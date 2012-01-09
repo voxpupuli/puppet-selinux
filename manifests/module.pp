@@ -66,11 +66,9 @@ define selinux::module(
     present: {
       exec { "${name}-buildmod":
         command => "checkmodule -M -m -o ${name}.mod ${name}.te",
-        notify  => Exec["${name}-buildpp"],
       }
       exec { "${name}-buildpp":
         command => "semodule_package -m ${name}.mod -o ${name}.pp",
-        notify  => Exec["${name}-install"],
       }
       exec { "${name}-install":
         command => 'semodule -i ${name}.pp',
