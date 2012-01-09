@@ -41,7 +41,7 @@ define selinux::module(
   # Only allow refresh in the event that the initial .te file is updated.
   Exec {
     path         => '/sbin:/usr/sbin:/bin:/usr/bin',
-    resfreshonly => 'true',
+    refreshonly  => 'true',
     cwd          => "${mod_dir}",
   }
 
