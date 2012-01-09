@@ -28,31 +28,23 @@
 #
 define selinux::module(
   $ensure  = 'present',
-  $mod_dir = '/usr/share/selinux', 
-  $mode    = 'enforcing',
+  $mod_dir = '/usr/share/selinux',
   $source
 ) {
-  # Automatically instantiate SELinux class. Give the option for the
-  # end user to change the mode in the event that testing is occuring
-  # in permissive mode.
-  class { 'selinux': 
-    mode => $mode,
-  }
-
   # Set Resource Defaults
   File {
     owner => 'root',
     group => 'root',
     mode  => '0644',
   }
-  
+
   # Only allow refresh in the event that the initial .te file is updated.
   Exec {
     path         => '/sbin:/usr/sbin:/bin:/usr/bin',
     resfreshonly => 'true',
     cwd          => "${mod_dir}",
   }
-  
+
   ## Begin Configuration
   file { $mod_dir:
     ensure => directory,
@@ -62,13 +54,13 @@ define selinux::module(
     source => $source,
     tag    => 'selinux-module',
   }
-  file { "${mod_dir}/${name}.mod": 
+  file { "${mod_dir}/${name}.mod":
     tag => ['selinux-module-build', 'selinux-module'],
   }
   file { "${mod_dir}/${name}.pp":
     tag => ['selinux-module-build', 'selinux-module'],
   }
-  
+
   # Specific executables based on present or absent.
   case $ensure {
     present: {
@@ -83,9 +75,9 @@ define selinux::module(
       exec { "${name}-install":
         command => 'semodule -i ${name}.pp',
       }
-      
+
       # Set dependency ordering
-      File["${mod_dir}/${name}.te"] 
+      File["${mod_dir}/${name}.te"]
       ~> Exec["${name}-buildmod"]
       ~> Exec["${name}-buildpp"]
       ~> Exec["${name}-install"]
@@ -93,12 +85,12 @@ define selinux::module(
     }
     absent: {
       exec { "${name}-remove":
-        command => "semodule -r ${name}.pp > /dev/null 2>&1",  
+        command => "semodule -r ${name}.pp > /dev/null 2>&1",
       }
-      
+
       # Set dependency ordering
       Exec["${name}-remove"]
-      -> File<| tag == 'selinux-module' |> 
+      -> File<| tag == 'selinux-module' |>
     }
     default: {
       fail("Invalid status for SELinux Module: ${ensure}")
