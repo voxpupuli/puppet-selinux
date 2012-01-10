@@ -71,7 +71,7 @@ define selinux::module(
         command => "semodule_package -m ${name}.mod -o ${name}.pp",
       }
       exec { "${name}-install":
-        command => 'semodule -i ${name}.pp',
+        command => "semodule -i ${name}.pp",
       }
 
       # Set dependency ordering
