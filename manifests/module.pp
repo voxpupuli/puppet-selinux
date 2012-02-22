@@ -46,9 +46,6 @@ define selinux::module(
   }
 
   ## Begin Configuration
-  file { $mod_dir:
-    ensure => directory,
-  }
   file { "${mod_dir}/${name}.te":
     ensure => $ensure,
     source => $source,
