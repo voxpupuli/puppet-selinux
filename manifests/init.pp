@@ -20,10 +20,11 @@ class selinux(
   $mode = 'permissive'
 ) {
   include stdlib
+  include selinux::params
 
   anchor { 'selinux::begin': }
-  -> class { 'selinux::config': 
+  -> class { 'selinux::config':
        mode => $mode,
-     } 
+  }
   -> anchor { 'selinux::end': }
 }

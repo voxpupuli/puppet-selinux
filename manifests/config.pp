@@ -22,6 +22,10 @@ class selinux::config(
     path => '/bin:/sbin:/usr/bin:/usr/sbin',
   }
 
+  file { $selinux::params::sx_mod_dir:
+    ensure => directory,
+  }
+
   # Check to see if the mode set is valid.
   if $mode == 'enforcing' or $mode == 'permissive' or $mode == 'disabled' {
     exec { "set-selinux-config-to-${mode}":

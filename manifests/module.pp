@@ -10,7 +10,7 @@
 #
 # Parameters:
 #   - $ensure: (present|absent) - sets the state for a module
-#   - $mod_dir: The directory compiled modules will live on a system (default: /usr/share/selinux)
+#   - $selinux::params::sx_mod_dir: The directory compiled modules will live on a system (default: /usr/share/selinux)
 #   - $mode: Allows an admin to set the SELinux status. (default: enforcing)
 #   - $source: the source file (either a puppet URI or local file) of the SELinux .te module
 #
@@ -28,7 +28,6 @@
 #
 define selinux::module(
   $ensure  = 'present',
-  $mod_dir = '/usr/share/selinux',
   $source
 ) {
   # Set Resource Defaults
@@ -42,19 +41,19 @@ define selinux::module(
   Exec {
     path         => '/sbin:/usr/sbin:/bin:/usr/bin',
     refreshonly  => 'true',
-    cwd          => "${mod_dir}",
+    cwd          => "${selinux::params::sx_mod_dir}",
   }
 
   ## Begin Configuration
-  file { "${mod_dir}/${name}.te":
+  file { "${selinux::params::sx_mod_dir}/${name}.te":
     ensure => $ensure,
     source => $source,
     tag    => 'selinux-module',
   }
-  file { "${mod_dir}/${name}.mod":
+  file { "${selinux::params::sx_mod_dir}/${name}.mod":
     tag => ['selinux-module-build', 'selinux-module'],
   }
-  file { "${mod_dir}/${name}.pp":
+  file { "${selinux::params::sx_mod_dir}/${name}.pp":
     tag => ['selinux-module-build', 'selinux-module'],
   }
 
@@ -72,7 +71,7 @@ define selinux::module(
       }
 
       # Set dependency ordering
-      File["${mod_dir}/${name}.te"]
+      File["${selinux::params::sx_mod_dir}/${name}.te"]
       ~> Exec["${name}-buildmod"]
       ~> Exec["${name}-buildpp"]
       ~> Exec["${name}-install"]
