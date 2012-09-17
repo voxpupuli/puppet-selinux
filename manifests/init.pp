@@ -8,7 +8,7 @@
 #
 # Actions:
 #  This module will configure SELinux and/or deploy SELinux based modules to running
-#  system. 
+#  system.
 #
 # Requires:
 #  - Class[stdlib]. This is Puppet Labs standard library to include additional methods for use within Puppet. [https://github.com/puppetlabs/puppetlabs-stdlib]
@@ -24,7 +24,7 @@ class selinux(
 
   anchor { 'selinux::begin': }
   -> class { 'selinux::config':
-       mode => $mode,
+      mode => $mode,
   }
   -> anchor { 'selinux::end': }
 }
