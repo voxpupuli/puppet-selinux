@@ -5,7 +5,7 @@
 #
 # Parameters:
 #  - $mode (enforced|permissive|disabled) - sets the operating state for SELinux.
-# 
+#
 # Actions:
 #  Configures SELinux to a specific state (enforced|permissive|disabled)
 #
@@ -34,7 +34,7 @@ class selinux::config(
     }
 
     case $mode {
-      permissive,disabled: { 
+      permissive,disabled: {
         $sestatus = '0'
         if $mode == 'disabled' and $::selinux_current_mode == 'permissive' {
           notice('A reboot is required to fully disable SELinux. SELinux will operate in Permissive mode until a reboot')
@@ -42,6 +42,9 @@ class selinux::config(
       }
       enforcing: {
         $sestatus = '1'
+      }
+      default : {
+        fail('You must specify a mode (enforced, permissive, or disabled) for selinux operation')
       }
     }
 
