@@ -29,7 +29,7 @@ class selinux::config(
   # Check to see if the mode set is valid.
   if $mode == 'enforcing' or $mode == 'permissive' or $mode == 'disabled' {
     exec { "set-selinux-config-to-${mode}":
-      command => "sed -i \"s@^\\(SELINUX=\\).*@\\1${mode}@\" /etc/sysconfig/selinux",
+      command => "sed -i --follow-symlinks \"s@^\\(SELINUX=\\).*@\\1${mode}@\" /etc/sysconfig/selinux",
       unless  => "grep -q \"SELINUX=${mode}\" /etc/sysconfig/selinux",
     }
 
