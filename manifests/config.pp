@@ -28,8 +28,20 @@ class selinux::config(
 
   # Check to see if the mode set is valid.
   if $mode == 'enforcing' or $mode == 'permissive' or $mode == 'disabled' {
+    case $::operatingsystemrelease {
+      # Change command based on OS release.
+      # RHEL <5 do not support --follow-symlinks with sed
+      # ref: @lboynton: http://git.io/QvJ9ww
+      /^5/: {
+        $selinux_set_command = "sed -i \"s@^\\(SELINUX=\\).*@\\1${mode}@\" /etc/sysconfig/selinux"
+      }
+      default: {
+        $selinux_set_command = "sed -i --follow-symlinks \"s@^\\(SELINUX=\\).*@\\1${mode}@\" /etc/sysconfig/selinux"
+      }
+    }
+
     exec { "set-selinux-config-to-${mode}":
-      command => "sed -i --follow-symlinks \"s@^\\(SELINUX=\\).*@\\1${mode}@\" /etc/sysconfig/selinux",
+      command => $selinux_set_command,
       unless  => "grep -q \"SELINUX=${mode}\" /etc/sysconfig/selinux",
     }
 
