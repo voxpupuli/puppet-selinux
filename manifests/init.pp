@@ -25,6 +25,7 @@ class selinux(
   anchor { 'selinux::begin': }
   -> class { 'selinux::config':
       mode => $mode,
+      require => Class['selinux::package'],
   }
   -> anchor { 'selinux::end': }
 }
