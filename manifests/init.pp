@@ -17,15 +17,18 @@
 #  include selinux
 #
 class selinux(
+
   $mode = 'permissive'
-) {
+
+  ) {
+
   include stdlib
   include selinux::params
-
-  anchor { 'selinux::begin': }
-  -> class { 'selinux::config':
-      mode => $mode,
-      require => Class['selinux::package'],
+  
+  class { 'selinux::package': }
+    -> class { 'selinux::config':
+    mode => $mode,
   }
-  -> anchor { 'selinux::end': }
+  -> Class['selinux']
+
 }
