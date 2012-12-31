@@ -16,8 +16,17 @@
 class selinux::package {
   case $::operatingsystem {
     centos,fedora,rhel,redhat,scientific: {
-      package { 'policycoreutils-python':
-        ensure => present,
+      case $::operatingsystemrelease {
+        /^5.+$/: {
+          package { 'policycoreutils':
+            ensure => present,
+          }
+        }
+        /^6.+$/: {
+          package { 'policycoreutils-python':
+            ensure => present,
+          }
+        }
       }
     }
     debian,ubuntu: {
