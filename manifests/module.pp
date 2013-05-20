@@ -29,6 +29,8 @@
 define selinux::module(
   $source,
   $ensure  = 'present',
+  $use_makefile = false,
+  $makefile = '/usr/share/selinux/devel/Makefile',
 ) {
   # Set Resource Defaults
   File {
@@ -57,8 +59,10 @@ define selinux::module(
     source => $source,
     tag    => 'selinux-module',
   }
-  file { "${selinux::params::sx_mod_dir}/${name}.mod":
-    tag => ['selinux-module-build', 'selinux-module'],
+  if !$use_makefile {
+    file { "${selinux::params::sx_mod_dir}/${name}.mod":
+      tag => ['selinux-module-build', 'selinux-module'],
+    }
   }
   file { "${selinux::params::sx_mod_dir}/${name}.pp":
     tag => ['selinux-module-build', 'selinux-module'],
@@ -67,11 +71,20 @@ define selinux::module(
   # Specific executables based on present or absent.
   case $ensure {
     present: {
-      exec { "${name}-buildmod":
-        command => "checkmodule -M -m -o ${name}.mod ${name}.te",
-      }
-      exec { "${name}-buildpp":
-        command => "semodule_package -m ${name}.mod -o ${name}.pp",
+      if $use_makefile {
+        exec { "${name}-buildmod":
+          command => 'true',
+        }
+        exec { "${name}-buildpp":
+          command => "make -f ${makefile} ${name}.pp",
+        }
+      } else {
+        exec { "${name}-buildmod":
+          command => "checkmodule -M -m -o ${name}.mod ${name}.te",
+        }
+        exec { "${name}-buildpp":
+          command => "semodule_package -m ${name}.mod -o ${name}.pp",
+        }
       }
       exec { "${name}-install":
         command => "semodule -i ${name}.pp",
