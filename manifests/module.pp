@@ -44,6 +44,13 @@ define selinux::module(
     cwd          => $selinux::params::sx_mod_dir,
   }
 
+  exec { "${name}-checkloaded":
+    refreshonly => false,
+    creates     => "/etc/selinux/${::selinux_config_policy}/modules/active/modules/${name}.pp",
+    command     => 'true',
+    notify      => Exec["${name}-buildmod"],
+  }
+
   ## Begin Configuration
   file { "${selinux::params::sx_mod_dir}/${name}.te":
     ensure => $ensure,
