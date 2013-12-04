@@ -73,21 +73,21 @@ define selinux::module(
     present: {
       if $use_makefile {
         exec { "${name}-buildmod":
-          command   => 'true',
+          command => 'true',
         }
         exec { "${name}-buildpp":
-          command   => "make -f ${makefile} ${name}.pp",
+          command => "make -f ${makefile} ${name}.pp",
         }
       } else {
         exec { "${name}-buildmod":
-          command   => "checkmodule -M -m -o ${name}.mod ${name}.te",
+          command => "checkmodule -M -m -o ${name}.mod ${name}.te",
         }
         exec { "${name}-buildpp":
-          command   => "semodule_package -m ${name}.mod -o ${name}.pp",
+          command => "semodule_package -m ${name}.mod -o ${name}.pp",
         }
       }
       exec { "${name}-install":
-        command   => "semodule -i ${name}.pp",
+        command => "semodule -i ${name}.pp",
       }
 
       # Set dependency ordering
@@ -99,7 +99,7 @@ define selinux::module(
     }
     absent: {
       exec { "${name}-remove":
-        command   => "semodule -r ${name}.pp > /dev/null 2>&1",
+        command => "semodule -r ${name}.pp > /dev/null 2>&1",
       }
 
       # Set dependency ordering
