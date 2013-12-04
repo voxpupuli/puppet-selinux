@@ -31,17 +31,21 @@
 #   pathname => "/var/log/mysql(/.*)?",
 # }
 #
-define selinux::fcontext ( $context = "", $pathname = "", $policy = "targeted" ) {
+define selinux::fcontext (
+  $context    = '',
+  $pathname   = '',
+  $policy     = 'targeted'
+) {
   Exec {
     path => '/bin:/sbin:/usr/bin:/usr/sbin',
   }
 
-  if ( $context == "" ) or ( $pathname == "" ) {
-    fail("context and pathname must not be empty")
+  if ( $context == '' ) or ( $pathname == '' ) {
+    fail('context and pathname must not be empty')
   }
 
   exec { "add_${context}_${pathname}":
     command => "semanage fcontext -a -t ${context} \"${pathname}\"",
-    unless => "semanage fcontext -l|grep \"^${pathname}.*:${context}:\"",
+    unless  => "semanage fcontext -l|grep \"^${pathname}.*:${context}:\"",
   }
 }

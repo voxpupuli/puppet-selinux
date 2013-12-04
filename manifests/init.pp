@@ -16,19 +16,12 @@
 # Sample Usage:
 #  include selinux
 #
-class selinux(
-
-  $mode = 'permissive'
-
-  ) {
+class selinux (
+  $mode = $::selinux::params::mode,
+) inherits selinux::params {
 
   include stdlib
-  include selinux::params
-  
-  class { 'selinux::package': }
-    -> class { 'selinux::config':
-    mode => $mode,
-  }
-  -> Class['selinux']
 
+  class { 'selinux::package': } ->
+  class { 'selinux::config': }
 }
