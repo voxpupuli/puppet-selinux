@@ -15,7 +15,7 @@
 # This class file is not called directly
 class selinux::package {
   case $::operatingsystem {
-    centos,fedora,rhel,redhat,scientific: {
+    CentOS,Fedora,RHEL,RedHat,Scientific: {
       case $::operatingsystemrelease {
         /^5.+$/: {
           package { 'policycoreutils':
@@ -27,11 +27,13 @@ class selinux::package {
             ensure => present,
           }
         }
+        default: {
+          # We only deal with CentOS 5 or 6
+        }
       }
     }
-    debian,ubuntu: {
-    }
-    opensuse,suse: {
+    default: {
+      # Nothing to do, only manage SELinux on OS's defined above
     }
   }
 }

@@ -28,9 +28,9 @@
 #
 define selinux::module(
   $source,
-  $ensure  = 'present',
-  $use_makefile = false,
-  $makefile = '/usr/share/selinux/devel/Makefile',
+  $ensure         = 'present',
+  $use_makefile   = false,
+  $makefile       = '/usr/share/selinux/devel/Makefile',
 ) {
   # Set Resource Defaults
   File {
@@ -47,25 +47,25 @@ define selinux::module(
   }
 
   exec { "${name}-checkloaded":
-    refreshonly => false,
-    creates     => "/etc/selinux/${::selinux_config_policy}/modules/active/modules/${name}.pp",
-    command     => 'true',
-    notify      => Exec["${name}-buildmod"],
+    refreshonly   => false,
+    creates       => "/etc/selinux/${::selinux_config_policy}/modules/active/modules/${name}.pp",
+    command       => 'true',
+    notify        => Exec["${name}-buildmod"],
   }
 
   ## Begin Configuration
-  file { "${selinux::params::sx_mod_dir}/${name}.te":
-    ensure => $ensure,
-    source => $source,
-    tag    => 'selinux-module',
+  file { "${::selinux::params::sx_mod_dir}/${name}.te":
+    ensure  => $ensure,
+    source  => $source,
+    tag     => 'selinux-module',
   }
   if !$use_makefile {
-    file { "${selinux::params::sx_mod_dir}/${name}.mod":
-      tag => ['selinux-module-build', 'selinux-module'],
+    file { "${::selinux::params::sx_mod_dir}/${name}.mod":
+      tag   => ['selinux-module-build', 'selinux-module'],
     }
   }
-  file { "${selinux::params::sx_mod_dir}/${name}.pp":
-    tag => ['selinux-module-build', 'selinux-module'],
+  file { "${::selinux::params::sx_mod_dir}/${name}.pp":
+    tag   => ['selinux-module-build', 'selinux-module'],
   }
 
   # Specific executables based on present or absent.
@@ -91,7 +91,7 @@ define selinux::module(
       }
 
       # Set dependency ordering
-      File["${selinux::params::sx_mod_dir}/${name}.te"]
+      File["${::selinux::params::sx_mod_dir}/${name}.te"]
       ~> Exec["${name}-buildmod"]
       ~> Exec["${name}-buildpp"]
       ~> Exec["${name}-install"]

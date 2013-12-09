@@ -15,8 +15,8 @@
 # Sample Usage:
 #  This module should not be called directly.
 #
-class selinux::config(
-  $mode
+class selinux::config (
+  $mode = $::selinux::mode,
 ) {
   Exec {
     path => '/bin:/sbin:/usr/bin:/usr/sbin',
@@ -30,7 +30,7 @@ class selinux::config(
   if $mode == 'enforcing' or $mode == 'permissive' or $mode == 'disabled' {
     case $::operatingsystemrelease {
       # Change command based on OS release.
-      # RHEL <5 do not support --follow-symlinks with sed
+      # RHEL <= 5 do not support --follow-symlinks with sed
       # ref: @lboynton: http://git.io/QvJ9ww
       /^5/: {
         $selinux_set_command = "sed -i \"s@^\\(SELINUX=\\).*@\\1${mode}@\" /etc/sysconfig/selinux"
