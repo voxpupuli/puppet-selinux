@@ -4,7 +4,7 @@
 #  This class manages SELinux on RHEL based systems.
 #
 # Parameters:
-#  - $mode (enforced|permissive|disabled) - sets the operating state for SELinux.
+#  - $mode (enforcing|permissive|disabled) - sets the operating state for SELinux.
 #
 # Actions:
 #  This module will configure SELinux and/or deploy SELinux based modules to running

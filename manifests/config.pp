@@ -4,7 +4,7 @@
 #  This class is designed to configure the system to use SELinux on the system
 #
 # Parameters:
-#  - $mode (enforced|permissive|disabled) - sets the operating state for SELinux.
+#  - $mode (enforcing|permissive|disabled) - sets the operating state for SELinux.
 #
 # Actions:
 #  Configures SELinux to a specific state (enforced|permissive|disabled)
