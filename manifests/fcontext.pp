@@ -26,26 +26,50 @@
 #
 # Sample Usage:
 #
-# selinux::fcontext{'set-samba-rootfolder-context':
+# selinux::fcontext{'set-mysql-log-context':
 #   context => "mysqld_log_t",
 #   pathname => "/var/log/mysql(/.*)?",
 # }
 #
+# selinux::fcontext{'set-postfix-instance1-spool':
+#   equals      => true,
+#   pathname    => '/var/spool/postfix-instance1',
+#   destination => '/var/spool/postfix'
+# }
+#
 define selinux::fcontext (
-  $context    = '',
-  $pathname   = '',
-  $policy     = 'targeted'
+  $context     = '',
+  $pathname    = '',
+  $policy      = 'targeted',
+  $equals      = false,
+  $destination = '',
 ) {
   Exec {
     path => '/bin:/sbin:/usr/bin:/usr/sbin',
   }
 
-  if ( $context == '' ) or ( $pathname == '' ) {
-    fail('context and pathname must not be empty')
+  if $pathname == '' {
+    fail('pathname must not be empty')
+  }
+
+  if ( $equals == false ) and ( $pathname == '' ) {
+    fail('pathname must not be empty')
+  }
+
+  if ( $equals == true ) and ( $destination == '' ) {
+    fail('destination must be set if equals is true')
+  }
+
+  if $equals == true {
+    $command = "semanage fcontext -a -e \"${destination}\" \"${pathname}\""
+    $unless  = "semanage fcontext -l | grep \"^${pathname} = ${destination}$\""
+  } else {
+    $command = "semanage fcontext -a -t ${context} \"${pathname}\""
+    $unless  = "semanage fcontext -l | grep \"^${pathname}.*:${context}:\""
   }
 
   exec { "add_${context}_${pathname}":
-    command => "semanage fcontext -a -t ${context} \"${pathname}\"",
-    unless  => "semanage fcontext -l|grep \"^${pathname}.*:${context}:\"",
+    command => $command,
+    unless  => $unless,
   }
 }
