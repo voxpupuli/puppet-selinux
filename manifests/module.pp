@@ -49,7 +49,7 @@ define selinux::module(
   exec { "${name}-checkloaded":
     refreshonly   => false,
     creates       => "/etc/selinux/${::selinux_config_policy}/modules/active/modules/${name}.pp",
-    command       => 'true',
+    command       => true,
     notify        => Exec["${name}-buildmod"],
   }
 
@@ -73,7 +73,7 @@ define selinux::module(
     present: {
       if $use_makefile {
         exec { "${name}-buildmod":
-          command => 'true',
+          command => true,
         }
         exec { "${name}-buildpp":
           command => "make -f ${makefile} ${name}.pp",
