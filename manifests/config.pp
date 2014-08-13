@@ -16,8 +16,8 @@
 #  This module should not be called directly.
 #
 class selinux::config (
-  $mode       = $::selinux::mode,
-  $sx_mod_dir = $::selinux::sx_mod_dir,
+  $mode       = $selinux::mode,
+  $sx_mod_dir = $selinux::sx_mod_dir,
 ) {
   Exec {
     path => '/bin:/sbin:/usr/bin:/usr/sbin',
