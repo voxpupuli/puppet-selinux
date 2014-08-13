@@ -26,22 +26,22 @@ class selinux::restorecond (
   }
 
   $restorecond_config_file_real = $restorecond_config_file ? {
-    'UNSET' => $::selinux::params::restorecond_config_file,
+    'UNSET' => $::selinux::params::$restorecond_config_file,
     default => $restorecond_config_file,
   }
 
   $restorecond_config_file_mode_real = $restorecond_config_file_mode ? {
-    'UNSET' => $::selinux::params::restorecond_config_file_mode,
+    'UNSET' => $::selinux::params::$restorecond_config_file_mode,
     default => $restorecond_config_file_mode,
   }
 
   $restorecond_config_file_owner_real = $restorecond_config_file_owner ? {
-    'UNSET' => $::selinux::params::restorecond_config_file_owner,
+    'UNSET' => $::selinux::params::$restorecond_config_file_owner,
     default => $restorecond_config_file_owner,
   }
 
   $restorecond_config_file_group_real = $restorecond_config_file_group ? {
-    'UNSET' => $::selinux::params::restorecond_config_file_group,
+    'UNSET' => $::selinux::params::$restorecond_config_file_group,
     default => $restorecond_config_file_group,
   }
 
