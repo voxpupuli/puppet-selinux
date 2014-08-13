@@ -16,13 +16,14 @@
 #  This module should not be called directly.
 #
 class selinux::config (
-  $mode = $::selinux::mode,
+  $mode       = $selinux::mode,
+  $sx_mod_dir = $selinux::sx_mod_dir,
 ) {
   Exec {
     path => '/bin:/sbin:/usr/bin:/usr/sbin',
   }
 
-  file { $selinux::params::sx_mod_dir:
+  file { $sx_mod_dir:
     ensure => directory,
   }
 
