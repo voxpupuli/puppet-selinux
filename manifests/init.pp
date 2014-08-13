@@ -17,8 +17,9 @@
 #  include selinux
 #
 class selinux (
-  $mode = $::selinux::params::mode,
-) inherits selinux::params {
+  $mode       = $::selinux::params::mode,
+  $sx_mod_dir = $::selinux::params::sx_mod_dir,
+) {
 
   include stdlib
 
