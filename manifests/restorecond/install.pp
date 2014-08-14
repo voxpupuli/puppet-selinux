@@ -3,7 +3,7 @@
 #
 class selinux::restorecond::install {
   package {
-    "policycoreutils":
+    'policycoreutils':
       ensure => present;
   }
 }
