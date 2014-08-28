@@ -22,13 +22,13 @@ class selinux::package {
             ensure => present,
           }
         }
-        /^6.+$/: {
+        /^(6|7).+$/: {
           package { 'policycoreutils-python':
             ensure => present,
           }
         }
         default: {
-          # We only deal with CentOS 5 or 6
+          # We only deal with RHEL (or deriviative) 5, 6 or 7.
         }
       }
     }
