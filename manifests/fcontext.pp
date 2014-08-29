@@ -71,5 +71,6 @@ define selinux::fcontext (
   exec { "add_${context}_${pathname}":
     command => $command,
     unless  => $unless,
+    require => Class['selinux::package'],
   }
 }

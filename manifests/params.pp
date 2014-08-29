@@ -10,6 +10,14 @@ class selinux::params {
   $sx_mod_dir   = '/usr/share/selinux'
   $mode         = 'disabled'
 
+  $sx_fs_mount  = $::operatingsystem ? {
+    /RedHat|CentOS/ => $::operatingsystemrelease ? {
+      /^7\./        => '/sys/fs/selinux',
+      default       => '/selinux',
+    },
+    default         => '/selinux',
+  }
+
   $restorecond_config_file       = '/etc/selinux/restorecond.conf'
   $restorecond_config_file_mode  = '0644'
   $restorecond_config_file_owner = 'root'
