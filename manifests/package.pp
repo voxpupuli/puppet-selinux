@@ -19,12 +19,12 @@ class selinux::package {
       case $::operatingsystemrelease {
         /^5.+$/: {
           package { 'policycoreutils':
-            ensure => present,
+            ensure => $selinux::params::package_ensure,
           }
         }
         /^(6|7).+$/: {
           package { 'policycoreutils-python':
-            ensure => present,
+            ensure => $selinux::params::package_ensure,
           }
         }
         default: {
