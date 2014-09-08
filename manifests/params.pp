@@ -9,6 +9,7 @@
 class selinux::params {
   $sx_mod_dir   = '/usr/share/selinux'
   $mode         = 'disabled'
+  $package_ensure = present
 
   $sx_fs_mount  = $::operatingsystem ? {
     /RedHat|CentOS/ => $::operatingsystemrelease ? {

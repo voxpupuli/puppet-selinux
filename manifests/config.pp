@@ -61,8 +61,8 @@ class selinux::config (
     }
 
     exec { "change-selinux-status-to-${mode}":
-      command => "echo ${sestatus} > /${sx_fs_mount}/enforce",
-      unless  => "grep -q '${sestatus}' /${sx_fs_mount}/enforce",
+      command => "echo ${sestatus} > /${::selinux::params::sx_fs_mount}/enforce",
+      unless  => "grep -q '${sestatus}' /${::selinux::params::sx_fs_mount}/enforce",
     }
   } else {
     fail("Invalid mode specified for SELinux: ${mode}")
