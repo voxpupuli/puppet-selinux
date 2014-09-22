@@ -73,7 +73,7 @@ define selinux::module(
     present: {
       if $use_makefile {
         exec { "${name}-buildmod":
-          command => true,
+          command => "true",
         }
         exec { "${name}-buildpp":
           command => "make -f ${makefile} ${name}.pp",
