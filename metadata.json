@@ -9,7 +9,7 @@
 "issues_url": "https://github.com/jfryman/puppet-selinux/issues",
 "dependencies": [
     {
-      "name": "puppetlabs-stdlib",
+      "name": "puppetlabs/stdlib",
       "version_range": ">= 3.0.0"
     }
   ]
