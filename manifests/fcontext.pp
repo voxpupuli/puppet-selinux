@@ -16,7 +16,7 @@
 #   http://riffraff169.wordpress.com/2012/03/09/add-file-contexts-with-puppet/
 #
 # Parameters:
-#   - $context:  A particular file context, like "mysqld_log_t"
+#   - $context: A particular file context, like "mysqld_log_t"
 #   - $pathname: An semanage fcontext-formatted pathname, like "/var/log/mysql(/.*)?"
 #   - $equals:   Boolean Value - Enables support for substituting target path with sourcepath when generating default label
 #   - $filetype: Boolean Value - enables support for "-f" file type option of "semanage fcontext"
