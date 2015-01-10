@@ -53,9 +53,9 @@ selinux::module { 'resnet-puppet':
 ```
 
 ## Defined Types
-`fcontext` - Define fcontext types and equals values
-`boolean` - Set seboolean values
-`port` - Set selinux port context policies
+* `fcontext` - Define fcontext types and equals values
+* `boolean` - Set seboolean values
+* `port` - Set selinux port context policies
 
 
 ## Development
