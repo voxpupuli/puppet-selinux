@@ -61,4 +61,4 @@ selinux::module { 'resnet-puppet':
 ## Development
 
 ## Authors
-James Fryman <james@frymanet.com>
+James Fryman <james@fryman.io>
