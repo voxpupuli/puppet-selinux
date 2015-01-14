@@ -33,16 +33,16 @@ class selinux::config (
       # RHEL <= 5 do not support --follow-symlinks with sed
       # ref: @lboynton: http://git.io/QvJ9ww
       /^5/: {
-        $selinux_set_command = "sed -i \"s@^\\(SELINUX=\\).*@\\1${mode}@\" /etc/sysconfig/selinux"
+        $selinux_set_command = "sed -i \"s@^\\(SELINUX=\\).*@\\1${mode}@\" /etc/selinux/config"
       }
       default: {
-        $selinux_set_command = "sed -i --follow-symlinks \"s@^\\(SELINUX=\\).*@\\1${mode}@\" /etc/sysconfig/selinux"
+        $selinux_set_command = "sed -i --follow-symlinks \"s@^\\(SELINUX=\\).*@\\1${mode}@\" /etc/selinux/config"
       }
     }
 
     exec { "set-selinux-config-to-${mode}":
       command => $selinux_set_command,
-      unless  => "grep -q \"SELINUX=${mode}\" /etc/sysconfig/selinux",
+      unless  => "grep -q \"SELINUX=${mode}\" /etc/selinux/config",
     }
 
     case $mode {
