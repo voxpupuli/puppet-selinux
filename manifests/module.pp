@@ -47,17 +47,17 @@ define selinux::module(
   }
 
   exec { "${name}-checkloaded":
-    refreshonly   => false,
-    creates       => "/etc/selinux/${::selinux_config_policy}/modules/active/modules/${name}.pp",
-    command       => 'true',
-    notify        => Exec["${name}-buildmod"],
+    refreshonly => false,
+    creates     => "/etc/selinux/${::selinux_config_policy}/modules/active/modules/${name}.pp",
+    command     => true,
+    notify      => Exec["${name}-buildmod"],
   }
 
   ## Begin Configuration
   file { "${::selinux::params::sx_mod_dir}/${name}.te":
-    ensure  => $ensure,
-    source  => $source,
-    tag     => 'selinux-module',
+    ensure => $ensure,
+    source => $source,
+    tag    => 'selinux-module',
   }
   if !$use_makefile {
     file { "${::selinux::params::sx_mod_dir}/${name}.mod":

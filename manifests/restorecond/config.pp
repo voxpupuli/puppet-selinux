@@ -18,8 +18,8 @@ class selinux::restorecond::config {
   }
 
   concat::fragment {'restorecond_config_default':
-    target  => $selinux::restorecond::config_file,
-    source  => 'puppet:///modules/selinux/restorecond.conf',
-    order   => '05'
+    target => $selinux::restorecond::config_file,
+    source => 'puppet:///modules/selinux/restorecond.conf',
+    order  => '05'
   }
 }
