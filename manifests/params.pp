@@ -12,8 +12,8 @@ class selinux::params {
   $package_ensure = present
 
   $sx_fs_mount  = $::osfamily ? {
-    'RedHat' => $::operatingsystemrelease ? {
-      /^7\./        => '/sys/fs/selinux',
+    'RedHat' => $::operatingsystemmajrelease ? {
+      '7'           => '/sys/fs/selinux',
       default       => '/selinux',
     },
     default         => '/selinux',
