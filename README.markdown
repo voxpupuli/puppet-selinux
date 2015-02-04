@@ -48,7 +48,7 @@ Deploy a custom module:
 ```puppet
 selinux::module { 'resnet-puppet':
   ensure => 'present',
-  source => 'puppet:///modules/site_puppet/site-puppet.te',
+  content => template(modulename/module.te',
 }
 ```
 

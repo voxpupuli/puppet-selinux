@@ -27,7 +27,7 @@
 #  }
 #
 define selinux::module(
-  $source,
+  $content,
   $ensure         = 'present',
   $use_makefile   = false,
   $makefile       = '/usr/share/selinux/devel/Makefile',
@@ -55,9 +55,9 @@ define selinux::module(
 
   ## Begin Configuration
   file { "${::selinux::params::sx_mod_dir}/${name}.te":
-    ensure => $ensure,
-    source => $source,
-    tag    => 'selinux-module',
+    ensure  => $ensure,
+    content => $content,
+    tag     => 'selinux-module',
   }
   if !$use_makefile {
     file { "${::selinux::params::sx_mod_dir}/${name}.mod":
