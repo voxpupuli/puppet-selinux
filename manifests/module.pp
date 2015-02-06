@@ -27,7 +27,8 @@
 #  }
 #
 define selinux::module(
-  $content,
+  $content        = '',
+  $source         = '',
   $ensure         = 'present',
   $use_makefile   = false,
   $makefile       = '/usr/share/selinux/devel/Makefile',
@@ -54,10 +55,18 @@ define selinux::module(
   }
 
   ## Begin Configuration
-  file { "${::selinux::params::sx_mod_dir}/${name}.te":
-    ensure  => $ensure,
-    content => $content,
-    tag     => 'selinux-module',
+  if $content {
+    file { "${::selinux::params::sx_mod_dir}/${name}.te":
+      ensure  => $ensure,
+      content => $content,
+      tag     => 'selinux-module',
+    }
+  } else {
+    file { "${::selinux::params::sx_mod_dir}/${name}.te":
+      ensure  => $ensure,
+      source  => $source,
+      tag     => 'selinux-module',
+    }
   }
   if !$use_makefile {
     file { "${::selinux::params::sx_mod_dir}/${name}.mod":
