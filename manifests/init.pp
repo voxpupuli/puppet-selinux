@@ -18,10 +18,7 @@
 #
 class selinux (
   $mode = $::selinux::params::mode,
-  $package_ensure = $::selinux::params::package_ensure,
 ) inherits selinux::params {
-
-  include stdlib
 
   class { 'selinux::package': } ->
   class { 'selinux::config': }

@@ -40,7 +40,7 @@
 #
 # Sample Usage:
 #
-# FOR SUBSTITUTING TARGET PATH WITH SOURCEPATH: 
+# FOR SUBSTITUTING TARGET PATH WITH SOURCEPATH:
 # selinux::fcontext{'set-postfix-instance1-spool':
 #   equals      => true,
 #   pathname    => '/var/spool/postfix-instance1',
@@ -63,50 +63,40 @@
 # }
 #
 define selinux::fcontext (
-  $destination = '',
+  $pathname,
+  $destination = undef,
   $context     = '',
-  $pathname    = '',
   $filetype    = false,
-  $filemode    = '',
+  $filemode    = undef,
   $equals      = false,
-  $policy      = 'targeted',
 ) {
-  Exec {
-    path => '/bin:/sbin:/usr/bin:/usr/sbin',
-  }
-  if $pathname == '' {
-    fail('pathname must not be empty')
+
+  include selinux
+
+  validate_absolute_path($pathname)
+  validate_bool($filetype, $equals)
+
+  if $equals {
+    validate_absolute_path($destination)
   }
 
-  if ( $equals == false ) and ( $pathname == '' ) {
-    fail('pathname must not be empty')
+  if $equals and $filetype {
+    fail('Resource cannot contain both "equals" and "filetype" options')
   }
 
-  if ( $equals == true ) and ( $destination == '' ) {
-    fail('destination must be set if equals is true')
-  }
-
-  if ( $filetype == true ) and ( $filemode == '' ) {
-    fail('file mode must not be empty')
-  }
-  elsif ( $filetype == true ) and ( $filemode !~ /(a|f|d|c|b|s|l|p)/ ) {
+  if $filetype and $filemode !~ /(a|f|d|c|b|s|l|p)/ {
     fail('file mode must be one of: a,f,d,c,b,s,l,p - see "man semanage-fcontext"')
   }
 
-  if ( $equals == true ) and ( $filetype == true) {
-    fail('Resource cannot contain both "equals" and "filetype" options')
-  }
-  elsif ( $equals == true ) {
+  if $equals {
     $resource_name = "add_${destination}_${pathname}"
     $command       = "semanage fcontext -a -e \"${destination}\" \"${pathname}\""
     $unless        = "semanage fcontext -l | grep -E \"^${pathname} = ${destination}$\""
-  }
-  elsif ( $equals == false ) and ( $filetype == true ) {
+  } elsif $filetype {
     $resource_name = "add_${context}_${pathname}_type_${filemode}"
     $command       = "semanage fcontext -a -f ${filemode} -t ${context} \"${pathname}\""
     $unless        = "semanage fcontext -l | grep -E \"^${pathname}.*:${context}:\""
-  }
-  elsif ( $equals == false ) and ( $filetype == false ) {
+  } else {
     $resource_name = "add_${context}_${pathname}"
     $command       = "semanage fcontext -a -t ${context} \"${pathname}\""
     $unless        = "semanage fcontext -l | grep -E \"^${pathname}.*:${context}:\""
@@ -115,6 +105,7 @@ define selinux::fcontext (
   exec { $resource_name:
     command => $command,
     unless  => $unless,
+    path    => '/bin:/sbin:/usr/bin:/usr/sbin',
     require => Class['selinux::package'],
   }
 }

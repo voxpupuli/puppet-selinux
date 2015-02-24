@@ -9,18 +9,35 @@
 class selinux::params {
   $sx_mod_dir   = '/usr/share/selinux'
   $mode         = 'disabled'
-  $package_ensure = present
 
-  $sx_fs_mount  = $::osfamily ? {
-    'RedHat' => $::operatingsystemmajrelease ? {
-      '7'           => '/sys/fs/selinux',
-      default       => '/selinux',
-    },
-    default         => '/selinux',
+  case $::osfamily {
+    'RedHat': {
+      case $::operatingsystemmajrelease {
+        '7': {
+          $sx_fs_mount = '/sys/fs/selinux'
+          $package_name = 'policycoreutils-python'
+        }
+        '6': {
+          $sx_fs_mount = '/selinux'
+          $package_name = 'policycoreutils-python'
+        }
+        '5': {
+          $sx_fs_mount = '/selinux'
+          $package_name = 'policycoreutils'
+        }
+        default: {
+          fail("${::osfamily}-${::operatingsystemmajrelease} is not supported")
+        }
+      }
+    }
+    default: {
+      fail("${::osfamily} is not supported")
+    }
   }
 
   $restorecond_config_file       = '/etc/selinux/restorecond.conf'
   $restorecond_config_file_mode  = '0644'
   $restorecond_config_file_owner = 'root'
   $restorecond_config_file_group = 'root'
+
 }

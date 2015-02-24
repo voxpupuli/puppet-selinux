@@ -11,15 +11,9 @@ class selinux::restorecond::config {
     notify => Service['restorecond'],
   }
 
-  concat::fragment {'restorecond_config_header':
-    target  => $selinux::restorecond::config_file,
-    content => "# File Managed by Puppet\n",
-    order   => '01'
-  }
-
   concat::fragment {'restorecond_config_default':
     target => $selinux::restorecond::config_file,
     source => 'puppet:///modules/selinux/restorecond.conf',
-    order  => '05'
+    order  => '01'
   }
 }

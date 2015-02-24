@@ -36,20 +36,15 @@
 #  }
 #
 define selinux::port (
-  $context  = undef,
+  $context,
+  $port,
   $protocol = undef,
-  $port     = undef,
-  $policy   = 'targeted'
 ) {
-  Exec {
-    path => '/bin:/sbin:/usr/bin:/usr/sbin',
-  }
 
-  if ( $context == undef ) or ( $port == undef ) {
-    fail('context and port must not be empty')
-  }
+  include selinux
 
   if $protocol {
+    validate_re($protocol, ['^tcp6?$', '^udp6?$'])
     $protocol_switch="-p ${protocol} "
   } else {
     $protocol_switch=''
@@ -58,6 +53,7 @@ define selinux::port (
   exec { "add_${context}_${port}":
     command => "semanage port -a -t ${context} ${protocol_switch}${port}",
     unless  => "semanage port -l|grep \"^${context}.*${protocol}.*${port}\"",
+    path    => '/bin:/sbin:/usr/bin:/usr/sbin',
     require => Class['selinux::package']
   }
 }
