@@ -32,6 +32,9 @@ define selinux::module(
   $use_makefile   = false,
   $makefile       = '/usr/share/selinux/devel/Makefile',
 ) {
+
+  include selinux
+
   # Set Resource Defaults
   File {
     owner => 'root',

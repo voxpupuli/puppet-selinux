@@ -26,8 +26,10 @@
 #
 
 define selinux::boolean (
-  $ensure = 'undef'
+  $ensure = true
 ) {
+
+  include selinux
 
   Exec {
     path => '/bin:/sbin:/usr/bin:/usr/sbin',

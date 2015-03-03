@@ -6,6 +6,7 @@ define selinux::restorecond::fragment (
   $source = undef,
   $order = '10'
 ) {
+
   if !defined(Class['selinux::restorecond']) {
     fail('You must include the restorecond base class before using any restorecond defined resources')
   }
