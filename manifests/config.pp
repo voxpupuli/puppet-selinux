@@ -39,7 +39,7 @@ class selinux::config (
   case $mode {
     permissive, disabled: {
       $sestatus = '0'
-      if $mode == 'disabled' and $::selinux_current_mode == 'permissive' {
+      if $mode == 'disabled' and getvar('::selinux_current_mode') == 'permissive' {
         notice('A reboot is required to fully disable SELinux. SELinux will operate in Permissive mode until a reboot')
       }
     }
