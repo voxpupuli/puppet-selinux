@@ -7,7 +7,7 @@ describe 'selinux::port' do
   ['tcp', 'udp', 'tcp6', 'udp6'].each do |protocol|
     context "valid protocol #{protocol}" do
       let(:params) { { :context => 'http_port_t', :port => 8080, :protocol => protocol } }
-      it { should contain_exec('add_http_port_t_8080').with(:command => "semanage port -a -t http_port_t -p #{protocol} 8080") }
+      it { should contain_exec("add_http_port_t_8080_#{protocol}").with(:command => "semanage port -a -t http_port_t -p #{protocol} 8080") }
     end
   end
 
@@ -17,8 +17,8 @@ describe 'selinux::port' do
   end
 
   context 'no protocol' do
-    let(:params) { { :context => 'http_port_t', :port => 8080 } }
-    it { should contain_exec('add_http_port_t_8080').with(:command => 'semanage port -a -t http_port_t 8080') }
+    let(:params) { { :context => 'http_port_t', :port => 8080} }
+    it { should contain_exec("add_http_port_t_8080").with(:command => 'semanage port -a -t http_port_t 8080') }
   end
 
 end
