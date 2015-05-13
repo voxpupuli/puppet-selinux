@@ -35,6 +35,15 @@ define selinux::module(
 
   include selinux
 
+  if $::selinux_config_policy in ['targeted','strict']
+  {
+    $selinux_policy = $::selinux_config_policy
+  }
+  elsif $::selinux_custom_policy
+  {
+    $selinux_policy = $::selinux_custom_policy
+  }
+
   # Set Resource Defaults
   File {
     owner => 'root',
@@ -51,7 +60,7 @@ define selinux::module(
 
   exec { "${name}-checkloaded":
     refreshonly => false,
-    creates     => "/etc/selinux/${::selinux_config_policy}/modules/active/modules/${name}.pp",
+    creates     => "/etc/selinux/${selinux_policy}/modules/active/modules/${name}.pp",
     command     => 'true',
     notify      => Exec["${name}-buildmod"],
   }
