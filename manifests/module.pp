@@ -69,15 +69,15 @@ define selinux::module(
   file { "${::selinux::params::sx_mod_dir}/${name}.te":
     ensure => $ensure,
     source => $source,
-    tag    => 'selinux-module',
+    tag    => "selinux-module-${name}",
   }
   if !$use_makefile {
     file { "${::selinux::params::sx_mod_dir}/${name}.mod":
-      tag   => ['selinux-module-build', 'selinux-module'],
+      tag   => ["selinux-module-build-${name}", "selinux-module-${name}"],
     }
   }
   file { "${::selinux::params::sx_mod_dir}/${name}.pp":
-    tag   => ['selinux-module-build', 'selinux-module'],
+    tag   => ["selinux-module-build-${name}", "selinux-module-${name}"],
   }
 
   # Specific executables based on present or absent.
@@ -107,7 +107,7 @@ define selinux::module(
       ~> Exec["${name}-buildmod"]
       ~> Exec["${name}-buildpp"]
       ~> Exec["${name}-install"]
-      -> File<| tag == 'selinux-module-build' |>
+      -> File<| tag == "selinux-module-build-${name}" |>
     }
     absent: {
       exec { "${name}-remove":
@@ -116,7 +116,7 @@ define selinux::module(
 
       # Set dependency ordering
       Exec["${name}-remove"]
-      -> File<| tag == 'selinux-module' |>
+      -> File<| tag == "selinux-module-${name}" |>
     }
     default: {
       fail("Invalid status for SELinux Module: ${ensure}")
