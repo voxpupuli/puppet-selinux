@@ -1,0 +1,17 @@
+# mcelog policy that can be used by the selinux module of jfryman
+# see https://forge.puppetlabs.com/jfryman/selinux
+
+module mcelog 1.0.1;
+
+require {
+    type mcelog_t;
+    type var_run_t;
+    type cpu_device_t;
+    class sock_file { create write unlink };
+    class dir { write add_name };
+    class chr_file { read write open};
+}
+
+allow mcelog_t var_run_t:dir { write add_name };
+allow mcelog_t var_run_t:sock_file { create write unlink };
+allow mcelog_t cpu_device_t:chr_file { read write open };
