@@ -2,9 +2,11 @@ source ENV['GEM_SOURCE'] || "https://rubygems.org"
 
 group :unit_tests do
   gem 'rake',                    :require => false
-  gem 'rspec-puppet',            :require => false, :git => 'https://github.com/rodjek/rspec-puppet.git', :tag => 'v2.0.0'
+  # https://github.com/rspec/rspec-core/issues/1864
+  gem 'rspec', '< 3.2.0', {"platforms"=>["ruby_18"]}
+  gem 'rspec-puppet', '~> 2.1',  :require => false
   gem 'puppetlabs_spec_helper',  :require => false
-  gem 'puppet-lint', '1.0.1',    :require => false
+  gem 'puppet-lint', '~> 1.0',    :require => false
   gem 'puppet-syntax',           :require => false
   gem 'metadata-json-lint',      :require => false
   gem 'json',                    :require => false
