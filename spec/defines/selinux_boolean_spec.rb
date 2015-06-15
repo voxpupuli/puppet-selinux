@@ -2,11 +2,7 @@ require 'spec_helper'
 
 describe 'selinux::boolean' do
   let(:title) { 'mybool' }
-  let(:facts) { {
-    :osfamily => 'RedHat',
-    :operatingsystemmajrelease => '7',
-    :selinux_current_mode => 'enforcing',
-  } }
+  include_context 'RedHat 7'
 
   context 'default' do
     it { should contain_exec("setsebool -P 'mybool' true")}

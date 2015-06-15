@@ -1,9 +1,17 @@
 require 'spec_helper'
 
 describe 'selinux' do
-  let(:facts) { { :osfamily => 'RedHat', :operatingsystemmajrelease => '7', :selinux_current_mode => 'enforcing' } }
+  context 'Redhat 7' do
+    include_context 'RedHat 7'
 
-  it { should contain_class('selinux::package') }
-  it { should contain_class('selinux::config') }
+    it { should contain_class('selinux::package') }
+    it { should contain_class('selinux::config') }
+  end
 
+  context 'Fedora 22' do
+    include_context 'Fedora 22'
+
+    it { should contain_class('selinux::package') }
+    it { should contain_class('selinux::config') }
+  end
 end

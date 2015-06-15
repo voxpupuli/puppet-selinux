@@ -2,11 +2,7 @@ require 'spec_helper'
 
 describe 'selinux::port' do
   let(:title) { 'myapp' }
-  let(:facts) { {
-    :osfamily => 'RedHat',
-    :operatingsystemmajrelease => '7',
-    :selinux_current_mode => 'enforcing',
-  } }
+  include_context 'RedHat 7'
 
   ['tcp', 'udp', 'tcp6', 'udp6'].each do |protocol|
     context "valid protocol #{protocol}" do
