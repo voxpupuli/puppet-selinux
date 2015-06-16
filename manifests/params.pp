@@ -13,7 +13,11 @@ class selinux::params {
   case $::osfamily {
     'RedHat': {
       case $::operatingsystem {
-        'RedHat': {
+        'Fedora': {
+          $sx_fs_mount = '/sys/fs/selinux'
+          $package_name = 'policycoreutils-python'
+        }
+        default: {
           case $::operatingsystemmajrelease {
             '7': {
               $sx_fs_mount = '/sys/fs/selinux'
@@ -31,13 +35,6 @@ class selinux::params {
               fail("${::operatingsystem}-${::operatingsystemmajrelease} is not supported")
             }
           }
-        }
-        'Fedora': {
-          $sx_fs_mount = '/sys/fs/selinux'
-          $package_name = 'policycoreutils-python'
-        }
-        default: {
-          fail("${::operatingsystem} is not supported")
         }
       }
     }
