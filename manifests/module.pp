@@ -61,7 +61,8 @@ define selinux::module(
   exec { "${name}-checkloaded":
     refreshonly => false,
     creates     => "/etc/selinux/${selinux_policy}/modules/active/modules/${name}.pp",
-    command     => 'true',
+
+    command     => 'true', # lint:ignore:quoted_booleans
     notify      => Exec["${name}-buildmod"],
   }
 
@@ -85,7 +86,7 @@ define selinux::module(
     present: {
       if $use_makefile {
         exec { "${name}-buildmod":
-          command => "true",
+          command => 'true', # lint:ignore:quoted_booleans
         }
         exec { "${name}-buildpp":
           command => "make -f ${makefile} ${name}.pp",
