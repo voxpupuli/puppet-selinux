@@ -2,11 +2,7 @@ require 'spec_helper'
 
 describe 'selinux::fcontext' do
   let(:title) { 'myfile' }
-  let(:facts) { {
-    :osfamily => 'RedHat',
-    :operatingsystemmajrelease => '7',
-    :selinux_current_mode => 'enforcing',
-  } }
+  include_context 'RedHat 7'
 
   context 'invalid pathname' do
     it { expect { is_expected.to compile }.to raise_error }

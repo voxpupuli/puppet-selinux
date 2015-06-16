@@ -3,16 +3,7 @@ require 'spec_helper'
 describe 'selinux::restorecond::fragment' do
   let(:pre_condition) { 'class { "selinux::restorecond": }' }
   let(:title) { 'cond' }
-  let(:facts) { {
-    :osfamily => 'RedHat',
-    :operatingsystemmajrelease => '7',
-    :selinux_current_mode => 'enforcing',
-    # concat facts
-    :concat_basedir => '/tmp',
-    :id => 0,
-    :is_pe => false,
-    :path => '/tmp',
-  } }
+  include_context 'RedHat 7'
 
   context 'source' do
     let(:params) { { :source => 'puppet:///data/cond.txt' } }
