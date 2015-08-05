@@ -1,23 +1,13 @@
 # Definition: selinux::restorecon
 #
 # Description
-#  This method provides the restorecon command. After running the restorecon, the file will have 
-#  the correct context re-applied and the changes will be made permanent.
-#
-# Parameters:
-#   - $pathname: path of the file to which the context needs to be re-applied.
-#
-# Actions:
-#  Runs "restorecon" with options to persistently set the file context
-#
-# Requires:
-#  - SELinux
-#  - policycoreutils-python (for el-based systems)
+#  After running the restorecon, the file will have the correct context re-applied and the changes will be made permanent.
 #
 # Sample Usage:
 #  selinux::restorecon{'restore-project-log-context':
 #     pathname => "/var/log/project/",
 #  }
+
 
 define selinux::restorecon (
   $pathname,
