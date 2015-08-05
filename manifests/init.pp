@@ -30,6 +30,14 @@ class selinux (
   $module_prefix  = $::selinux::params::module_prefix,
   $manage_package = $::selinux::params::manage_package,
   $package_name   = $::selinux::params::package_name,
+  $mode = $::selinux::params::mode,
+
+  ### START Hiera Lookups ###
+  $selinux_booleans = {},
+  $selinux_modules = {},
+  $selinux_fcontexts = {},
+  $selinux_ports = {}
+  ### END Hiera Lookups ###
 ) inherits selinux::params {
 
   $mode_real = $mode ? {
@@ -55,4 +63,9 @@ class selinux (
     package_name   => $package_name,
   } ->
   class { 'selinux::config': }
+
+  create_resources('selinux::boolean', $selinux_booleans)
+  create_resources('selinux::module', $selinux_modules)
+  create_resources('selinux::fcontext', $selinux_fcontexts)
+  create_resources('selinux::port', $selinux_ports)
 }
