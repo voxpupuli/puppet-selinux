@@ -1,11 +1,21 @@
-# Class: selinux::restorecon
+# Definition: selinux::restorecon
 #
 # Description
-#  This class provides the restorecon, applies the new security context to the files.
+#  This method provides the restorecon, applies the new security context to the files.
+#
+# Parameters:
+#   - $pathname: folder path to file context needs to be applied after semanage.
+#
+# Actions:
+#  Runs "restorecon" with options to persistently set the file context
+#
+# Requires:
+#  - SELinux
+#  - policycoreutils-python (for el-based systems)
 #
 # Sample Usage:
-#  selinux::restorecon{'restore-apollo-log-context':
-#     pathname => "/var/log/apollo/",
+#  selinux::restorecon{'restore-project-log-context':
+#     pathname => "/var/log/project/",
 #  }
 
 define selinux::restorecon (
