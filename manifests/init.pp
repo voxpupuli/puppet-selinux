@@ -18,8 +18,20 @@
 #
 class selinux (
   $mode = $::selinux::params::mode,
+
+  ### START Hiera Lookups ###
+  $selinux_booleans = {}
+  $selinux_modules = {}
+  $selinux_fcontexts = {}
+  $selinux_ports = {}
+  ### END Hiera Lookups ###
 ) inherits selinux::params {
 
   class { 'selinux::package': } ->
   class { 'selinux::config': }
+
+  create_resources('selinux::boolean', $selinux_booleans)
+  create_resources('selinux::module', $selinux_modules)
+  create_resources('selinux::fcontext', $selinux_fcontexts)
+  create_resources('selinux::port', $selinux_ports)
 }
