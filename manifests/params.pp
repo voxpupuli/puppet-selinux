@@ -31,6 +31,13 @@ class selinux::params {
               $sx_fs_mount = '/selinux'
               $package_name = 'policycoreutils'
             }
+            '': {
+              # Fallback to lsbmajdistrelease, if puppet version is < 3.0
+              if($::lsbmajdistrelease == 5) {
+                $sx_fs_mount = '/selinux'
+                $package_name = 'policycoreutils'
+              }
+            }
             default: {
               fail("${::operatingsystem}-${::operatingsystemmajrelease} is not supported")
             }
