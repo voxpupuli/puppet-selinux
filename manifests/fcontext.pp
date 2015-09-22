@@ -100,11 +100,11 @@ define selinux::fcontext (
   } elsif $filetype {
     $resource_name = "add_${context}_${pathname}_type_${filemode}"
     $command       = "semanage fcontext -a -f ${filemode} -t ${context} '${pathnameShell}'"
-    $unless        = "semanage fcontext -l | grep -P '^${pathnameRegexp}.*:${context}:'"
+    $unless        = "semanage fcontext -l | grep -P '^${pathnameRegexp}\\x20.*:${context}:'"
   } else {
     $resource_name = "add_${context}_${pathname}"
     $command       = "semanage fcontext -a -t ${context} '${pathnameShell}'"
-    $unless        = "semanage fcontext -l | grep -P '^${pathnameRegexp}.*:${context}:'"
+    $unless        = "semanage fcontext -l | grep -P '^${pathnameRegexp}\\x20.*:${context}:'"
   }
 
   exec { $resource_name:

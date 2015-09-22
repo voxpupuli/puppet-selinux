@@ -40,7 +40,7 @@ describe 'selinux::fcontext' do
     let(:params) { { :pathname => '/tmp/file1', :filetype => true, :filemode => 'a', :context => 'user_home_dir_t' } }
     it { should contain_exec('add_user_home_dir_t_/tmp/file1_type_a').with(
       :command => 'semanage fcontext -a -f a -t user_home_dir_t \'/tmp/file1\'',
-      :unless => 'semanage fcontext -l | grep -P \'^\Q/tmp/file1\E.*:user_home_dir_t:\''
+      :unless => 'semanage fcontext -l | grep -P \'^\Q/tmp/file1\E\x20.*:user_home_dir_t:\''
     ) }
   end
 
@@ -48,7 +48,7 @@ describe 'selinux::fcontext' do
     let(:params) { { :pathname => '/tmp/f"i$le\'1', :filetype => true, :filemode => 'a', :context => 'user_home_dir_t' } }
     it { should contain_exec('add_user_home_dir_t_/tmp/f"i$le\'1_type_a').with(
       :command => %q!semanage fcontext -a -f a -t user_home_dir_t '/tmp/f"i$le'"'"'1'!,
-      :unless => %q!semanage fcontext -l | grep -P '^\Q/tmp/f"i$le'"'"'1\E.*:user_home_dir_t:'!
+      :unless => %q!semanage fcontext -l | grep -P '^\Q/tmp/f"i$le'"'"'1\E\x20.*:user_home_dir_t:'!
     ) }
   end
 
@@ -56,7 +56,7 @@ describe 'selinux::fcontext' do
     let(:params) { { :pathname => '/tmp/file1', :context => 'user_home_dir_t' } }
     it { should contain_exec('add_user_home_dir_t_/tmp/file1').with(
       :command => 'semanage fcontext -a -t user_home_dir_t \'/tmp/file1\'',
-      :unless => 'semanage fcontext -l | grep -P \'^\Q/tmp/file1\E.*:user_home_dir_t:\''
+      :unless => 'semanage fcontext -l | grep -P \'^\Q/tmp/file1\E\x20.*:user_home_dir_t:\''
     ) }
   end
 
@@ -64,7 +64,7 @@ describe 'selinux::fcontext' do
     let(:params) { { :pathname => '/tmp/f"i$le\'1', :context => 'user_home_dir_t' } }
     it { should contain_exec('add_user_home_dir_t_/tmp/f"i$le\'1').with(
       :command => %q!semanage fcontext -a -t user_home_dir_t '/tmp/f"i$le'"'"'1'!,
-      :unless => %q!semanage fcontext -l | grep -P '^\Q/tmp/f"i$le'"'"'1\E.*:user_home_dir_t:'!
+      :unless => %q!semanage fcontext -l | grep -P '^\Q/tmp/f"i$le'"'"'1\E\x20.*:user_home_dir_t:'!
     ) }
   end
 
