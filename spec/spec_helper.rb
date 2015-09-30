@@ -6,6 +6,7 @@ facts = {
   :operatingsystem           => 'RedHat',
   :operatingsystemmajrelease => '7',
   :selinux_current_mode      => 'enforcing',
+  :selinux_config_policy     => 'targeted',
   # concat facts
   :concat_basedir => '/tmp',
   :id             => 0,

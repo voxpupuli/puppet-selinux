@@ -58,12 +58,21 @@ define selinux::module(
     cwd          => $selinux::params::sx_mod_dir,
   }
 
+  case $ensure { # lint:ignore:case_without_default
+    present: {
+      $_checkloaded_notify = [Exec["${name}-buildmod"]]
+    }
+    absent: {
+      # buildmod doesn't exist in the absent case
+      $_checkloaded_notify = []
+    }
+  }
   exec { "${name}-checkloaded":
     refreshonly => false,
     creates     => "/etc/selinux/${selinux_policy}/modules/active/modules/${name}.pp",
 
     command     => 'true', # lint:ignore:quoted_booleans
-    notify      => Exec["${name}-buildmod"],
+    notify      => $_checkloaded_notify,
   }
 
   ## Begin Configuration
