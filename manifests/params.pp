@@ -9,6 +9,7 @@
 class selinux::params {
   $sx_mod_dir   = '/usr/share/selinux'
   $mode         = 'disabled'
+  $type         = 'targeted'
 
   case $::osfamily {
     'RedHat': {
