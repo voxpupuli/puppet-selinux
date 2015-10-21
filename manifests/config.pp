@@ -27,7 +27,7 @@ class selinux::config (
 
   # Validations
   validate_re($mode, ['^enforcing$', '^permissive$', '^disabled$'], "Valid modes are enforcing, permissive, and disabled.  Received: ${mode}")
-  validate_re($type, ['^targeted$', '^minimum$', '^mls$'], "Valid modes are targeted, minimum, and mls.  Received: ${type}")
+  validate_re($type, ['^targeted$', '^minimum$', '^mls$'], "Valid types are targeted, minimum, and mls.  Received: ${type}")
 
   file { $selinux::params::sx_mod_dir:
     ensure => directory,

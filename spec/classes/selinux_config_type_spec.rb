@@ -14,21 +14,21 @@ describe 'selinux' do
       let(:params) { { :type => 'targeted' } }
 
       it { should contain_file('/usr/share/selinux').with(:ensure => 'directory') }
-      it { should contain_file_line('set-selinux-config-to-targeted').with(:line => 'SELINUXTYPE=targeted') }
+      it { should contain_file_line('set-selinux-config-type-to-targeted').with(:line => 'SELINUXTYPE=targeted') }
     end
 
     context 'minimal' do
       let(:params) { { :type => 'minimal' } }
 
       it { should contain_file('/usr/share/selinux').with(:ensure => 'directory') }
-      it { should contain_file_line('set-selinux-config-to-minimal').with(:line => 'SELINUXTYPE=minimal') }
+      it { should contain_file_line('set-selinux-config-type-to-minimal').with(:line => 'SELINUXTYPE=minimal') }
     end
 
     context 'mls' do
       let(:params) { { :type => 'mls' } }
 
       it { should contain_file('/usr/share/selinux').with(:ensure => 'directory') }
-      it { should contain_file_line('set-selinux-config-to-mls').with(:line => 'SELINUXTYPE=mls') }
+      it { should contain_file_line('set-selinux-config-type-to-mls').with(:line => 'SELINUXTYPE=mls') }
     end
 
   end
