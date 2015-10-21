@@ -18,6 +18,7 @@
 #
 class selinux (
   $mode = $::selinux::params::mode,
+  $type = $::selinux::params::type,
 ) inherits selinux::params {
 
   class { 'selinux::package': } ->

@@ -5,9 +5,10 @@
 #
 # Parameters:
 #  - $mode (enforcing|permissive|disabled) - sets the operating state for SELinux.
+#  - $mode (targeted|minimum|mls) - sets the operating type for SELinux.
 #
 # Actions:
-#  Configures SELinux to a specific state (enforced|permissive|disabled)
+#  Configures SELinux to a specific state (enforced|permissive|disabled and targeted|minimum|mls)
 #
 # Requires:
 #  This module has no requirements
@@ -17,6 +18,7 @@
 #
 class selinux::config (
   $mode = $::selinux::mode,
+  $type = $::selinux::type,
 ) {
 
   if $caller_module_name != $module_name {
@@ -24,7 +26,8 @@ class selinux::config (
   }
 
   # Validations
-  validate_re($mode, ['^enforcing$', '^permissive$', '^disabled'], "Valid modes are enforcing, permissive, and disabled.  Received: ${mode}")
+  validate_re($mode, ['^enforcing$', '^permissive$', '^disabled$'], "Valid modes are enforcing, permissive, and disabled.  Received: ${mode}")
+  validate_re($type, ['^targeted$', '^minimum$', '^mls$'], "Valid types are targeted, minimum, and mls.  Received: ${type}")
 
   file { $selinux::params::sx_mod_dir:
     ensure => directory,
@@ -34,6 +37,12 @@ class selinux::config (
     path  => '/etc/selinux/config',
     line  => "SELINUX=${mode}",
     match => '^SELINUX=\w+',
+  }
+
+  file_line { "set-selinux-config-type-to-${type}":
+    path  => '/etc/selinux/config',
+    line  => "SELINUXTYPE=${type}",
+    match => '^SELINUXTYPE=\w+',
   }
 
   case $mode {
