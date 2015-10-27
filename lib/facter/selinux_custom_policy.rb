@@ -1,6 +1,6 @@
 # As a workaround for Facter bug with EL7:
 # https://tickets.puppetlabs.com/browse/FACT-756
-# 
+#
 
 require 'facter'
 
