@@ -19,4 +19,3 @@ class { 'selinux':
 # class { 'selinux':
 #   mode => 'permissive',
 # }
-

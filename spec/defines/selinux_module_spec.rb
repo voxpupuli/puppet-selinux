@@ -15,7 +15,7 @@ describe 'selinux::module' do
     }
 
   end  # context
-  
+
   context 'absent case' do
 
     let(:params) {{

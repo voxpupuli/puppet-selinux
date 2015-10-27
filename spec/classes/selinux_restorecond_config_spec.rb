@@ -7,4 +7,3 @@ describe 'selinux::restorecond' do
   it { should contain_concat__fragment('restorecond_config_default') }
 
 end
-

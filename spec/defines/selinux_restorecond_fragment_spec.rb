@@ -16,4 +16,3 @@ describe 'selinux::restorecond::fragment' do
   end
 
 end
-

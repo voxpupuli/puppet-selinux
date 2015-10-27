@@ -41,4 +41,3 @@ describe 'selinux' do
   end
 
 end
-
