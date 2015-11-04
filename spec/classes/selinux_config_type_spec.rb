@@ -5,9 +5,20 @@ describe 'selinux' do
 
   context 'config' do
 
-    context 'invalid mode' do
+    context 'invalid type' do
       let(:params) { { :type => 'invalid' } }
       it { expect { should create_class('selinux') }.to raise_error(/Valid types are targeted, minimum, and mls.  Received: invalid/) }
+    end
+
+    context 'undef type' do
+      it { should have_file_resource_count(1) }
+      it { should have_file_line_resource_count(0) }
+      it { should have_exec_resource_count(0) }
+
+      it { should contain_file('/usr/share/selinux') }
+      it { should_not contain_file_line('set-selinux-config-type-to-targeted') }
+      it { should_not contain_file_line('set-selinux-config-type-to-minimum') }
+      it { should_not contain_file_line('set-selinux-config-type-to-mls') }
     end
 
     context 'targeted' do

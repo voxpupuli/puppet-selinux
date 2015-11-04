@@ -26,24 +26,30 @@ Requires puppetlabs/stdlib
 Parameters:
 
  * `$mode` (enforced|permissive|disabled) - sets the operating state for SELinux.
+ * `$type` (targeted|minimum|mls) - sets the enforcement type.
 
 ## Reference
 
-Basic usage:
+### Basic usage
 
 ```puppet
 include selinux
 ```
 
-More advanced usage:
+This will include the module and allow you to use the provided defined types, but will not modify existing SELinux settings on the system.
+
+### More advanced usage
 
 ```puppet
 class { selinux:
-  mode => 'enforcing'
+  mode => 'enforcing',
+  type => 'targeted',
 }
 ```
 
-Deploy a custom module:
+This will include the module and manage the SELinux mode (possible values are `enforcing`, `permissive`, and `disabled`) and enforcement type (possible values are `target`, `minimum`, and `mls`). Note that disabling SELinux requires a reboot to fully take effect. It will run in `permissive` mode until then.
+
+### Deploy a custom module
 
 ```puppet
 selinux::module { 'resnet-puppet':
@@ -52,9 +58,17 @@ selinux::module { 'resnet-puppet':
 }
 ```
 
+### Set a boolean value
+
+```puppet
+selinux::boolean { 'puppetagent_manage_all_files': }
+```
+
 ## Defined Types
-* `fcontext` - Define fcontext types and equals values
 * `boolean` - Set seboolean values
+* `fcontext` - Define fcontext types and equals values
+* `module` - Manage an SELinux module
+* `permissive` - Set a context to `permissive`.
 * `port` - Set selinux port context policies
 
 
