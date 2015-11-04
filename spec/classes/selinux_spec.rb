@@ -10,6 +10,7 @@ describe 'selinux' do
       include_context ctx
 
       it { should contain_class('selinux').without_mode() }
+      it { should contain_class('selinux').without_type() }
       it { should contain_class('selinux::package') }
       it { should contain_class('selinux::config') }
     end
