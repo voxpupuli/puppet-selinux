@@ -17,10 +17,15 @@
 #  include selinux
 #
 class selinux (
-  $mode = $::selinux::params::mode,
-  $type = $::selinux::params::type,
+  $mode           = $::selinux::params::mode,
+  $type           = $::selinux::params::type,
+  $manage_package = $::selinux::params::manage_package,
+  $package_name   = $::selinux::params::package_name,
 ) inherits selinux::params {
 
-  class { 'selinux::package': } ->
+  class { 'selinux::package':
+    manage_package => $manage_package,
+    package_name   => $package_name,
+  } ->
   class { 'selinux::config': }
 }

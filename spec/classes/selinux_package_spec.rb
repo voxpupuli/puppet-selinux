@@ -38,6 +38,40 @@ describe 'selinux' do
       it { should contain_package('policycoreutils-python').with(:ensure => 'installed') }
     end
 
+    context 'do not manage package' do
+      let(:facts) do
+        {
+          :osfamily                  => 'RedHat',
+          :operatingsystem           => 'RedHat',
+          :operatingsystemmajrelease => '5',
+        }
+      end
+      let(:params) do
+        {
+          :manage_package => false,
+        }
+      end
+
+      it { should_not contain_package('policycoreutils').with(:ensure => 'installed') }
+    end
+
+    context 'install a different package name' do
+      let(:facts) do
+        {
+          :osfamily                  => 'RedHat',
+          :operatingsystem           => 'RedHat',
+          :operatingsystemmajrelease => '5',
+        }
+      end
+      let(:params) do
+        {
+          :package_name => 'some_package',
+        }
+      end
+
+      it { should contain_package('some_package').with(:ensure => 'installed') }
+    end
+
   end
 
 end

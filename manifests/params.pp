@@ -7,9 +7,10 @@
 #  mod_dir = $selinux::params::sx_mod_dir
 #
 class selinux::params {
-  $sx_mod_dir   = '/usr/share/selinux'
-  $mode         = undef
-  $type         = undef
+  $sx_mod_dir     = '/usr/share/selinux'
+  $mode           = undef
+  $type           = undef
+  $manage_package = true
 
   case $::osfamily {
     'RedHat': {
