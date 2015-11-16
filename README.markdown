@@ -27,6 +27,8 @@ Parameters:
 
  * `$mode` (enforced|permissive|disabled) - sets the operating state for SELinux.
  * `$type` (targeted|minimum|mls) - sets the enforcement type.
+ * `$manage_package` (boolean) - Whether or not to manage the SELinux management package.
+ * `$package_name` (string) - sets the name of the selinux management package.
 
 ## Reference
 

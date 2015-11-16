@@ -5,7 +5,9 @@
 #
 # Parameters:
 #  - $mode (enforcing|permissive|disabled) - sets the operating state for SELinux.
-#  - $mode (targeted|minimum|mls) - sets the operating type for SELinux.
+#  - $type (targeted|minimum|mls) - sets the operating type for SELinux.
+#  - $manage_package (boolean) - Whether or not to manage the SELinux management package.
+#  - $package_name (string) - sets the name of the selinux management package.
 #
 # Actions:
 #  Configures SELinux to a specific state (enforced|permissive|disabled and targeted|minimum|mls)
@@ -17,8 +19,10 @@
 #  This module should not be called directly.
 #
 class selinux::config (
-  $mode = $::selinux::mode,
-  $type = $::selinux::type,
+  $mode           = $::selinux::mode,
+  $type           = $::selinux::type,
+  $manage_package = $::selinux::manage_package,
+  $package_name   = $::selinux::package_name,
 ) {
 
   if $caller_module_name != $module_name {
@@ -69,4 +73,7 @@ class selinux::config (
       match => '^SELINUXTYPE=\w+',
     }
   }
+
+  validate_bool($manage_package)
+  validate_string($package_name)
 }

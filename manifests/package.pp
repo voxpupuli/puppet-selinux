@@ -13,14 +13,18 @@
 # Sample Usage:
 #
 # This class file is not called directly
-class selinux::package {
+class selinux::package (
+  $manage_package = $::selinux::params::manage_package,
+  $package_name   = $::selinux::params::package_name,
+){
 
   if $caller_module_name != $module_name {
     fail("Use of private class ${name} by ${caller_module_name}")
   }
 
-  package { $::selinux::params::package_name:
-    ensure => installed,
+  if $manage_package {
+    package { $package_name:
+      ensure => installed,
+    }
   }
-
 }
