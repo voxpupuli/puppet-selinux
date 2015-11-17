@@ -38,19 +38,15 @@
 define selinux::port (
   $context,
   $port,
-  $protocol = undef,
+  $protocol,
 ) {
 
   include selinux
 
-  if $protocol {
-    validate_re($protocol, ['^tcp6?$', '^udp6?$'])
-    $protocol_switch="-p ${protocol} "
-  } else {
-    $protocol_switch=''
-  }
+  validate_re($protocol, ['^tcp6?$', '^udp6?$'])
+  $protocol_switch="-p ${protocol} "
 
-  exec { "add_${context}_${port}":
+  exec { "add_${context}_${protocol}_${port}":
     command => "semanage port -a -t ${context} ${protocol_switch}${port}",
     unless  => "semanage port -l|grep \"^${context}.*${protocol}.*${port}\"|grep -w ${port}",
     path    => '/bin:/sbin:/usr/bin:/usr/sbin',
