@@ -88,18 +88,23 @@ define selinux::fcontext (
     fail('file mode must be one of: a,f,d,c,b,s,l,p - see "man semanage-fcontext"')
   }
 
+  $destinationShell = selinux_sh_escape($destination)
+  $pathnameShell = selinux_sh_escape($pathname)
+  $destinationRegexp = selinux_sh_escape(selinux_escape_perl_regexp($destination))
+  $pathnameRegexp = selinux_sh_escape(selinux_escape_perl_regexp($pathname))
+
   if $equals {
     $resource_name = "add_${destination}_${pathname}"
-    $command       = "semanage fcontext -a -e \"${destination}\" \"${pathname}\""
-    $unless        = "semanage fcontext -l | grep -E \"^${pathname} = ${destination}$\""
+    $command       = "semanage fcontext -a -e '${destinationShell}' '${pathnameShell}'"
+    $unless        = "semanage fcontext -l | grep -P '^${pathnameRegexp} = ${destinationRegexp}\$'"
   } elsif $filetype {
     $resource_name = "add_${context}_${pathname}_type_${filemode}"
-    $command       = "semanage fcontext -a -f ${filemode} -t ${context} \"${pathname}\""
-    $unless        = "semanage fcontext -l | grep -E \"^${pathname}.*:${context}:\""
+    $command       = "semanage fcontext -a -f ${filemode} -t ${context} '${pathnameShell}'"
+    $unless        = "semanage fcontext -l | grep -P '^${pathnameRegexp}\\x20.*:${context}:'"
   } else {
     $resource_name = "add_${context}_${pathname}"
-    $command       = "semanage fcontext -a -t ${context} \"${pathname}\""
-    $unless        = "semanage fcontext -l | grep -E \"^${pathname}.*:${context}:\""
+    $command       = "semanage fcontext -a -t ${context} '${pathnameShell}'"
+    $unless        = "semanage fcontext -l | grep -P '^${pathnameRegexp}\\x20.*:${context}:'"
   }
 
   exec { $resource_name:
