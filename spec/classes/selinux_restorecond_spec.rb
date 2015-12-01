@@ -5,5 +5,4 @@ describe 'selinux::restorecond' do
 
   it { should contain_class('selinux::restorecond::config') }
   it { should contain_class('selinux::restorecond::service') }
-
 end

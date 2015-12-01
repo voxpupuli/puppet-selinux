@@ -4,22 +4,35 @@ describe 'selinux::boolean' do
   let(:title) { 'mybool' }
   include_context 'RedHat 7'
 
-  context 'default' do
-    it { should contain_exec("setsebool -P 'mybool' true")}
-  end
-
-  ['on', true].each do |value|
+  ['on', true, 'present'].each do |value|
     context value do
-      let(:params) { { :ensure => value } }
-      it { should contain_exec("setsebool -P 'mybool' true")}
+      let(:params) do
+        {
+          ensure: value
+        }
+      end
+      it do
+        should contain_selboolean('mybool').with(
+          'value'      => 'on',
+          'persistent' => true
+        )
+      end
     end
   end
 
-  ['off', false].each do |value|
+  ['off', false, 'absent'].each do |value|
     context value do
-      let(:params) { { :ensure => value } }
-      it { should contain_exec("setsebool -P 'mybool' false")}
+      let(:params) do
+        {
+          ensure: value
+        }
+      end
+      it do
+        should contain_selboolean('mybool').with(
+          'value'      => 'off',
+          'persistent' => true
+        )
+      end
     end
   end
-
 end

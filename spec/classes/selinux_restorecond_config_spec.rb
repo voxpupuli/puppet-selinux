@@ -5,5 +5,4 @@ describe 'selinux::restorecond' do
 
   it { should contain_concat('/etc/selinux/restorecond.conf') }
   it { should contain_concat__fragment('restorecond_config_default') }
-
 end

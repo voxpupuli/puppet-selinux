@@ -8,6 +8,7 @@
 #  - $type (targeted|minimum|mls) - sets the operating type for SELinux.
 #  - $manage_package (boolean) - Whether or not to manage the SELinux management package.
 #  - $package_name (string) - sets the name of the selinux management package.
+#  - $sx_mod_dir (directory) - sets the operating sx_mod_dir for SELinux.
 #
 # Actions:
 #  Configures SELinux to a specific state (enforced|permissive|disabled and targeted|minimum|mls)
@@ -21,6 +22,7 @@
 class selinux::config (
   $mode           = $::selinux::mode,
   $type           = $::selinux::type,
+  $sx_mod_dir     = $::selinux::sx_mod_dir,
   $manage_package = $::selinux::manage_package,
   $package_name   = $::selinux::package_name,
 ) {
@@ -29,13 +31,13 @@ class selinux::config (
     fail("Use of private class ${name} by ${caller_module_name}")
   }
 
-  file { $selinux::params::sx_mod_dir:
+  file { $sx_mod_dir:
     ensure => directory,
+    owner  => 'root',
+    group  => 'root',
   }
 
   if $mode {
-    validate_re($mode, ['^enforcing$', '^permissive$', '^disabled$'], "Valid modes are enforcing, permissive, and disabled.  Received: ${mode}")
-
     file_line { "set-selinux-config-to-${mode}":
       path  => '/etc/selinux/config',
       line  => "SELINUX=${mode}",
@@ -65,15 +67,10 @@ class selinux::config (
   }
 
   if $type {
-    validate_re($type, ['^targeted$', '^minimum$', '^mls$'], "Valid types are targeted, minimum, and mls.  Received: ${type}")
-
     file_line { "set-selinux-config-type-to-${type}":
       path  => '/etc/selinux/config',
       line  => "SELINUXTYPE=${type}",
       match => '^SELINUXTYPE=\w+',
     }
   }
-
-  validate_bool($manage_package)
-  validate_string($package_name)
 }
