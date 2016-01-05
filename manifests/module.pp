@@ -33,6 +33,7 @@ define selinux::module(
   $makefile     = '/usr/share/selinux/devel/Makefile',
   $prefix       = 'local_',
   $sx_mod_dir   = '/usr/share/selinux',
+  $syncversion  = true,
 ) {
 
   require selinux
@@ -42,6 +43,7 @@ define selinux::module(
   validate_string($prefix)
   validate_absolute_path($sx_mod_dir)
   validate_absolute_path($makefile)
+  validate_bool($syncversion)
 
   $selinux_policy = $::selinux_config_policy ? {
     /targeted|strict/ => $::selinux_config_policy,
@@ -70,6 +72,6 @@ define selinux::module(
     # Warning: change the .te version!
     ensure       => $ensure,
     selmoduledir => $sx_mod_dir,
-    syncversion  => true,
+    syncversion  => $syncversion,
   }
 }
