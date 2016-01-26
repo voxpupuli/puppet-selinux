@@ -30,7 +30,6 @@ class selinux (
   $module_prefix  = $::selinux::params::module_prefix,
   $manage_package = $::selinux::params::manage_package,
   $package_name   = $::selinux::params::package_name,
-  $mode = $::selinux::params::mode,
 
   ### START Hiera Lookups ###
   $selinux_booleans = {},
