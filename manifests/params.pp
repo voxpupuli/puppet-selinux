@@ -8,7 +8,6 @@
 #
 class selinux::params {
   $makefile       = '/usr/share/selinux/devel/Makefile'
-  $module_prefix  = ''
   $sx_mod_dir     = '/usr/share/selinux'
   $mode           = undef
   $type           = undef
@@ -37,7 +36,7 @@ class selinux::params {
             }
             '': {
               # Fallback to lsbmajdistrelease, if puppet version is < 3.0
-              if($::lsbmajdistrelease == 5) {
+              if($::lsbmajdistrelease == '5') {
                 $sx_fs_mount = '/selinux'
                 $package_name = 'policycoreutils'
               }

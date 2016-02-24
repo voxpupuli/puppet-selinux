@@ -30,12 +30,12 @@ define selinux::permissive (
   $context,
 ) {
 
-  include selinux
+  include ::selinux
 
   exec { "add_${context}":
     command => "semanage permissive -a ${context}",
     unless  => "semanage permissive -l|grep ${context}",
     path    => '/bin:/sbin:/usr/bin:/usr/sbin',
-    require => Class['selinux::package']
+    require => Class['selinux::package'],
   }
 }

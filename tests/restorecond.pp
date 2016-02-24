@@ -1,5 +1,5 @@
-class {'selinux::restorecond':}
+class {'::selinux::restorecond':}
 
 selinux::restorecond::fragment{'test':
-  content => "/etc/does_not_exist\n"
+  content => "/etc/does_not_exist\n",
 }
