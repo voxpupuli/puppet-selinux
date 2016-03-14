@@ -65,19 +65,21 @@
 define selinux::fcontext (
   $pathname,
   $destination = undef,
-  $context     = '',
+  $context     = undef,
   $filetype    = false,
   $filemode    = undef,
   $equals      = false,
 ) {
 
-  include selinux
+  include ::selinux
 
   validate_absolute_path($pathname)
   validate_bool($filetype, $equals)
 
   if $equals {
     validate_absolute_path($destination)
+  } else {
+    validate_string($context)
   }
 
   if $equals and $filetype {

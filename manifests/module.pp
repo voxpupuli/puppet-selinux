@@ -37,7 +37,7 @@ define selinux::module(
 ) {
 
   require selinux
-  
+
   validate_re($ensure, [ '^present$', '^absent$' ], '$ensure must be "present" or "absent"')
   validate_string($source)
   validate_string($prefix)

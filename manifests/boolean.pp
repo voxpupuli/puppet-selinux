@@ -31,7 +31,7 @@ define selinux::boolean (
   $persistent = true,
 ) {
 
-  include selinux
+  include ::selinux
 
   $ensure_real = $ensure ? {
     true    => 'true', # lint:ignore:quoted_booleans
