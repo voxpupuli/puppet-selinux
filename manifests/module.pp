@@ -71,7 +71,7 @@ define selinux::module(
     # Load the module if it has changed or was not loaded
     # Warning: change the .te version!
     ensure        => $ensure,
-    selmodulepath => "${sx_mod_dir}/${prefix}${name}",
+    selmodulepath => "${sx_mod_dir}/${prefix}${name}.pp",
     syncversion   => $syncversion,
   }
 }
