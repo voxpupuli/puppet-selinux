@@ -67,11 +67,11 @@ define selinux::module(
     command     => "make -f ${makefile} ${prefix}${name}.pp",
   }
   ->
-  selmodule { "${prefix}${name}":
+  selmodule { $name:
     # Load the module if it has changed or was not loaded
     # Warning: change the .te version!
-    ensure       => $ensure,
-    selmoduledir => $sx_mod_dir,
-    syncversion  => $syncversion,
+    ensure        => $ensure,
+    selmodulepath => "${sx_mod_dir}/${prefix}${name}",
+    syncversion   => $syncversion,
   }
 }
