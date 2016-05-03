@@ -40,7 +40,7 @@ define selinux::module(
   require selinux
 
   validate_re($ensure, [ '^present$', '^absent$' ], '$ensure must be "present" or "absent"')
-  if $source == undef and $content == undef {
+  if $ensure == 'present' and $source == undef and $content == undef {
     fail("You must provide 'source' or 'content' field for selinux module")
   }
   if $source != undef {
