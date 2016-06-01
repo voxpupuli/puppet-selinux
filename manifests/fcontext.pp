@@ -30,6 +30,9 @@
 #         - s = socket
 #         - l = symbolic link
 #         - p = named pipe
+#    - $restorecond: Boolean Value - Run restorecon against the path name upon changes (default true)
+#    - $restorecond_path: Path name to use for restorecon, (default $pathname)
+#
 #
 # Actions:
 #  Runs "semanage fcontext" with options to persistently set the file context
@@ -64,11 +67,13 @@
 #
 define selinux::fcontext (
   $pathname,
-  $destination = undef,
-  $context     = undef,
-  $filetype    = false,
-  $filemode    = undef,
-  $equals      = false,
+  $destination      = undef,
+  $context          = undef,
+  $filetype         = false,
+  $filemode         = undef,
+  $equals           = false,
+  $restorecond      = true,
+  $restorecond_path = undef,
 ) {
 
   include ::selinux
@@ -81,6 +86,13 @@ define selinux::fcontext (
   } else {
     validate_string($context)
   }
+
+  $restorecond_path_private = $restorecond_path ? {
+    undef   => $pathname,
+    default => $restorecond_path
+  }
+
+  validate_absolute_path($restorecond_path_private)
 
   if $equals and $filetype {
     fail('Resource cannot contain both "equals" and "filetype" options')
@@ -110,4 +122,14 @@ define selinux::fcontext (
     path    => '/bin:/sbin:/usr/bin:/usr/sbin',
     require => Class['selinux::package'],
   }
+
+  if $restorecond {
+    exec { "restorecond ${resource_name}":
+      path        => '/bin:/sbin:/usr/bin:/usr/sbin',
+      command     => "restorecon ${restorecond_path_private}",
+      refreshonly => true,
+      subscribe   => Exec[$resource_name],
+    }
+  }
+
 }
