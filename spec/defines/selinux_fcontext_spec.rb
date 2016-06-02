@@ -48,7 +48,7 @@ describe 'selinux::fcontext' do
     it { should contain_exec('restorecond add_user_home_dir_t_/tmp/file1').with(command: 'restorecon /tmp/file1/different') }
   end
   context 'with restorecon recurse specific path' do
-    let(:params) { { pathname: '/tmp/file1', context: 'user_home_dir_t', restorecond_path: '/tmp/file1/different', restorecond_path: true } }
+    let(:params) { { pathname: '/tmp/file1', context: 'user_home_dir_t', restorecond_path: '/tmp/file1/different', restorecond_recurse: true } }
     it { should contain_exec('add_user_home_dir_t_/tmp/file1').with(command: 'semanage fcontext -a -t user_home_dir_t "/tmp/file1"') }
     it { should contain_exec('restorecond add_user_home_dir_t_/tmp/file1').with(command: 'restorecon -R /tmp/file1/different') }
   end
