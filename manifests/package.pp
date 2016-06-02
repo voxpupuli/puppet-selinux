@@ -21,8 +21,6 @@ class selinux::package (
     fail("Use of private class ${name} by ${caller_module_name}")
   }
   if $manage_package {
-    package { $package_name:
-      ensure => installed,
-    }
+    ensure_packages ($package_name)
   }
 }

@@ -12,17 +12,21 @@ describe 'selinux' do
         }
       end
 
-      it { should contain_package('policycoreutils').with(ensure: 'installed') }
+      it { should contain_package('policycoreutils').with(ensure: 'present') }
     end
 
-    context "On RedHat 6 based OSes" do
-      let(:facts) do
-        {
-          osfamily: 'RedHat',
-          operatingsystem: 'RedHat',
-          operatingsystemmajrelease: '6',
-          selinux_current_mode: 'enforcing'
-        }
+    %w(6 7).each do |majrelease|
+      context "On RedHat #{majrelease} based OSes" do
+        let(:facts) do
+          {
+            osfamily: 'RedHat',
+            operatingsystem: 'RedHat',
+            operatingsystemmajrelease: majrelease,
+            selinux_current_mode: 'enforcing'
+          }
+        end
+
+        it { should contain_package('policycoreutils-python').with(ensure: 'present') }
       end
 
       it { should contain_package('policycoreutils-python').with(ensure: 'installed') }
@@ -51,6 +55,7 @@ describe 'selinux' do
       end
       it { should contain_package('policycoreutils-python').with(ensure: 'installed') }
     end
+
     context 'On Fedora 20' do
       let(:facts) do
         {
@@ -116,7 +121,7 @@ describe 'selinux' do
         }
       end
 
-      it { should_not contain_package('policycoreutils').with(ensure: 'installed') }
+      it { should_not contain_package('policycoreutils').with(ensure: 'present') }
     end
 
     context 'install a different package name' do
@@ -133,7 +138,7 @@ describe 'selinux' do
         }
       end
 
-      it { should contain_package('some_package').with(ensure: 'installed') }
+      it { should contain_package('some_package').with(ensure: 'present') }
     end
   end
 end
