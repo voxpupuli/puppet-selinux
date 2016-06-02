@@ -28,7 +28,8 @@
 #  }
 #
 define selinux::module(
-  $source,
+  $source       = undef,
+  $content      = undef,
   $ensure       = 'present',
   $makefile     = '/usr/share/selinux/devel/Makefile',
   $prefix       = 'local_',
@@ -39,7 +40,15 @@ define selinux::module(
   require selinux
 
   validate_re($ensure, [ '^present$', '^absent$' ], '$ensure must be "present" or "absent"')
-  validate_string($source)
+  if $ensure == 'present' and $source == undef and $content == undef {
+    fail("You must provide 'source' or 'content' field for selinux module")
+  }
+  if $source != undef {
+    validate_string($source)
+  }
+  if $content != undef {
+    validate_string($content)
+  }
   validate_string($prefix)
   validate_absolute_path($sx_mod_dir)
   validate_absolute_path($makefile)
@@ -52,11 +61,12 @@ define selinux::module(
 
   ## Begin Configuration
   file { "${sx_mod_dir}/${prefix}${name}.te":
-    ensure => $ensure,
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0644',
-    source => $source,
+    ensure  => $ensure,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    source  => $source,
+    content => $content,
   }
   ~>
   exec { "${sx_mod_dir}/${prefix}${name}.pp":
@@ -67,11 +77,11 @@ define selinux::module(
     command     => "make -f ${makefile} ${prefix}${name}.pp",
   }
   ->
-  selmodule { "${prefix}${name}":
+  selmodule { $name:
     # Load the module if it has changed or was not loaded
     # Warning: change the .te version!
-    ensure       => $ensure,
-    selmoduledir => $sx_mod_dir,
-    syncversion  => $syncversion,
+    ensure        => $ensure,
+    selmodulepath => "${sx_mod_dir}/${prefix}${name}.pp",
+    syncversion   => $syncversion,
   }
 }

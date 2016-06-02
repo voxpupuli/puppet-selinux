@@ -13,24 +13,35 @@ class selinux::params {
   $type           = undef
   $manage_package = true
 
+  if $::operatingsystemmajrelease {
+    $os_maj_release = $::operatingsystemmajrelease
+  } else {
+    $os_versions    = split($::operatingsystemrelease, '[.]')
+    $os_maj_release = $os_versions[0]
+  }
+
   case $::osfamily {
     'RedHat': {
       case $::operatingsystem {
         'Fedora': {
           $sx_fs_mount = '/sys/fs/selinux'
-          $package_name = 'policycoreutils-python'
+          case $os_maj_release {
+            '19','20' : {
+              $package_name = 'policycoreutils-python'
+            }
+            '21','22','23','24' : {
+              $package_name = 'policycoreutils-devel'
+            }
+            default: {
+              fail("${::operatingsystem}-${::os_maj_release} is not supported")
+            }
+          }
         }
         default: {
-          if $::operatingsystemmajrelease {
-            $os_maj_release = $::operatingsystemmajrelease
-          } else {
-            $os_versions    = split($::operatingsystemrelease, '[.]')
-            $os_maj_release = $os_versions[0]
-          }
           case $os_maj_release {
             '7': {
               $sx_fs_mount = '/sys/fs/selinux'
-              $package_name = 'policycoreutils-python'
+              $package_name = 'policycoreutils-devel'
             }
             '6': {
               $sx_fs_mount = '/selinux'
