@@ -14,7 +14,7 @@ describe 'selinux::module' do
     it do
       should contain_file('/usr/share/selinux/local_mymodule.te').that_notifies('Exec[/usr/share/selinux/local_mymodule.pp]')
 
-      should contain_selmodule('local_mymodule').with_ensure('present')
+      should contain_selmodule('mymodule').with_ensure('present')
     end
   end  # context
 
@@ -27,7 +27,7 @@ describe 'selinux::module' do
     end
 
     it do
-      should contain_selmodule('local_mymodule')
+      should contain_selmodule('mymodule')
         .with_ensure('absent')
     end
   end  # context
