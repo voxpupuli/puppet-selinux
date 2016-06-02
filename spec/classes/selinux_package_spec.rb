@@ -12,7 +12,7 @@ describe 'selinux' do
         }
       end
 
-      it { should contain_package('policycoreutils').with(ensure: 'installed') }
+      it { should contain_package('policycoreutils').with(ensure: 'present') }
     end
 
     %w(6 7).each do |majrelease|
@@ -26,14 +26,14 @@ describe 'selinux' do
           }
         end
 
-        it { should contain_package('policycoreutils-python').with(ensure: 'installed') }
+        it { should contain_package('policycoreutils-python').with(ensure: 'present') }
       end
     end
 
     context 'On Fedora 22 based OSes' do
       include_context 'Fedora 22'
 
-      it { should contain_package('policycoreutils-python').with(ensure: 'installed') }
+      it { should contain_package('policycoreutils-python').with(ensure: 'present') }
     end
 
     context 'do not manage package' do
@@ -50,7 +50,7 @@ describe 'selinux' do
         }
       end
 
-      it { should_not contain_package('policycoreutils').with(ensure: 'installed') }
+      it { should_not contain_package('policycoreutils').with(ensure: 'present') }
     end
 
     context 'install a different package name' do
@@ -67,7 +67,7 @@ describe 'selinux' do
         }
       end
 
-      it { should contain_package('some_package').with(ensure: 'installed') }
+      it { should contain_package('some_package').with(ensure: 'present') }
     end
   end
 end
