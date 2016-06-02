@@ -67,13 +67,14 @@
 #
 define selinux::fcontext (
   $pathname,
-  $destination      = undef,
-  $context          = undef,
-  $filetype         = false,
-  $filemode         = undef,
-  $equals           = false,
-  $restorecond      = true,
-  $restorecond_path = undef,
+  $destination         = undef,
+  $context             = undef,
+  $filetype            = false,
+  $filemode            = undef,
+  $equals              = false,
+  $restorecond         = true,
+  $restorecond_path    = undef,
+  $restorecond_recurse = false,
 ) {
 
   include ::selinux
@@ -93,6 +94,11 @@ define selinux::fcontext (
   }
 
   validate_absolute_path($restorecond_path_private)
+
+  $restorecond_resurse_private = $restorecond_recurse ? {
+    true  => '-R',
+    false => ''
+  }
 
   if $equals and $filetype {
     fail('Resource cannot contain both "equals" and "filetype" options')
@@ -126,7 +132,7 @@ define selinux::fcontext (
   if $restorecond {
     exec { "restorecond ${resource_name}":
       path        => '/bin:/sbin:/usr/bin:/usr/sbin',
-      command     => "restorecon ${restorecond_path_private}",
+      command     => "restorecon ${restorecond_resurse_private} ${restorecond_path_private}",
       refreshonly => true,
       subscribe   => Exec[$resource_name],
     }
