@@ -28,8 +28,6 @@ describe 'selinux' do
 
         it { should contain_package('policycoreutils-python').with(ensure: 'present') }
       end
-
-      it { should contain_package('policycoreutils-python').with(ensure: 'installed') }
     end
 
     context "On RedHat 7 based OSes" do
