@@ -70,7 +70,7 @@ define selinux::fcontext (
   $destination         = undef,
   $context             = undef,
   $filetype            = false,
-  $filemode            = undef,
+  $filemode            = 'a',
   $equals              = false,
   $restorecond         = true,
   $restorecond_path    = undef,
@@ -111,15 +111,11 @@ define selinux::fcontext (
   if $equals {
     $resource_name = "add_${destination}_${pathname}"
     $command       = "semanage fcontext -a -e \"${destination}\" \"${pathname}\""
-    $unless        = "semanage fcontext -l | grep -E \"^${pathname} = ${destination}$\""
-  } elsif $filetype {
+    $unless        = "semanage fcontext -E | grep -F \"fcontext -a -e ${pathname} ${destination}$\""
+  } else {
     $resource_name = "add_${context}_${pathname}_type_${filemode}"
     $command       = "semanage fcontext -a -f ${filemode} -t ${context} \"${pathname}\""
-    $unless        = "semanage fcontext -l | grep \"^${pathname}[[:space:]].*:${context}:\""
-  } else {
-    $resource_name = "add_${context}_${pathname}"
-    $command       = "semanage fcontext -a -t ${context} \"${pathname}\""
-    $unless        = "semanage fcontext -l | grep \"^${pathname}[[:space:]].*:${context}:\""
+    $unless        = "semanage fcontext -E | grep -F \"fcontext -a -f $filemode -t ${context} \'${pathname}\'\""
   }
 
   Exec {
