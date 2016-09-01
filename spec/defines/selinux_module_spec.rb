@@ -27,8 +27,7 @@ describe 'selinux::module' do
     end
 
     it do
-      should contain_selmodule('mymodule')
-        .with_ensure('absent')
+      should contain_selmodule('mymodule').with_ensure('absent')
     end
   end  # context
 end # describe
