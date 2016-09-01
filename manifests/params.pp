@@ -38,7 +38,7 @@ class selinux::params {
           }
         }
         'Amazon': {
-            $sx_fs_mount = '/selinux',
+            $sx_fs_mount = '/selinux'
             $package_name = 'policycoreutils'
         }
         default: {
