@@ -21,6 +21,12 @@ matrix:
     env: PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes" FUTURE_PARSER="yes" CHECK=test
   - rvm: 2.1.9
     env: PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes" CHECK=test
+  - rvm: 2.0.0
+    env: PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes" CHECK=test
+  - rvm: 2.0.0
+    env: PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes" FUTURE_PARSE="yes" CHECK=test
+  - rvm: 2.0.0
+    env: PUPPET_VERSION="~> 4.0" CHECK=test
   - rvm: 2.1.9
     env: PUPPET_VERSION="~> 4.0" CHECK=test
   - rvm: 2.2.5
