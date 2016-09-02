@@ -12,25 +12,5 @@ RSpec.configure do |c|
   c.default_facts = default_facts
 end
 
-shared_context 'RedHat 7' do
-end
-
-shared_context 'CentOS 7' do
-  let(:facts) do
-    {
-      operatingsystem: 'CentOS',
-      operatingsystemmajrelease: '7'
-    }
-  end
-end
-
-shared_context 'Fedora 22' do
-  let(:facts) do
-    {
-      operatingsystem: 'Fedora',
-      operatingsystemmajrelease: '22'
-    }
-  end
-end
-
+require 'spec_helper_methods'
 # vim: syntax=ruby
