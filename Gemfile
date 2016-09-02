@@ -1,4 +1,4 @@
-source ENV['GEM_SOURCE'] || 'https://rubygems.org'
+source ENV['GEM_SOURCE'] || "https://rubygems.org"
 
 def location_for(place, fake_version = nil)
   if place =~ /^(git[:@][^#]*)#(.*)/
@@ -26,17 +26,8 @@ group :test do
   gem 'puppet-blacksmith',                                          :require => false
   gem 'voxpupuli-release',                                          :require => false, :git => 'https://github.com/voxpupuli/voxpupuli-release-gem.git'
   gem 'puppet-strings',                                             :require => false, :git => 'https://github.com/puppetlabs/puppetlabs-strings.git'
-  gem 'rubocop-rspec', '~> 1.7',                                    :require => false if RUBY_VERSION >= '2.3.0'
-  gem 'rubocop-rspec', '<= 1.5.1',                                  :require => false if RUBY_VERSION >= '2.0.0' and RUBY_VERSION < '2.3.0'
-  gem 'rubocop-rspec', '< 1.5.0',                                   :require => false if RUBY_VERSION < '2.0.0'
+  gem 'rubocop-rspec', '~> 1.6',                                    :require => false if RUBY_VERSION >= '2.3.0'
   gem 'json_pure', '<= 2.0.1',                                      :require => false if RUBY_VERSION < '2.0.0'
-
-  gem 'puppet-lint-empty_string-check',                             :require => false
-  gem 'puppet-lint-file_ensure-check',                              :require => false
-  gem 'puppet-lint-resource_reference_syntax',                      :require => false
-  gem 'puppet-lint-spaceship_operator_without_tag-check',           :require => false
-  gem 'puppet-lint-undef_in_function-check',                        :require => false
-  gem 'listen', '~> 3.0.0',                                         :require => false if RUBY_VERSION < '2.2.0'
 end
 
 group :development do

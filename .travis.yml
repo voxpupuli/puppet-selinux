@@ -21,12 +21,6 @@ matrix:
     env: PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes" FUTURE_PARSER="yes" CHECK=test
   - rvm: 2.1.9
     env: PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes" CHECK=test
-  - rvm: 2.0.0
-    env: PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes" CHECK=test
-  - rvm: 2.0.0
-    env: PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes" FUTURE_PARSE="yes" CHECK=test
-  - rvm: 2.0.0
-    env: PUPPET_VERSION="~> 4.0" CHECK=test
   - rvm: 2.1.9
     env: PUPPET_VERSION="~> 4.0" CHECK=test
   - rvm: 2.2.5
@@ -49,7 +43,7 @@ deploy:
     branch: ha-bug-puppet-forge
   user: puppet
   password:
-    secure: ""
+    secure: "r7NI3OHbyMs/w351LkmkTFFLriDDyWKvgyZt+XYPw7jbaWmqnV4+NSJMQSkXgTS+tq2jNPLOWY1UuPuFJKkyd1m7LteOb2yZ6HJs5BL7QJjJWC2vUjkY60kl2xHn81D6SEXOXoVseGWiimlTlWJM3pKljNgZOZlOMw96vgnd6/I="
   on:
     tags: true
     # all_branches is required to use tags

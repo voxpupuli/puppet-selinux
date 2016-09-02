@@ -35,7 +35,7 @@ RSpec::Core::RakeTask.new(:acceptance) do |t|
 end
 
 desc 'Run tests metadata_lint, release_checks'
-task :test => [
+task test: [
   :metadata_lint,
   :release_checks,
 ]
