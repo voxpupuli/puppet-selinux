@@ -1,37 +1,15 @@
-require 'rubygems' if RUBY_VERSION < '1.9.0'
 require 'puppetlabs_spec_helper/module_spec_helper'
+require 'rspec-puppet-facts'
+include RspecPuppetFacts
 
-facts = {
-  osfamily: 'RedHat',
-  operatingsystem: 'RedHat',
-  operatingsystemmajrelease: '7',
-  selinux_current_mode: 'enforcing',
-  selinux_config_policy: 'targeted',
-  # concat facts
-  concat_basedir: '/tmp',
-  id: 0,
-  is_pe: false,
-  path: '/tmp'
-}
-
-shared_context 'RedHat 7' do
-  let(:facts) { facts }
+RSpec.configure do |c|
+  default_facts = {
+    puppetversion: Puppet.version,
+    facterversion: Facter.version
+  }
+  default_facts.merge!(YAML.load(File.read(File.expand_path('../default_facts.yml', __FILE__)))) if File.exist?(File.expand_path('../default_facts.yml', __FILE__))
+  default_facts.merge!(YAML.load(File.read(File.expand_path('../default_module_facts.yml', __FILE__)))) if File.exist?(File.expand_path('../default_module_facts.yml', __FILE__))
+  c.default_facts = default_facts
 end
 
-shared_context 'CentOS 7' do
-  let(:facts) do
-    facts.dup.merge(
-      operatingsystem: 'CentOS',
-      operatingsystemmajrelease: '7'
-    )
-  end
-end
-
-shared_context 'Fedora 22' do
-  let(:facts) do
-    facts.dup.merge(
-      operatingsystem: 'Fedora',
-      operatingsystemmajrelease: '22'
-    )
-  end
-end
+# vim: syntax=ruby
