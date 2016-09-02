@@ -13,6 +13,7 @@ describe 'selinux' do
       it { should contain_class('selinux').without_type }
       it { should contain_class('selinux::package') }
       it { should contain_class('selinux::config') }
+      it { should contain_class('selinux::params') }
     end
   end
 end

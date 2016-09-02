@@ -6,7 +6,7 @@ describe 'selinux' do
   context 'config' do
     context 'invalid type' do
       let(:params) { { type: 'invalid' } }
-      it { expect { should create_class('selinux') }.to raise_error(/Valid types are targeted, minimum, and mls.  Received: invalid/) }
+      it { expect { should create_class('selinux') }.to raise_error(%r{Valid types are targeted, minimum, and mls.  Received: invalid}) }
     end
 
     context 'undef type' do

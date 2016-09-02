@@ -37,7 +37,7 @@ define selinux::module(
   $syncversion  = true,
 ) {
 
-  require selinux
+  include ::selinux
 
   validate_re($ensure, [ '^present$', '^absent$' ], '$ensure must be "present" or "absent"')
   if $ensure == 'present' and $source == undef and $content == undef {

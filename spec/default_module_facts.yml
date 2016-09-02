@@ -1,0 +1,10 @@
+---
+osfamily: RedHat
+operatingsystem: RedHat
+operatingsystemmajrelease: '7'
+selinux_config_mode: enforcing
+selinux_current_mode: enforcing
+selinux_config_policy: targeted
+# concat facts
+id: 0
+path: /tmp

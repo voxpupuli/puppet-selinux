@@ -14,6 +14,8 @@ describe 'selinux::module' do
     it do
       should contain_file('/usr/share/selinux/local_mymodule.te').that_notifies('Exec[/usr/share/selinux/local_mymodule.pp]')
 
+      should contain_exec('/usr/share/selinux/local_mymodule.pp').with(command: 'make -f /usr/share/selinux/devel/Makefile local_mymodule.pp')
+
       should contain_selmodule('mymodule').with_ensure('present')
     end
   end  # context
@@ -27,8 +29,7 @@ describe 'selinux::module' do
     end
 
     it do
-      should contain_selmodule('mymodule')
-        .with_ensure('absent')
+      should contain_selmodule('mymodule').with_ensure('absent')
     end
   end  # context
 end # describe

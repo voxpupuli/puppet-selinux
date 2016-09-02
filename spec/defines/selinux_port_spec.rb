@@ -13,7 +13,7 @@ describe 'selinux::port' do
 
   context 'invalid protocol' do
     let(:params) { { context: 'http_port_t', port: 8080, protocol: 'bad' } }
-    it { expect { is_expected.to compile }.to raise_error }
+    it { expect { is_expected.to compile }.to raise_error(%r{error during compilation}) }
   end
 
   context 'no protocol' do

@@ -5,19 +5,22 @@ describe 'selinux::fcontext' do
   include_context 'RedHat 7'
 
   context 'invalid pathname' do
-    it { expect { is_expected.to compile }.to raise_error }
+    it { expect { is_expected.to compile }.to raise_error(%r{Must pass pathname to | expects a value for parameter 'pathname'}) }
   end
 
   context 'equal requires destination' do
-    it { expect { is_expected.to compile }.to raise_error }
+    let(:params) { { pathname: '/tmp/file1', equals: true } }
+    it { expect { is_expected.to compile }.to raise_error(%r{is not an absolute path}) }
   end
 
   context 'invalid filetype' do
-    it { expect { is_expected.to compile }.to raise_error }
+    let(:params) { { pathname: '/tmp/file1', filetype: true, filemode: 'X', context: 'user_home_dir_t' } }
+    it { expect { is_expected.to compile }.to raise_error(%r{file mode must be one of: a,f,d,c,b,s,l,p - see "man semanage-fcontext"}) }
   end
 
   context 'equals and filetype' do
-    it { expect { is_expected.to compile }.to raise_error }
+    let(:params) { { pathname: '/tmp/file1', equals: true, filetype: true, filemode: 'a', context: 'user_home_dir_t', destination: '/tmp/file2' } }
+    it { expect { is_expected.to compile }.to raise_error(%r{cannot contain both "equals" and "filetype" options}) }
   end
 
   context 'substituting fcontext' do
