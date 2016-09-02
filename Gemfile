@@ -34,6 +34,7 @@ group :development do
   gem 'travis',       :require => false
   gem 'travis-lint',  :require => false
   gem 'guard-rake',   :require => false
+  gem 'github_changelog_generator'
 end
 
 group :system_tests do

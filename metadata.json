@@ -1,12 +1,12 @@
 {
-"name": "jfryman/selinux",
-"version": "0.4.0",
-"author": "jfryman",
+"name": "puppet-selinux",
+"version": "0.4.1",
+"author": "Vox Pupuli",
 "summary": "This class manages SELinux on RHEL based systems",
 "license": "Apache-2.0",
-"source": "https://github.com/jfryman/puppet-selinux",
-"project_page": "https://github.com/jfryman/puppet-selinux",
-"issues_url": "https://github.com/jfryman/puppet-selinux/issues",
+"source": "https://github.com/voxpupuli/puppet-selinux",
+"project_page": "https://github.com/voxpupuli/puppet-selinux",
+"issues_url": "https://github.com/voxpupuli/puppet-selinux/issues",
 "operatingsystem_support": [
   {
     "operatingsystem": "RedHat",
