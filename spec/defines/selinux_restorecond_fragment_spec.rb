@@ -6,12 +6,21 @@ describe 'selinux::restorecond::fragment' do
   include_context 'RedHat 7'
 
   context 'source' do
-    let(:params) { { source: 'puppet:///data/cond.txt' } }
+    let(:params) do
+      {
+        source: 'puppet:///data/cond.txt'
+      }
+    end
     it { should contain_concat__fragment('restorecond_conf_cond').with(source: 'puppet:///data/cond.txt', order: 10) }
   end
 
   context 'content and order' do
-    let(:params) { { content: '/etc/myapp', order: 20 } }
+    let(:params) do
+      {
+        content: '/etc/myapp',
+        order: 20
+      }
+    end
     it { should contain_concat__fragment('restorecond_conf_cond').with(content: '/etc/myapp', order: 20) }
   end
 end
