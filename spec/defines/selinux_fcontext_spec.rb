@@ -18,6 +18,11 @@ describe 'selinux::fcontext' do
     it { expect { is_expected.to compile }.to raise_error(%r{file mode must be one of: a,f,d,c,b,s,l,p - see "man semanage-fcontext"}) }
   end
 
+  context 'invalid multiple filetype' do
+    let(:params) { { pathname: '/tmp/file1', filetype: true, filemode: 'afdcbslp', context: 'user_home_dir_t' } }
+    it { expect { is_expected.to compile }.to raise_error(%r{file mode must be one of: a,f,d,c,b,s,l,p - see "man semanage-fcontext"}) }
+  end
+
   context 'equals and filetype' do
     let(:params) { { pathname: '/tmp/file1', equals: true, filetype: true, filemode: 'a', context: 'user_home_dir_t', destination: '/tmp/file2' } }
     it { expect { is_expected.to compile }.to raise_error(%r{cannot contain both "equals" and "filetype" options}) }
@@ -43,7 +48,7 @@ describe 'selinux::fcontext' do
 
   context 'with restorecon disabled' do
     let(:params) { { pathname: '/tmp/file1', context: 'user_home_dir_t', restorecond: false } }
-    it { should_not contain_exec('restorecond add_user_home_dir_t_/tmp/file1_type_a').with(command: 'restorecon /tmp/file1') }
+    it { should_not contain_exec('restorecond add_user_home_dir_t_/tmp/file1_type_a').with(command: %r{restorecon}) }
   end
   context 'with restorecon specific path' do
     let(:params) { { pathname: '/tmp/file1', context: 'user_home_dir_t', restorecond_path: '/tmp/file1/different' } }
@@ -54,5 +59,10 @@ describe 'selinux::fcontext' do
     let(:params) { { pathname: '/tmp/file1', context: 'user_home_dir_t', restorecond_path: '/tmp/file1/different', restorecond_recurse: true } }
     it { should contain_exec('add_user_home_dir_t_/tmp/file1_type_a').with(command: 'semanage fcontext -a -f a -t user_home_dir_t /tmp/file1') }
     it { should contain_exec('restorecond add_user_home_dir_t_/tmp/file1_type_a').with(command: 'restorecon -R /tmp/file1/different') }
+  end
+  context 'with restorecon path with quotation' do
+    let(:params) { { pathname: '/tmp/"$HOME"/"$PATH"/[^ \'\\\#\`]+(?:.*)', context: 'user_home_dir_t' } }
+    it { should contain_exec('add_user_home_dir_t_/tmp/"$HOME"/"$PATH"/[^ \'\\\#\`]+(?:.*)_type_a').with(command: 'semanage fcontext -a -f a -t user_home_dir_t "/tmp/\\"\\$HOME\\"/\\"\\$PATH\\"/[^ \'\\\\\\\\#\\\\\`]+(?:.*)"') }
+    it { should contain_exec('restorecond add_user_home_dir_t_/tmp/"$HOME"/"$PATH"/[^ \'\\\#\`]+(?:.*)_type_a').with(command: 'restorecon "/tmp/\\"\\$HOME\\"/\\"\\$PATH\\"/[^ \'\\\\\\\\#\\\\\`]+(?:.*)"') }
   end
 end

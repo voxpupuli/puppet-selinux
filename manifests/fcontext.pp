@@ -104,7 +104,7 @@ define selinux::fcontext (
     fail('Resource cannot contain both "equals" and "filetype" options')
   }
 
-  if $filetype and $filemode !~ /(a|f|d|c|b|s|l|p)/ {
+  if $filetype and $filemode !~ /^(?:a|f|d|c|b|s|l|p)$/ {
     fail('file mode must be one of: a,f,d,c,b,s,l,p - see "man semanage-fcontext"')
   }
 
