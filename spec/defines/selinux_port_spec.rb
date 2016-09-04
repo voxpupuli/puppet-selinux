@@ -9,6 +9,10 @@ describe 'selinux::port' do
       let(:params) { { context: 'http_port_t', port: 8080, protocol: protocol } }
       it { should contain_exec("add_http_port_t_8080_#{protocol}").with(command: "semanage port -a -t http_port_t -p #{protocol} 8080") }
     end
+    context "protocol #{protocol} and port as range" do
+      let(:params) { { context: 'http_port_t', port: '8080-8089', protocol: protocol } }
+      it { should contain_exec("add_http_port_t_8080-8089_#{protocol}").with(command: "semanage port -a -t http_port_t -p #{protocol} 8080-8089") }
+    end
   end
 
   context 'invalid protocol' do
