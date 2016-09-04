@@ -7,6 +7,13 @@ require 'facter'
 Facter.add(:selinux_custom_policy) do
   confine kernel: 'Linux', osfamily: 'RedHat', operatingsystemmajrelease: '7', selinux: ['true', true]
   setcode do
-    Facter::Util::Resolution.exec("sestatus | grep 'Loaded policy name' | awk '{ print \$4 }'")
+    policy = nil
+    output = Facter::Util::Resolution.exec('sestatus 2>/dev/null')
+    if output
+      output.each_line do |line|
+        break if line =~ %r{^Loaded policy name:\s*(?<policy>.*)$}
+      end
+    end
+    policy
   end
 end
