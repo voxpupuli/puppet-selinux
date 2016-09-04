@@ -104,15 +104,14 @@ define selinux::fcontext (
     fail('Resource cannot contain both "equals" and "filetype" options')
   }
 
-  if $filetype and $filemode !~ /^(?:a|f|d|c|b|s|l|p)$/ {
-    fail('file mode must be one of: a,f,d,c,b,s,l,p - see "man semanage-fcontext"')
-  }
-
   if $equals {
     $resource_name = "add_${destination}_${pathname}"
     $command       = shellquote('semanage', 'fcontext','-a', '-e', $destination, $pathname)
     $unless        = sprintf('semanage fcontext -l | grep -Fx %s', shellquote("${pathname} = ${destination}"))
   } else {
+    if $filemode !~ /^(?:a|f|d|c|b|s|l|p)$/ {
+      fail('"filemode" must be one of: a,f,d,c,b,s,l,p - see "man semanage-fcontext"')
+    }
     $resource_name = "add_${context}_${pathname}_type_${filemode}"
     $command       = shellquote('semanage', 'fcontext','-a', '-f', $filemode, '-t', $context, $pathname)
     $unless        = sprintf('semanage fcontext -E | grep -Fx %s', shellquote("fcontext -a -f ${filemode} -t ${context} '${pathname}'"))

@@ -18,6 +18,18 @@ describe 'selinux::fcontext' do
     it { expect { is_expected.to compile }.to raise_error(%r{is not an absolute path}) }
   end
 
+  context 'invalid filemode with filetype false' do
+    let(:params) do
+      {
+        pathname: '/tmp/file1',
+        filetype: false,
+        filemode: 'X',
+        context: 'user_home_dir_t'
+      }
+    end
+    it { expect { is_expected.to compile }.to raise_error(%r{"filemode" must be one of: a,f,d,c,b,s,l,p - see "man semanage-fcontext"}) }
+  end
+
   context 'invalid filetype' do
     let(:params) do
       {
@@ -27,7 +39,7 @@ describe 'selinux::fcontext' do
         context: 'user_home_dir_t'
       }
     end
-    it { expect { is_expected.to compile }.to raise_error(%r{file mode must be one of: a,f,d,c,b,s,l,p - see "man semanage-fcontext"}) }
+    it { expect { is_expected.to compile }.to raise_error(%r{"filemode" must be one of: a,f,d,c,b,s,l,p - see "man semanage-fcontext"}) }
   end
 
   context 'invalid multiple filetype' do
@@ -39,7 +51,7 @@ describe 'selinux::fcontext' do
         context: 'user_home_dir_t'
       }
     end
-    it { expect { is_expected.to compile }.to raise_error(%r{file mode must be one of: a,f,d,c,b,s,l,p - see "man semanage-fcontext"}) }
+    it { expect { is_expected.to compile }.to raise_error(%r{"filemode" must be one of: a,f,d,c,b,s,l,p - see "man semanage-fcontext"}) }
   end
 
   context 'equals and filetype' do
