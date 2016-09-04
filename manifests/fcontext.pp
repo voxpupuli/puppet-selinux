@@ -132,7 +132,8 @@ define selinux::fcontext (
   if $restorecond {
     exec { "restorecond ${resource_name}":
       path        => '/bin:/sbin:/usr/bin:/usr/sbin',
-      command     => "restorecon ${restorecond_resurse_private}${restorecond_path_private}",
+      command     => "restorecon ${restorecond_resurse_private}\"${restorecond_path_private}\"",
+      onlyif      => "test -e \"${restorecond_path_private}\"",
       refreshonly => true,
       subscribe   => Exec[$resource_name],
     }
