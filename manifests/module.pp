@@ -71,10 +71,10 @@ define selinux::module(
   ~>
   exec { "${sx_mod_dir}/${prefix}${name}.pp":
   # Only allow refresh in the event that the initial .te file is updated.
-    path        => '/sbin:/usr/sbin:/bin:/usr/bin',
+    command     => "make -f ${makefile} ${prefix}${name}.pp",
+    path        => '/bin:/sbin:/usr/bin:/usr/sbin',
     refreshonly => true,
     cwd         => $sx_mod_dir,
-    command     => "make -f ${makefile} ${prefix}${name}.pp",
   }
   ->
   selmodule { $name:

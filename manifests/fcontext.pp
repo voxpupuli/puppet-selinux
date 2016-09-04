@@ -122,16 +122,18 @@ define selinux::fcontext (
     $unless        = "semanage fcontext -l | grep \"^${pathname}[[:space:]].*:${context}:\""
   }
 
+  Exec {
+    path => '/bin:/sbin:/usr/bin:/usr/sbin',
+  }
+
   exec { $resource_name:
     command => $command,
     unless  => $unless,
-    path    => '/bin:/sbin:/usr/bin:/usr/sbin',
     require => Class['selinux::package'],
   }
 
   if $restorecond {
     exec { "restorecond ${resource_name}":
-      path        => '/bin:/sbin:/usr/bin:/usr/sbin',
       command     => "restorecon ${restorecond_resurse_private}${restorecond_path_private}",
       refreshonly => true,
       subscribe   => Exec[$resource_name],
