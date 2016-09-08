@@ -7,7 +7,7 @@ describe 'selinux::module' do
   context 'present case' do
     let(:params) do
       {
-        source: 'test_value'
+        source: 'puppet:///modules/mymodule/selinux/mymodule.te'
       }
     end
 
@@ -23,8 +23,7 @@ describe 'selinux::module' do
   context 'absent case' do
     let(:params) do
       {
-        ensure: 'absent',
-        source: 'test_value'
+        ensure: 'absent'
       }
     end
 

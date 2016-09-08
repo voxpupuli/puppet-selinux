@@ -70,7 +70,7 @@ define selinux::fcontext (
   $destination         = undef,
   $context             = undef,
   $filetype            = false,
-  $filemode            = undef,
+  $filemode            = 'a',
   $equals              = false,
   $restorecond         = true,
   $restorecond_path    = undef,
@@ -96,43 +96,41 @@ define selinux::fcontext (
   validate_absolute_path($restorecond_path_private)
 
   $restorecond_resurse_private = $restorecond_recurse ? {
-    true  => '-R ',
-    false => ''
+    true  => ['-R'],
+    false => [],
   }
 
   if $equals and $filetype {
     fail('Resource cannot contain both "equals" and "filetype" options')
   }
 
-  if $filetype and $filemode !~ /(a|f|d|c|b|s|l|p)/ {
-    fail('file mode must be one of: a,f,d,c,b,s,l,p - see "man semanage-fcontext"')
-  }
-
   if $equals {
     $resource_name = "add_${destination}_${pathname}"
-    $command       = "semanage fcontext -a -e \"${destination}\" \"${pathname}\""
-    $unless        = "semanage fcontext -l | grep -E \"^${pathname} = ${destination}$\""
-  } elsif $filetype {
-    $resource_name = "add_${context}_${pathname}_type_${filemode}"
-    $command       = "semanage fcontext -a -f ${filemode} -t ${context} \"${pathname}\""
-    $unless        = "semanage fcontext -l | grep \"^${pathname}[[:space:]].*:${context}:\""
+    $command       = shellquote('semanage', 'fcontext','-a', '-e', $destination, $pathname)
+    $unless        = sprintf('semanage fcontext -l | grep -Fx %s', shellquote("${pathname} = ${destination}"))
   } else {
-    $resource_name = "add_${context}_${pathname}"
-    $command       = "semanage fcontext -a -t ${context} \"${pathname}\""
-    $unless        = "semanage fcontext -l | grep \"^${pathname}[[:space:]].*:${context}:\""
+    if $filemode !~ /^(?:a|f|d|c|b|s|l|p)$/ {
+      fail('"filemode" must be one of: a,f,d,c,b,s,l,p - see "man semanage-fcontext"')
+    }
+    $resource_name = "add_${context}_${pathname}_type_${filemode}"
+    $command       = shellquote('semanage', 'fcontext','-a', '-f', $filemode, '-t', $context, $pathname)
+    $unless        = sprintf('semanage fcontext -E | grep -Fx %s', shellquote("fcontext -a -f ${filemode} -t ${context} '${pathname}'"))
+  }
+
+  Exec {
+    path => '/bin:/sbin:/usr/bin:/usr/sbin',
   }
 
   exec { $resource_name:
     command => $command,
     unless  => $unless,
-    path    => '/bin:/sbin:/usr/bin:/usr/sbin',
     require => Class['selinux::package'],
   }
 
   if $restorecond {
     exec { "restorecond ${resource_name}":
-      path        => '/bin:/sbin:/usr/bin:/usr/sbin',
-      command     => "restorecon ${restorecond_resurse_private}${restorecond_path_private}",
+      command     => shellquote('restorecon', $restorecond_resurse_private, $restorecond_path_private),
+      onlyif      => shellquote('test', '-e', $restorecond_path_private),
       refreshonly => true,
       subscribe   => Exec[$resource_name],
     }

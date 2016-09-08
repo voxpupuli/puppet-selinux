@@ -33,8 +33,8 @@ define selinux::permissive (
   include ::selinux
 
   exec { "add_${context}":
-    command => "semanage permissive -a ${context}",
-    unless  => "semanage permissive -l|grep ${context}",
+    command => shellquote('semanage', 'permissive', '-a', $context),
+    unless  => sprintf('semanage permissive -l | grep -Fx %s', shellquote($context)),
     path    => '/bin:/sbin:/usr/bin:/usr/sbin',
     require => Class['selinux::package'],
   }
