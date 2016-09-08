@@ -1,5 +1,15 @@
 # Change Log
 
+## 2016-09-08 Release [v0.5.0](https://github.com/voxpupuli/puppet-selinux/tree/v0.5.0)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v0.4.1...v0.5.0)
+
+**Merged pull requests:**
+
+- Cleanups and dangling issues [\#117](https://github.com/voxpupuli/puppet-selinux/pull/117) ([maage](https://github.com/maage))
+- Fixing operatingsystem for Amazon Linux [\#111](https://github.com/voxpupuli/puppet-selinux/pull/111) ([bleiva](https://github.com/bleiva))
+
+
 ## 2016-09-02 Release [0.4.1](https://github.com/voxpupuli/puppet-selinux/tree/v0.4.1)
 [Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v0.4.0...v0.4.1)
 
