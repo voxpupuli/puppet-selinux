@@ -40,8 +40,8 @@ class selinux::params {
             }
           }
         }
-       'Amazon': {
-        $sx_fs_mount = '/selinux'
+        'Amazon': {
+          $sx_fs_mount = '/selinux'
           case $os_maj_release {
             '4': {
               $package_name = 'policycoreutils-python'
