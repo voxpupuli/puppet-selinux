@@ -15,9 +15,9 @@ describe 'selinux' do
       it { is_expected.to have_exec_resource_count(0) }
 
       it { is_expected.to contain_file('/usr/share/selinux') }
-      it { is_expected.to_not contain_file_line('set-selinux-config-type-to-targeted') }
-      it { is_expected.to_not contain_file_line('set-selinux-config-type-to-minimum') }
-      it { is_expected.to_not contain_file_line('set-selinux-config-type-to-mls') }
+      it { is_expected.not_to contain_file_line('set-selinux-config-type-to-targeted') }
+      it { is_expected.not_to contain_file_line('set-selinux-config-type-to-minimum') }
+      it { is_expected.not_to contain_file_line('set-selinux-config-type-to-mls') }
     end
 
     context 'targeted' do

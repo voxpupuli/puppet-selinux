@@ -15,12 +15,12 @@ describe 'selinux' do
       it { is_expected.to have_exec_resource_count(0) }
 
       it { is_expected.to contain_file('/usr/share/selinux') }
-      it { is_expected.to_not contain_file_line('set-selinux-config-to-enforcing') }
-      it { is_expected.to_not contain_file_line('set-selinux-config-to-permissive') }
-      it { is_expected.to_not contain_file_line('set-selinux-config-to-disabled') }
-      it { is_expected.to_not contain_exec('change-selinux-status-to-enforcing') }
-      it { is_expected.to_not contain_exec('change-selinux-status-to-permissive') }
-      it { is_expected.to_not contain_exec('change-selinux-status-to-disabled') }
+      it { is_expected.not_to contain_file_line('set-selinux-config-to-enforcing') }
+      it { is_expected.not_to contain_file_line('set-selinux-config-to-permissive') }
+      it { is_expected.not_to contain_file_line('set-selinux-config-to-disabled') }
+      it { is_expected.not_to contain_exec('change-selinux-status-to-enforcing') }
+      it { is_expected.not_to contain_exec('change-selinux-status-to-permissive') }
+      it { is_expected.not_to contain_exec('change-selinux-status-to-disabled') }
     end
 
     context 'enforcing' do

@@ -101,7 +101,7 @@ describe 'selinux' do
         }
       end
 
-      it { is_expected.to_not contain_package('policycoreutils').with(ensure: 'present') }
+      it { is_expected.not_to contain_package('policycoreutils').with(ensure: 'present') }
     end
 
     context 'install a different package name' do

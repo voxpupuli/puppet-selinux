@@ -112,7 +112,7 @@ describe 'selinux::fcontext' do
         restorecond: false
       }
     end
-    it { is_expected.to_not contain_exec('restorecond add_user_home_dir_t_/tmp/file1_type_a').with(command: %r{restorecon}) }
+    it { is_expected.not_to contain_exec('restorecond add_user_home_dir_t_/tmp/file1_type_a').with(command: %r{restorecon}) }
   end
   context 'with restorecon specific path' do
     let(:params) do
