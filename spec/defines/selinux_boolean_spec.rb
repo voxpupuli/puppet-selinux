@@ -12,7 +12,7 @@ describe 'selinux::boolean' do
         }
       end
       it do
-        should contain_selboolean('mybool').with(
+        is_expected.to contain_selboolean('mybool').with(
           'value'      => 'on',
           'persistent' => true
         )
@@ -28,7 +28,7 @@ describe 'selinux::boolean' do
         }
       end
       it do
-        should contain_selboolean('mybool').with(
+        is_expected.to contain_selboolean('mybool').with(
           'value'      => 'off',
           'persistent' => true
         )
