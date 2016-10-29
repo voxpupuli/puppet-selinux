@@ -13,7 +13,7 @@ describe 'selinux::port' do
           protocol: protocol
         }
       end
-      it { should contain_exec("add_http_port_t_8080_#{protocol}").with(command: "semanage port -a -t http_port_t -p #{protocol} 8080") }
+      it { is_expected.to contain_exec("add_http_port_t_8080_#{protocol}").with(command: "semanage port -a -t http_port_t -p #{protocol} 8080") }
     end
     context "protocol #{protocol} and port as range" do
       let(:params) do
@@ -23,7 +23,7 @@ describe 'selinux::port' do
           protocol: protocol
         }
       end
-      it { should contain_exec("add_http_port_t_8080-8089_#{protocol}").with(command: "semanage port -a -t http_port_t -p #{protocol} 8080-8089") }
+      it { is_expected.to contain_exec("add_http_port_t_8080-8089_#{protocol}").with(command: "semanage port -a -t http_port_t -p #{protocol} 8080-8089") }
     end
   end
 
@@ -45,6 +45,6 @@ describe 'selinux::port' do
         port: 8080
       }
     end
-    it { should contain_exec('add_http_port_t_8080').with(command: 'semanage port -a -t http_port_t 8080') }
+    it { is_expected.to contain_exec('add_http_port_t_8080').with(command: 'semanage port -a -t http_port_t 8080') }
   end
 end

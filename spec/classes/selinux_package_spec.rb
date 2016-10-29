@@ -12,7 +12,7 @@ describe 'selinux' do
         }
       end
 
-      it { should contain_package('policycoreutils').with(ensure: 'present') }
+      it { is_expected.to contain_package('policycoreutils').with(ensure: 'present') }
     end
 
     %w(6).each do |majrelease|
@@ -26,7 +26,7 @@ describe 'selinux' do
           }
         end
 
-        it { should contain_package('policycoreutils-python').with(ensure: 'present') }
+        it { is_expected.to contain_package('policycoreutils-python').with(ensure: 'present') }
       end
     end
 
@@ -41,7 +41,7 @@ describe 'selinux' do
           }
         end
 
-        it { should contain_package('selinux-policy-devel').with(ensure: 'present') }
+        it { is_expected.to contain_package('selinux-policy-devel').with(ensure: 'present') }
       end
     end
 
@@ -55,7 +55,7 @@ describe 'selinux' do
             selinux_current_mode: 'enforcing'
           }
         end
-        it { should contain_package('policycoreutils-python').with(ensure: 'present') }
+        it { is_expected.to contain_package('policycoreutils-python').with(ensure: 'present') }
       end
     end
 
@@ -69,7 +69,7 @@ describe 'selinux' do
             selinux_current_mode: 'enforcing'
           }
         end
-        it { should contain_package('policycoreutils-devel').with(ensure: 'present') }
+        it { is_expected.to contain_package('policycoreutils-devel').with(ensure: 'present') }
       end
     end
 
@@ -83,7 +83,7 @@ describe 'selinux' do
             selinux_current_mode: 'enforcing'
           }
         end
-        it { should contain_package('selinux-policy-devel').with(ensure: 'present') }
+        it { is_expected.to contain_package('selinux-policy-devel').with(ensure: 'present') }
       end
     end
 
@@ -101,7 +101,7 @@ describe 'selinux' do
         }
       end
 
-      it { should_not contain_package('policycoreutils').with(ensure: 'present') }
+      it { is_expected.to_not contain_package('policycoreutils').with(ensure: 'present') }
     end
 
     context 'install a different package name' do
@@ -118,7 +118,7 @@ describe 'selinux' do
         }
       end
 
-      it { should contain_package('some_package').with(ensure: 'present') }
+      it { is_expected.to contain_package('some_package').with(ensure: 'present') }
     end
   end
 end

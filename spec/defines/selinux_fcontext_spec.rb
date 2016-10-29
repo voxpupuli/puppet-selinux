@@ -76,8 +76,8 @@ describe 'selinux::fcontext' do
         destination: '/tmp/file2'
       }
     end
-    it { should contain_exec('add_/tmp/file2_/tmp/file1').with(command: 'semanage fcontext -a -e /tmp/file2 /tmp/file1') }
-    it { should contain_exec('restorecond add_/tmp/file2_/tmp/file1').with(command: 'restorecon /tmp/file1') }
+    it { is_expected.to contain_exec('add_/tmp/file2_/tmp/file1').with(command: 'semanage fcontext -a -e /tmp/file2 /tmp/file1') }
+    it { is_expected.to contain_exec('restorecond add_/tmp/file2_/tmp/file1').with(command: 'restorecon /tmp/file1') }
   end
 
   context 'set filemode and context' do
@@ -89,8 +89,8 @@ describe 'selinux::fcontext' do
         context: 'user_home_dir_t'
       }
     end
-    it { should contain_exec('add_user_home_dir_t_/tmp/file1_type_a').with(command: 'semanage fcontext -a -f a -t user_home_dir_t /tmp/file1') }
-    it { should contain_exec('restorecond add_user_home_dir_t_/tmp/file1_type_a').with(command: 'restorecon /tmp/file1') }
+    it { is_expected.to contain_exec('add_user_home_dir_t_/tmp/file1_type_a').with(command: 'semanage fcontext -a -f a -t user_home_dir_t /tmp/file1') }
+    it { is_expected.to contain_exec('restorecond add_user_home_dir_t_/tmp/file1_type_a').with(command: 'restorecon /tmp/file1') }
   end
 
   context 'set context' do
@@ -100,8 +100,8 @@ describe 'selinux::fcontext' do
         context: 'user_home_dir_t'
       }
     end
-    it { should contain_exec('add_user_home_dir_t_/tmp/file1_type_a').with(command: 'semanage fcontext -a -f a -t user_home_dir_t /tmp/file1') }
-    it { should contain_exec('restorecond add_user_home_dir_t_/tmp/file1_type_a').with(command: 'restorecon /tmp/file1') }
+    it { is_expected.to contain_exec('add_user_home_dir_t_/tmp/file1_type_a').with(command: 'semanage fcontext -a -f a -t user_home_dir_t /tmp/file1') }
+    it { is_expected.to contain_exec('restorecond add_user_home_dir_t_/tmp/file1_type_a').with(command: 'restorecon /tmp/file1') }
   end
 
   context 'with restorecon disabled' do
@@ -112,7 +112,7 @@ describe 'selinux::fcontext' do
         restorecond: false
       }
     end
-    it { should_not contain_exec('restorecond add_user_home_dir_t_/tmp/file1_type_a').with(command: %r{restorecon}) }
+    it { is_expected.to_not contain_exec('restorecond add_user_home_dir_t_/tmp/file1_type_a').with(command: %r{restorecon}) }
   end
   context 'with restorecon specific path' do
     let(:params) do
@@ -122,8 +122,8 @@ describe 'selinux::fcontext' do
         restorecond_path: '/tmp/file1/different'
       }
     end
-    it { should contain_exec('add_user_home_dir_t_/tmp/file1_type_a').with(command: 'semanage fcontext -a -f a -t user_home_dir_t /tmp/file1') }
-    it { should contain_exec('restorecond add_user_home_dir_t_/tmp/file1_type_a').with(command: 'restorecon /tmp/file1/different') }
+    it { is_expected.to contain_exec('add_user_home_dir_t_/tmp/file1_type_a').with(command: 'semanage fcontext -a -f a -t user_home_dir_t /tmp/file1') }
+    it { is_expected.to contain_exec('restorecond add_user_home_dir_t_/tmp/file1_type_a').with(command: 'restorecon /tmp/file1/different') }
   end
   context 'with restorecon recurse specific path' do
     let(:params) do
@@ -134,8 +134,8 @@ describe 'selinux::fcontext' do
         restorecond_recurse: true
       }
     end
-    it { should contain_exec('add_user_home_dir_t_/tmp/file1_type_a').with(command: 'semanage fcontext -a -f a -t user_home_dir_t /tmp/file1') }
-    it { should contain_exec('restorecond add_user_home_dir_t_/tmp/file1_type_a').with(command: 'restorecon -R /tmp/file1/different') }
+    it { is_expected.to contain_exec('add_user_home_dir_t_/tmp/file1_type_a').with(command: 'semanage fcontext -a -f a -t user_home_dir_t /tmp/file1') }
+    it { is_expected.to contain_exec('restorecond add_user_home_dir_t_/tmp/file1_type_a').with(command: 'restorecon -R /tmp/file1/different') }
   end
   context 'with restorecon path with quotation' do
     let(:params) do
@@ -144,7 +144,7 @@ describe 'selinux::fcontext' do
         context: 'user_home_dir_t'
       }
     end
-    it { should contain_exec('add_user_home_dir_t_/tmp/"$HOME"/"$PATH"/[^ \'\\\#\`]+(?:.*)_type_a').with(command: 'semanage fcontext -a -f a -t user_home_dir_t "/tmp/\\"\\$HOME\\"/\\"\\$PATH\\"/[^ \'\\\\\\\\#\\\\\`]+(?:.*)"') }
-    it { should contain_exec('restorecond add_user_home_dir_t_/tmp/"$HOME"/"$PATH"/[^ \'\\\#\`]+(?:.*)_type_a').with(command: 'restorecon "/tmp/\\"\\$HOME\\"/\\"\\$PATH\\"/[^ \'\\\\\\\\#\\\\\`]+(?:.*)"') }
+    it { is_expected.to contain_exec('add_user_home_dir_t_/tmp/"$HOME"/"$PATH"/[^ \'\\\#\`]+(?:.*)_type_a').with(command: 'semanage fcontext -a -f a -t user_home_dir_t "/tmp/\\"\\$HOME\\"/\\"\\$PATH\\"/[^ \'\\\\\\\\#\\\\\`]+(?:.*)"') }
+    it { is_expected.to contain_exec('restorecond add_user_home_dir_t_/tmp/"$HOME"/"$PATH"/[^ \'\\\#\`]+(?:.*)_type_a').with(command: 'restorecon "/tmp/\\"\\$HOME\\"/\\"\\$PATH\\"/[^ \'\\\\\\\\#\\\\\`]+(?:.*)"') }
   end
 end

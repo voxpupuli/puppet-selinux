@@ -11,7 +11,7 @@ describe 'selinux::restorecond::fragment' do
         source: 'puppet:///data/cond.txt'
       }
     end
-    it { should contain_concat__fragment('restorecond_conf_cond').with(source: 'puppet:///data/cond.txt', order: 10) }
+    it { is_expected.to contain_concat__fragment('restorecond_conf_cond').with(source: 'puppet:///data/cond.txt', order: 10) }
   end
 
   context 'content and order' do
@@ -21,6 +21,6 @@ describe 'selinux::restorecond::fragment' do
         order: 20
       }
     end
-    it { should contain_concat__fragment('restorecond_conf_cond').with(content: '/etc/myapp', order: 20) }
+    it { is_expected.to contain_concat__fragment('restorecond_conf_cond').with(content: '/etc/myapp', order: 20) }
   end
 end
