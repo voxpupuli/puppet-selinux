@@ -32,7 +32,7 @@ class selinux::params {
             '21','22','23' : {
               $package_name = 'policycoreutils-devel'
             }
-            '24' : {
+            '24', '25' : {
               $package_name = 'selinux-policy-devel'
             }
             default: {
