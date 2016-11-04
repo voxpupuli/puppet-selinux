@@ -41,9 +41,9 @@ class selinux (
   }
 
   ### START Hiera Lookups ###
-  $selinux_booleans  = hiera('selinux_booleans', undef),
-  $selinux_modules   = hiera('selinux_modules', undef),
-  $selinux_fcontexts = hiera('selinux_fcontexts', undef),
+  $selinux_booleans  = hiera('selinux_booleans', undef)
+  $selinux_modules   = hiera('selinux_modules', undef)
+  $selinux_fcontexts = hiera('selinux_fcontexts', undef)
   $selinux_ports     = hiera('selinux_ports', undef)
   ### END Hiera Lookups ###
 
