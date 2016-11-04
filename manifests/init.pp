@@ -39,7 +39,7 @@ class selinux (
     /\w+/   => $type,
     default => 'undef',
   }
-  
+
   ### START Hiera Lookups ###
   $selinux_booleans  = hiera('selinux_booleans', undef),
   $selinux_modules   = hiera('selinux_modules', undef),
