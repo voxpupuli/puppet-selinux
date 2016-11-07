@@ -30,11 +30,13 @@ class selinux (
   $package_name   = $::selinux::params::package_name,
 
   ### START Hiera Lookups ###
-  $selinux_booleans = {},
-  $selinux_modules = {},
-  $selinux_fcontexts = {},
-  $selinux_ports = {}
+  $boolean        = undef,
+  $fcontext       = undef,
+  $module         = undef,
+  $permissive     = undef,
+  $port           = undef,
   ### END Hiera Lookups ###
+
 ) inherits selinux::params {
 
   $mode_real = $mode ? {
@@ -60,8 +62,19 @@ class selinux (
   } ->
   class { '::selinux::config': }
 
-  create_resources('selinux::boolean', $selinux_booleans)
-  create_resources('selinux::module', $selinux_modules)
-  create_resources('selinux::fcontext', $selinux_fcontexts)
-  create_resources('selinux::port', $selinux_ports)
+  if $boolean {
+    create_resources ( 'selinux::boolean', hiera_hash('selinux::boolean') )
+  }
+  if $fcontext {
+    create_resources ( 'selinux::fcontext', hiera_hash('selinux::fcontext') )
+  }
+  if $module {
+    create_resources ( 'selinux::module', hiera_hash('selinux::module') )
+  }
+  if $permissive {
+    create_resources ( 'selinux::fcontext', hiera_hash('selinux::permissive') )
+  }
+  if $port {
+    create_resources ( 'selinux::port', hiera_hash('selinux::port') )
+  }
 }
