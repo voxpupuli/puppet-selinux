@@ -15,5 +15,4 @@ describe 'selinux::permissive' do
       is_expected.to contain_exec('add_oddjob_mkhomedir_t').with(command: 'semanage permissive -a oddjob_mkhomedir_t')
     end
   end
-
 end
