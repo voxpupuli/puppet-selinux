@@ -28,6 +28,15 @@ class selinux (
   $makefile       = $::selinux::params::makefile,
   $manage_package = $::selinux::params::manage_package,
   $package_name   = $::selinux::params::package_name,
+
+  ### START Hiera Lookups ###
+  $boolean        = undef,
+  $fcontext       = undef,
+  $module         = undef,
+  $permissive     = undef,
+  $port           = undef,
+  ### END Hiera Lookups ###
+  
 ) inherits selinux::params {
 
   $mode_real = $mode ? {
@@ -39,13 +48,6 @@ class selinux (
     /\w+/   => $type,
     default => 'undef',
   }
-
-  ### START Hiera Lookups ###
-  $selinux_booleans  = hiera('selinux_booleans', undef)
-  $selinux_modules   = hiera('selinux_modules', undef)
-  $selinux_fcontexts = hiera('selinux_fcontexts', undef)
-  $selinux_ports     = hiera('selinux_ports', undef)
-  ### END Hiera Lookups ###
 
   validate_absolute_path($sx_mod_dir)
   validate_re($mode_real, ['^enforcing$', '^permissive$', '^disabled$', '^undef$'], "Valid modes are enforcing, permissive, and disabled.  Received: ${mode}")
@@ -60,16 +62,19 @@ class selinux (
   } ->
   class { '::selinux::config': }
 
-  if $selinux_booleans {
-    create_resources ( 'selinux::boolean', hiera_hash('selinux_booleans') )
+  if $boolean {
+    create_resources ( 'selinux::boolean', hiera_hash('selinux::boolean') )
   }
-  if $selinux_modules {
-    create_resources ( 'selinux::module', hiera_hash('selinux_modules') )
+  if $fcontext {
+    create_resources ( 'selinux::fcontext', hiera_hash('selinux::fcontext') )
   }
-  if $selinux_fcontexts {
-    create_resources ( 'selinux::fcontext', hiera_hash('selinux_fcontexts') )
+  if $module {
+    create_resources ( 'selinux::module', hiera_hash('selinux::module') )
   }
-  if $selinux_ports {
-    create_resources ( 'selinux::port', hiera_hash('selinux_ports') )
+  if $permissive {
+    create_resources ( 'selinux::fcontext', hiera_hash('selinux::permissive') )
+  }
+  if $port {
+    create_resources ( 'selinux::port', hiera_hash('selinux::port') )
   }
 }
