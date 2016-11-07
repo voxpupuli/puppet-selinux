@@ -36,7 +36,7 @@ class selinux (
   $permissive     = undef,
   $port           = undef,
   ### END Hiera Lookups ###
-  
+
 ) inherits selinux::params {
 
   $mode_real = $mode ? {
