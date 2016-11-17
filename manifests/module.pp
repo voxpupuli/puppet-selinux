@@ -10,7 +10,7 @@
 #
 # Parameters:
 #   - $ensure: (present|absent) - sets the state for a module
-#   - $sx_mod_dir (absolute_path) - sets the operating state for SELinux.
+#   - $sx_mod_dir (absolute_path) - sets the module directory.
 #   - $source: the source file (either a puppet URI or local file) of the SELinux .te module
 #   - $makefile: the makefile file path
 #   - $prefix: the prefix to add to the loaded module. Defaults to 'local_'.
