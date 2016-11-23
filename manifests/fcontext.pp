@@ -113,8 +113,23 @@ define selinux::fcontext (
       fail('"filemode" must be one of: a,f,d,c,b,s,l,p - see "man semanage-fcontext"')
     }
     $resource_name = "add_${context}_${pathname}_type_${filemode}"
-    $command       = shellquote('semanage', 'fcontext','-a', '-f', $filemode, '-t', $context, $pathname)
-    $unless        = sprintf('semanage fcontext -E | grep -Fx %s', shellquote("fcontext -a -f ${filemode} -t ${context} '${pathname}'"))
+    if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == '6' {
+      case $filemode {
+        'a': {
+          $_filemode = 'all files'
+          $_quotedfilemode = '\'all files\''
+          }
+        default: {
+          $_filemode = $filemode
+          $_quotedfilemode = $_filemode
+        }
+      }
+    } else {
+      $_filemode = $filemode
+      $_quotedfilemode = $_filemode
+    }
+    $command       = shellquote('semanage', 'fcontext','-a', '-f', $_filemode, '-t', $context, $pathname)
+    $unless        = sprintf('semanage fcontext -E | grep -Fx %s', shellquote("fcontext -a -f ${_quotedfilemode} -t ${context} '${pathname}'"))
   }
 
   Exec {
