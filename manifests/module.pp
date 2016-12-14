@@ -13,7 +13,7 @@
 #   - $sx_mod_dir (absolute_path) - sets the operating state for SELinux.
 #   - $source: the source file (either a puppet URI or local file) of the SELinux .te module
 #   - $makefile: the makefile file path
-#   - $prefix: the prefix to add to the loaded module. Defaults to 'local_'.
+#   - $prefix: the prefix to add to the loaded module. Defaults to ''.
 #
 # Actions:
 #  Compiles a module using make and installs it
@@ -32,7 +32,7 @@ define selinux::module(
   $content      = undef,
   $ensure       = 'present',
   $makefile     = '/usr/share/selinux/devel/Makefile',
-  $prefix       = 'local_',
+  $prefix       = '',
   $sx_mod_dir   = '/usr/share/selinux',
   $syncversion  = true,
 ) {
