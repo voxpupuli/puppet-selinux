@@ -88,7 +88,11 @@ describe 'selinux::fcontext' do
             context: 'user_home_dir_t'
           }
         end
-        it { is_expected.to contain_exec('add_user_home_dir_t_/tmp/file1_type_a').with(command: 'semanage fcontext -a -f a -t user_home_dir_t /tmp/file1') }
+        if (facts[:osfamily] == 'RedHat') && (facts[:operatingsystemmajrelease] == '6')
+          it { is_expected.to contain_exec('add_user_home_dir_t_/tmp/file1_type_a').with(command: 'semanage fcontext -a -f "all files" -t user_home_dir_t /tmp/file1') }
+        else
+          it { is_expected.to contain_exec('add_user_home_dir_t_/tmp/file1_type_a').with(command: 'semanage fcontext -a -f a -t user_home_dir_t /tmp/file1') }
+        end
         it { is_expected.to contain_exec('restorecond add_user_home_dir_t_/tmp/file1_type_a').with(command: 'restorecon /tmp/file1') }
       end
 
@@ -99,7 +103,11 @@ describe 'selinux::fcontext' do
             context: 'user_home_dir_t'
           }
         end
-        it { is_expected.to contain_exec('add_user_home_dir_t_/tmp/file1_type_a').with(command: 'semanage fcontext -a -f a -t user_home_dir_t /tmp/file1') }
+        if (facts[:osfamily] == 'RedHat') && (facts[:operatingsystemmajrelease] == '6')
+          it { is_expected.to contain_exec('add_user_home_dir_t_/tmp/file1_type_a').with(command: 'semanage fcontext -a -f "all files" -t user_home_dir_t /tmp/file1') }
+        else
+          it { is_expected.to contain_exec('add_user_home_dir_t_/tmp/file1_type_a').with(command: 'semanage fcontext -a -f a -t user_home_dir_t /tmp/file1') }
+        end
         it { is_expected.to contain_exec('restorecond add_user_home_dir_t_/tmp/file1_type_a').with(command: 'restorecon /tmp/file1') }
       end
 
@@ -121,7 +129,11 @@ describe 'selinux::fcontext' do
             restorecond_path: '/tmp/file1/different'
           }
         end
-        it { is_expected.to contain_exec('add_user_home_dir_t_/tmp/file1_type_a').with(command: 'semanage fcontext -a -f a -t user_home_dir_t /tmp/file1') }
+        if (facts[:osfamily] == 'RedHat') && (facts[:operatingsystemmajrelease] == '6')
+          it { is_expected.to contain_exec('add_user_home_dir_t_/tmp/file1_type_a').with(command: 'semanage fcontext -a -f "all files" -t user_home_dir_t /tmp/file1') }
+        else
+          it { is_expected.to contain_exec('add_user_home_dir_t_/tmp/file1_type_a').with(command: 'semanage fcontext -a -f a -t user_home_dir_t /tmp/file1') }
+        end
         it { is_expected.to contain_exec('restorecond add_user_home_dir_t_/tmp/file1_type_a').with(command: 'restorecon /tmp/file1/different') }
       end
       context 'with restorecon recurse specific path' do
@@ -133,7 +145,13 @@ describe 'selinux::fcontext' do
             restorecond_recurse: true
           }
         end
-        it { is_expected.to contain_exec('add_user_home_dir_t_/tmp/file1_type_a').with(command: 'semanage fcontext -a -f a -t user_home_dir_t /tmp/file1') }
+        if (facts[:osfamily] == 'RedHat') && (facts[:operatingsystemmajrelease] == '6')
+          it { is_expected.to contain_exec('add_user_home_dir_t_/tmp/file1_type_a').with(command: 'semanage fcontext -a -f "all files" -t user_home_dir_t /tmp/file1') }
+          it { is_expected.to contain_exec('add_user_home_dir_t_/tmp/file1_type_a').with(unless: "semanage fcontext -E | grep -Fx \"fcontext -a -f 'all files' -t user_home_dir_t '/tmp/file1'\"") }
+        else
+          it { is_expected.to contain_exec('add_user_home_dir_t_/tmp/file1_type_a').with(command: 'semanage fcontext -a -f a -t user_home_dir_t /tmp/file1') }
+          it { is_expected.to contain_exec('add_user_home_dir_t_/tmp/file1_type_a').with(unless: "semanage fcontext -E | grep -Fx \"fcontext -a -f a -t user_home_dir_t '/tmp/file1'\"") }
+        end
         it { is_expected.to contain_exec('restorecond add_user_home_dir_t_/tmp/file1_type_a').with(command: 'restorecon -R /tmp/file1/different') }
       end
       context 'with restorecon path with quotation' do
@@ -143,7 +161,11 @@ describe 'selinux::fcontext' do
             context: 'user_home_dir_t'
           }
         end
-        it { is_expected.to contain_exec('add_user_home_dir_t_/tmp/"$HOME"/"$PATH"/[^ \'\\\#\`]+(?:.*)_type_a').with(command: 'semanage fcontext -a -f a -t user_home_dir_t "/tmp/\\"\\$HOME\\"/\\"\\$PATH\\"/[^ \'\\\\\\\\#\\\\\`]+(?:.*)"') }
+        if (facts[:osfamily] == 'RedHat') && (facts[:operatingsystemmajrelease] == '6')
+          it { is_expected.to contain_exec('add_user_home_dir_t_/tmp/"$HOME"/"$PATH"/[^ \'\\\#\`]+(?:.*)_type_a').with(command: 'semanage fcontext -a -f "all files" -t user_home_dir_t "/tmp/\\"\\$HOME\\"/\\"\\$PATH\\"/[^ \'\\\\\\\\#\\\\\`]+(?:.*)"') }
+        else
+          it { is_expected.to contain_exec('add_user_home_dir_t_/tmp/"$HOME"/"$PATH"/[^ \'\\\#\`]+(?:.*)_type_a').with(command: 'semanage fcontext -a -f a -t user_home_dir_t "/tmp/\\"\\$HOME\\"/\\"\\$PATH\\"/[^ \'\\\\\\\\#\\\\\`]+(?:.*)"') }
+        end
         it { is_expected.to contain_exec('restorecond add_user_home_dir_t_/tmp/"$HOME"/"$PATH"/[^ \'\\\#\`]+(?:.*)_type_a').with(command: 'restorecon "/tmp/\\"\\$HOME\\"/\\"\\$PATH\\"/[^ \'\\\\\\\\#\\\\\`]+(?:.*)"') }
       end
     end
