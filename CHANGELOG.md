@@ -1,5 +1,11 @@
 # Change Log
 
+## 2016-12-14 Release 0.7.0
+
+- Remove custom fact selinux_custom_policy (not used anymore)
+- Default the module prefix to '' (bugfix for CentOS7)
+
+
 ## 2016-12-24 Release 0.6.0
 
 - Modulesync with latest Vox Pupuli defaults
