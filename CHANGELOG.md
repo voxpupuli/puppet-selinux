@@ -1,5 +1,18 @@
 # Change Log
 
+## 2016-12-24 Release 0.6.0
+
+- Modulesync with latest Vox Pupuli defaults
+- Add support for Fedora 25
+- Update README.md with badges
+- Improve spec tests
+- Add acceptance tests
+- Add Hiera support
+- Fix CentOS 6 semanage syntax
+- Implement puppet-strings
+- Fix: Do relabel if necessary
+
+
 ## 2016-09-08 Release [v0.5.0](https://github.com/voxpupuli/puppet-selinux/tree/v0.5.0)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v0.4.1...v0.5.0)
