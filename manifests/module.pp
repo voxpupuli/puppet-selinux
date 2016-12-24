@@ -54,11 +54,6 @@ define selinux::module(
   validate_absolute_path($makefile)
   validate_bool($syncversion)
 
-  $selinux_policy = $::selinux_config_policy ? {
-    /targeted|strict/ => $::selinux_config_policy,
-    default           => $::selinux_custom_policy,
-  }
-
   ## Begin Configuration
   file { "${sx_mod_dir}/${prefix}${name}.te":
     ensure  => $ensure,
