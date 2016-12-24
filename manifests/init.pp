@@ -1,25 +1,34 @@
 # Class: selinux
 #
-# Description
-#  This class manages SELinux on RHEL based systems.
+# This class manages SELinux on RHEL based systems.
 #
-# Parameters:
-#  - $mode (enforcing|permissive|disabled) - sets the operating state for SELinux.
-#  - $type (enforcing|permissive|disabled) - sets the operating state for SELinux.
-#  - $sx_mod_dir (absolute_path) - sets the operating state for SELinux.
-#  - $makefile (string) - the default makefile to use for module compilation
-#  - $manage_package (boolean) - manage the package for selinux tools
-#  - $package_name (string) - sets the name for the selinux tools package
+# @example Enable enforcing mode with targeted policy
+#   class { 'selinux':
+#     mode => 'enforcing',
+#     type => 'targeted',
+#   }
 #
-# Actions:
-#  This module will configure SELinux and/or deploy SELinux based modules to running
-#  system.
-#
-# Requires:
-#  - Class[stdlib]. This is Puppet Labs standard library to include additional methods for use within Puppet. [https://github.com/puppetlabs/puppetlabs-stdlib]
-#
-# Sample Usage:
-#  include selinux
+# @param mode sets the operating state for SELinux.
+#   Default value: undef
+#   Allowed values: (enforcing|permissive|disabled|undef)
+# @param type sets the selinux type
+#   Default value: undef
+#   Allowed values: (targeted|minimum|mls|undef)
+# @param sx_mod_dir directory where to store puppet managed selinux modules
+#   Default value: /usr/share/selinux
+#   Allowed values: absolute path
+# @param makefile the path to the systems SELinux makefile
+#   Default value: /usr/share/selinux/devel/Makefile
+#   Allowed value: absolute path
+# @param manage_package manage the package for selinux tools
+#   Default value: true
+# @param package_name sets the name for the selinux tools package
+#   Default value: OS dependent (see params.pp)
+# @param boolean Hash of selinux::boolean resource parameters
+# @param fcontext Hash of selinux::fcontext resource parameters
+# @param module Hash of selinux::module resource parameters
+# @param permissive Hash of selinux::module resource parameters
+# @param port Hash of selinux::port resource parameters
 #
 class selinux (
   $mode           = $::selinux::params::mode,
