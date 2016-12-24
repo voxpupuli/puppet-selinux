@@ -24,6 +24,7 @@ describe 'selinux' do
           it { is_expected.not_to contain_exec('change-selinux-status-to-enforcing') }
           it { is_expected.not_to contain_exec('change-selinux-status-to-permissive') }
           it { is_expected.not_to contain_exec('change-selinux-status-to-disabled') }
+          it { is_expected.not_to contain_file('/.autorelabel') }
         end
 
         context 'enforcing' do
@@ -32,6 +33,7 @@ describe 'selinux' do
           it { is_expected.to contain_file('/usr/share/selinux').with(ensure: 'directory') }
           it { is_expected.to contain_file_line('set-selinux-config-to-enforcing').with(line: 'SELINUX=enforcing') }
           it { is_expected.to contain_exec('change-selinux-status-to-enforcing').with(command: 'setenforce 1') }
+          it { is_expected.not_to contain_file('/.autorelabel') }
         end
 
         context 'permissive' do
@@ -39,6 +41,7 @@ describe 'selinux' do
           it { is_expected.to contain_file('/usr/share/selinux').with(ensure: 'directory') }
           it { is_expected.to contain_file_line('set-selinux-config-to-permissive').with(line: 'SELINUX=permissive') }
           it { is_expected.to contain_exec('change-selinux-status-to-permissive').with(command: 'setenforce 0') }
+          it { is_expected.not_to contain_file('/.autorelabel') }
         end
 
         context 'disabled' do
@@ -46,6 +49,23 @@ describe 'selinux' do
           it { is_expected.to contain_file('/usr/share/selinux').with(ensure: 'directory') }
           it { is_expected.to contain_file_line('set-selinux-config-to-disabled').with(line: 'SELINUX=disabled') }
           it { is_expected.to contain_exec('change-selinux-status-to-disabled').with(command: 'setenforce 0') }
+          it { is_expected.not_to contain_file('/.autorelabel') }
+        end
+
+        context 'disabled to permissive creates autorelabel trigger file' do
+          let(:facts) do
+            facts.merge(selinux_enabled: false)
+          end
+          let(:params) { { mode: 'permissive' } }
+          it { is_expected.to contain_file('/.autorelabel').with(ensure: 'file') }
+        end
+
+        context 'disabled to enforcing creates autorelabel trigger file' do
+          let(:facts) do
+            facts.merge(selinux_enabled: false)
+          end
+          let(:params) { { mode: 'enforcing' } }
+          it { is_expected.to contain_file('/.autorelabel').with(ensure: 'file') }
         end
       end
     end

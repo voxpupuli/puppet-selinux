@@ -59,6 +59,18 @@ class selinux::config (
       }
     }
 
+    # a complete relabeling is required when switching from disabled to
+    # permissive or enforcing. Ensure the autorelabel trigger file is created.
+    if $mode in ['enforcing','permissive'] and
+      !$::selinux_enabled {
+      file { '/.autorelabel':
+        ensure  => 'file',
+        owner   => 'root',
+        group   => 'root',
+        content => "# created by puppet for disabled to ${mode} switch\n",
+      }
+    }
+
     exec { "change-selinux-status-to-${mode}":
       command => "setenforce ${sestatus}",
       unless  => "getenforce | grep -Eqi '${mode}|disabled'",
