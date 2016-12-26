@@ -23,9 +23,7 @@ This class manages SELinux on RHEL based systems.
 
 ## Requirements
 
-* Puppet-3.x or later
-* Facter 1.7.0 or later
-* Ruby-1.9.3 or later (Ruby-1.8.7 is **not** supported).
+* Puppet 3.8.7 or later
 
 ## Module Description
 
