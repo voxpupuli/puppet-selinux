@@ -62,7 +62,7 @@ class selinux::config (
     # a complete relabeling is required when switching from disabled to
     # permissive or enforcing. Ensure the autorelabel trigger file is created.
     if $mode in ['enforcing','permissive'] and
-      !$::selinux_enabled {
+      !$::selinux {
       file { '/.autorelabel':
         ensure  => 'file',
         owner   => 'root',
