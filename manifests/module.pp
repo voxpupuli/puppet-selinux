@@ -1,32 +1,27 @@
-# Definition: selinux::module
+# Defined type: selinux::module
 #
-# Description
-#  This class will either install or uninstall a SELinux module from a running system.
-#  This module allows an admin to keep .te files in text form in a repository, while
-#  allowing the system to compile and manage SELinux modules.
+# This class will either install or uninstall a SELinux module from a running system.
+# This module allows an admin to keep .te files in text form in a repository, while
+# allowing the system to compile and manage SELinux modules.
 #
-#  Concepts incorporated from:
-#  http://stuckinadoloop.wordpress.com/2011/06/15/puppet-managed-deployment-of-selinux-modules/
+# Concepts incorporated from:
+# http://stuckinadoloop.wordpress.com/2011/06/15/puppet-managed-deployment-of-selinux-modules/
+# 
+# @example compile and load the apache module
+#   selinux::module{ 'apache':
+#     ensure => 'present',
+#     source => 'puppet:///modules/selinux/apache.te',
+#   }
 #
-# Parameters:
-#   - $ensure: (present|absent) - sets the state for a module
-#   - $sx_mod_dir (absolute_path) - sets the module directory.
-#   - $source: the source file (either a puppet URI or local file) of the SELinux .te module
-#   - $makefile: the makefile file path
-#   - $prefix: the prefix to add to the loaded module. Defaults to ''.
-#
-# Actions:
-#  Compiles a module using make and installs it
-#
-# Requires:
-#  - SELinux
-#
-# Sample Usage:
-#  selinux::module{ 'apache':
-#    ensure => 'present',
-#    source => 'puppet:///modules/selinux/apache.te',
-#  }
-#
+# @param ensure present or absent
+# @param sx_mod_dir path where source is stored and the module built. 
+#   Valid values: absolute path
+# @param source the source file (either a puppet URI or local file) of the SELinux .te file
+# @param content content of the source .te file
+# @param makefile absolute path to the selinux-devel Makefile
+# @param prefix (DEPRECATED) the prefix to add to the loaded module. Defaults to ''.
+#   Does not work with CentOS >= 7.2 and Fedora >= 24 SELinux tools.
+# @param syncversion selmodule syncversion param
 define selinux::module(
   $source       = undef,
   $content      = undef,
@@ -34,7 +29,7 @@ define selinux::module(
   $makefile     = '/usr/share/selinux/devel/Makefile',
   $prefix       = '',
   $sx_mod_dir   = '/usr/share/selinux',
-  $syncversion  = true,
+  $syncversion  = undef,
 ) {
 
   include ::selinux
@@ -52,7 +47,9 @@ define selinux::module(
   validate_string($prefix)
   validate_absolute_path($sx_mod_dir)
   validate_absolute_path($makefile)
-  validate_bool($syncversion)
+  if $syncversion != undef {
+    validate_bool($syncversion)
+  }
 
   ## Begin Configuration
   file { "${sx_mod_dir}/${prefix}${name}.te":
