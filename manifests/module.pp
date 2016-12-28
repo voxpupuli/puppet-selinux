@@ -34,7 +34,7 @@ define selinux::module(
   $makefile     = '/usr/share/selinux/devel/Makefile',
   $prefix       = '',
   $sx_mod_dir   = '/usr/share/selinux',
-  $syncversion  = true,
+  $syncversion  = undef,
 ) {
 
   include ::selinux
@@ -52,7 +52,9 @@ define selinux::module(
   validate_string($prefix)
   validate_absolute_path($sx_mod_dir)
   validate_absolute_path($makefile)
-  validate_bool($syncversion)
+  if $syncversion != undef {
+    validate_bool($syncversion)
+  }
 
   ## Begin Configuration
   file { "${sx_mod_dir}/${prefix}${name}.te":
