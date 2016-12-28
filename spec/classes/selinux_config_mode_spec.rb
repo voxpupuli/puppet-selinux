@@ -5,11 +5,10 @@ describe 'selinux' do
     context "on #{os}" do
       let(:facts) do
         facts.merge(
-          selinux_enabled: true,
           selinux: true,
           selinux_config_mode: 'enforcing',
           selinux_config_policy: 'targeted',
-          selinux_current_mode: 'enforcing',
+          selinux_current_mode: 'enforcing'
         )
       end
 
@@ -61,8 +60,7 @@ describe 'selinux' do
         context 'disabled to permissive creates autorelabel trigger file' do
           let(:facts) do
             hash = facts.merge(
-              selinux_enabled: false,
-              selinux: false,
+              selinux: false
             )
             hash.delete(:selinux_config_mode)
             hash.delete(:selinux_current_mode)
@@ -76,7 +74,7 @@ describe 'selinux' do
         context 'disabled to enforcing creates autorelabel trigger file' do
           let(:facts) do
             hash = facts.merge(
-              selinux_enabled: false,
+              selinux: false
             )
             hash.delete(:selinux_config_mode)
             hash.delete(:selinux_current_mode)
