@@ -4,7 +4,13 @@ describe 'selinux' do
   on_supported_os.each do |os, facts|
     context "on #{os}" do
       let(:facts) do
-        facts
+        facts.merge(
+          selinux_enabled: true,
+          selinux: true,
+          selinux_config_mode: 'enforcing',
+          selinux_config_policy: 'targeted',
+          selinux_current_mode: 'enforcing',
+        )
       end
 
       context 'config' do
@@ -54,7 +60,14 @@ describe 'selinux' do
 
         context 'disabled to permissive creates autorelabel trigger file' do
           let(:facts) do
-            facts.merge(selinux_enabled: false)
+            hash = facts.merge(
+              selinux_enabled: false,
+              selinux: false,
+            )
+            hash.delete(:selinux_config_mode)
+            hash.delete(:selinux_current_mode)
+            hash.delete(:selinux_config_policy)
+            hash
           end
           let(:params) { { mode: 'permissive' } }
           it { is_expected.to contain_file('/.autorelabel').with(ensure: 'file') }
@@ -62,7 +75,13 @@ describe 'selinux' do
 
         context 'disabled to enforcing creates autorelabel trigger file' do
           let(:facts) do
-            facts.merge(selinux_enabled: false)
+            hash = facts.merge(
+              selinux_enabled: false,
+            )
+            hash.delete(:selinux_config_mode)
+            hash.delete(:selinux_current_mode)
+            hash.delete(:selinux_config_policy)
+            hash
           end
           let(:params) { { mode: 'enforcing' } }
           it { is_expected.to contain_file('/.autorelabel').with(ensure: 'file') }
