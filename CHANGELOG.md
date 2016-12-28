@@ -1,5 +1,11 @@
 # Change Log
 
+## 2016-12-28 Release 0.7.1
+
+- selinux::module syncversion parameter now defaults to undef
+  to workaround puppet selmodule syncversion bug on CentOS >= 7.3 ([PR #158](https://github.com/voxpupuli/puppet-selinux/pull/158))
+- Bugfix for wrong named fact used in selinux::config ([PR #159](https://github.com/voxpupuli/puppet-selinux/pull/159))
+
 ## 2016-12-14 Release 0.7.0
 
 - Remove custom fact selinux_custom_policy (not used anymore)
