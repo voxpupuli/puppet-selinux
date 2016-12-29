@@ -1,30 +1,21 @@
-# Definition: selinux::boolean
+# Defined type: selinux::boolean
 #
-# Description
-#  This class will set the state of an SELinux boolean.
-#  All pending values are written to the policy file on disk, so they will be persistant across reboots.
-#  Ensure that the manifest notifies a related service as a restart for that service may be required.
+# This class will set the state of an SELinux boolean.
+# All pending values are written to the policy file on disk, so they will be persistant across reboots.
+# Ensure that the manifest notifies a related service as a restart for that service may be required.
 #
-# Class created by GreenOgre<aggibson@cogeco.ca>
-#  Adds to puppet-selinux by jfryman
-#   https://github.com/jfryman/puppet-selinux
+# @example activate boolean
+#   selinux::boolean{ 'named_write_master_zones':
+#      ensure     => 'on',
+#   }
 #
-# Parameters:
-#   - $ensure: (on|off) - Sets the current state of a particular SELinux boolean
-#   - $persistent: (true|false) - Should a particular SELinux boolean persist across reboots
+# @example disable boolean
+#   selinux::boolean{ 'named_write_master_zones':
+#      ensure     => 'off',
+#   }
 #
-# Actions:
-#  Wraps selboolean to set states
-#
-# Requires:
-#  - SELinux
-#
-# Sample Usage:
-#
-#  selinux::boolean{ 'named_write_master_zones':
-#     ensure     => "on",
-#     persistent => true,
-#  }
+# @param ensure Sets the current state of a particular SELinux boolean. Valid values: on, off
+# @param persistent Should a particular SELinux boolean persist across reboots
 #
 define selinux::boolean (
   $ensure     = 'on',
@@ -48,8 +39,12 @@ define selinux::boolean (
     default                    => undef,
   }
 
-  selboolean { $name:
-    value      => $value,
-    persistent => $persistent,
+  # seboolean calls getsebool and setsebool 
+  # they only work when current mode is not disabled.
+  if $::selinux {
+    selboolean { $name:
+      value      => $value,
+      persistent => $persistent,
+    }
   }
 }
