@@ -45,6 +45,10 @@ define selinux::port (
 
   include ::selinux
 
+  Anchor['selinux::module post'] ->
+  Selinux::Port[$title] ->
+  Anchor['selinux::end']
+
   if $protocol {
     validate_re($protocol, ['^tcp6?$', '^udp6?$'])
     $protocol_switch = ['-p', $protocol]

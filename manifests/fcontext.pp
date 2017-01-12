@@ -79,6 +79,10 @@ define selinux::fcontext (
 
   include ::selinux
 
+  Anchor['selinux::module post'] ->
+  Selinux::Fcontext[$title] ->
+  Anchor['selinux::end']
+
   validate_absolute_path($pathname)
   validate_bool($filetype, $equals)
 

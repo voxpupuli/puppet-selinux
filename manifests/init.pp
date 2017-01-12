@@ -68,7 +68,8 @@ class selinux (
   class { '::selinux::package':
     manage_package => $manage_package,
     package_name   => $package_name,
-  } ->
+  }
+
   class { '::selinux::config': }
 
   if $boolean {
@@ -86,4 +87,12 @@ class selinux (
   if $port {
     create_resources ( 'selinux::port', hiera_hash('selinux::port') )
   }
+
+  # Ordering
+  anchor { 'selinux::start': } ->
+  Class['selinux::package'] ->
+  Class['selinux::config'] ->
+  anchor { 'selinux::module pre': } ->
+  anchor { 'selinux::module post': } ->
+  anchor { 'selinux::end': }
 }

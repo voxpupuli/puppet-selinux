@@ -34,6 +34,10 @@ define selinux::module(
 
   include ::selinux
 
+  Anchor['selinux::module pre'] ->
+  Selinux::Module[$title] ->
+  Anchor['selinux::module post']
+
   validate_re($ensure, [ '^present$', '^absent$' ], '$ensure must be "present" or "absent"')
   if $ensure == 'present' and $source == undef and $content == undef {
     fail("You must provide 'source' or 'content' field for selinux module")

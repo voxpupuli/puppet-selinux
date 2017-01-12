@@ -5,28 +5,31 @@ describe 'selinux class' do
     <<-EOS
       class { 'selinux': mode => 'enforcing' }
 
-      # with puppet4 I would use a HERE DOC to make this pretty,
-      # but with puppet3 it's not possible.
-      selinux::module { 'puppet_selinux_test_policy':
-        content => "policy_module(puppet_selinux_test_policy, 1.0.0)\ngen_tunable(puppet_selinux_test_policy_bool, false)\ntype puppet_selinux_test_policy_t;\ntype puppet_selinux_test_policy_exec_t;\ninit_daemon_domain(puppet_selinux_test_policy_t, puppet_selinux_test_policy_exec_t)\ntype puppet_selinux_test_policy_port_t;\ncorenet_port(puppet_selinux_test_policy_port_t)\n",
-        prefix => '',
-        syncversion => undef,
-      } ->
+      selinux::boolean { 'puppet_selinux_test_policy_bool': }
 
-      file { '/tmp/test_selinux_fcontext':
-        content => 'TEST',
-        seltype => 'puppet_selinux_test_policy_exec_t',
-      } ->
-
-      selinux::boolean { 'puppet_selinux_test_policy_bool': } ->
-
-      selinux::permissive { 'puppet_selinux_test_policy_t': context => 'puppet_selinux_test_policy_t', } ->
+      selinux::permissive { 'puppet_selinux_test_policy_t': context => 'puppet_selinux_test_policy_t', }
 
       selinux::port { 'puppet_selinux_test_policy_port_t/tcp':
         context => 'puppet_selinux_test_policy_port_t',
         port => '55555',
         protocol => 'tcp',
       }
+
+      # with puppet4 I would use a HERE DOC to make this pretty,
+      # but with puppet3 it's not possible.
+      selinux::module { 'puppet_selinux_test_policy':
+        content => "policy_module(puppet_selinux_test_policy, 1.0.0)\ngen_tunable(puppet_selinux_test_policy_bool, false)\ntype puppet_selinux_test_policy_t;\ntype puppet_selinux_test_policy_exec_t;\ninit_daemon_domain(puppet_selinux_test_policy_t, puppet_selinux_test_policy_exec_t)\ntype puppet_selinux_test_policy_port_t;\ncorenet_port(puppet_selinux_test_policy_port_t)\n",
+        prefix => '',
+        syncversion => undef,
+      }
+
+      Class['selinux'] ->
+
+      file { '/tmp/test_selinux_fcontext':
+        content => 'TEST',
+        seltype => 'puppet_selinux_test_policy_exec_t',
+      }
+
     EOS
   end
 

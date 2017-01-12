@@ -8,6 +8,17 @@ describe 'selinux::fcontext' do
         facts
       end
 
+      context 'ordering' do
+        let(:params) do
+          {
+            pathname: '/tmp/file1',
+            context: 'user_home_dir_t'
+          }
+        end
+        it { is_expected.to contain_selinux__fcontext('myfile').that_requires('Anchor[selinux::module post]') }
+        it { is_expected.to contain_selinux__fcontext('myfile').that_comes_before('Anchor[selinux::end]') }
+      end
+
       context 'invalid pathname' do
         it { expect { is_expected.to compile }.to raise_error(%r{Must pass pathname to | expects a value for parameter 'pathname'}) }
       end
