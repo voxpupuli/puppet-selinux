@@ -33,6 +33,10 @@ define selinux::boolean (
 
   include ::selinux
 
+  Anchor['selinux::module post'] ->
+  Selinux::Boolean[$title] ->
+  Anchor['selinux::end']
+
   $ensure_real = $ensure ? {
     true    => 'true', # lint:ignore:quoted_booleans
     false   => 'false', # lint:ignore:quoted_booleans
