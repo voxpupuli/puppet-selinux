@@ -1,5 +1,10 @@
 # Change Log
 
+## 2017-01-12 - Release 0.8.0
+
+This is the last release with Puppet 3 support!
+- Modulesync with latest Vox Pupuli defaults
+
 ## 2016-12-28 Release 0.7.1
 
 - selinux::module syncversion parameter now defaults to undef
