@@ -8,6 +8,9 @@ describe 'selinux::boolean' do
         facts
       end
 
+      it { is_expected.to contain_selinux__boolean('mybool').that_requires('Anchor[selinux::module post]') }
+      it { is_expected.to contain_selinux__boolean('mybool').that_comes_before('Anchor[selinux::end]') }
+
       ['on', true, 'present'].each do |value|
         context value do
           let(:params) do

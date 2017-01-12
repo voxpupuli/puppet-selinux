@@ -16,6 +16,8 @@ describe 'selinux::permissive' do
         end
         it do
           is_expected.to contain_exec('add_oddjob_mkhomedir_t').with(command: 'semanage permissive -a oddjob_mkhomedir_t')
+          is_expected.to contain_selinux__permissive('mycontextp').that_requires('Anchor[selinux::module post]')
+          is_expected.to contain_selinux__permissive('mycontextp').that_comes_before('Anchor[selinux::end]')
         end
       end
     end

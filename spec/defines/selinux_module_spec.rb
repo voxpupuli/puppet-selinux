@@ -9,6 +9,16 @@ describe 'selinux::module' do
         facts
       end
 
+      context 'ordering' do
+        let(:params) do
+          {
+            source: 'puppet:///modules/mymodule/selinux/mymodule.te'
+          }
+        end
+        it { is_expected.to contain_selinux__module('mymodule').that_requires('Anchor[selinux::module pre]') }
+        it { is_expected.to contain_selinux__module('mymodule').that_comes_before('Anchor[selinux::module post]') }
+      end
+
       context 'present case' do
         let(:params) do
           {

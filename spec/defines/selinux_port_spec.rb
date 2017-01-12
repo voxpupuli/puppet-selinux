@@ -8,6 +8,18 @@ describe 'selinux::port' do
         facts
       end
 
+      context 'ordering' do
+        let(:params) do
+          {
+            context: 'http_port_t',
+            port: 8080,
+            protocol: 'tcp'
+          }
+        end
+        it { is_expected.to contain_selinux__port('myapp').that_requires('Anchor[selinux::module post]') }
+        it { is_expected.to contain_selinux__port('myapp').that_comes_before('Anchor[selinux::end]') }
+      end
+
       %w(tcp udp tcp6 udp6).each do |protocol|
         context "valid protocol #{protocol}" do
           let(:params) do
