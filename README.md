@@ -30,8 +30,12 @@ This class manages SELinux on RHEL based systems.
 This module will configure SELinux and/or deploy SELinux based modules to
 running system.
 
-Requires puppetlabs/stdlib
-`https://github.com/puppetlabs/puppetlabs-stdlib`
+## Get in touch
+
+* IRC: [#voxpupuli on irc.freenode.net](irc://irc.freenode.net/voxpupuli) 
+  ([Freenode WebChat](http://webchat.freenode.net/?channels=%23voxpupuli))
+* Mailinglist: <voxpupuli@groups.io> 
+  ([groups.io Webinterface](https://groups.io/g/voxpupuli/topics))
 
 ## Usage
 
@@ -41,6 +45,25 @@ Parameters:
 * `$type` (targeted|minimum|mls) - sets the enforcement type.
 * `$manage_package` (boolean) - Whether or not to manage the SELinux management package.
 * `$package_name` (string) - sets the name of the selinux management package.
+
+## Known problems / limitations
+
+* If SELinux is disabled and you want to switch to permissive or enforcing you
+  are required to reboot the system (limitation of SELinux). The module won't
+  do this for you.
+* If you add filecontexts with `semange fcontext` (what `selinux::fcontext` 
+  does) the order is important. If you add /my/folder before /my/folder/subfolder
+  only /my/folder will match (limitation of SELinux). There is no such limitation
+  to file-contexts defined in SELinux modules. (GH-121)
+* `selinux::module` only allows to add a type enforcment file (`*.te`) but no
+  interfaces (`*.if`) or file-contexts (`*.fc`).
+* While SELinux is disabled the defined types `selinux::boolean`, 
+  `selinux::fcontext`, `selinux::port` will produce puppet agent runtime errors 
+  because the used tools fail.
+* `selinux::port` has the `action` parameter which  if you specify `-d` or 
+  `--delete` silently does nothing. (GH-164)
+* `selinux::permissive` allows only to set a domain to permissive but not to
+   remove it. (GH-165)
 
 ## Reference
 
@@ -67,6 +90,7 @@ This will include the module and manage the SELinux mode (possible values are
 are `target`, `minimum`, and `mls`). Note that disabling SELinux requires a reboot
 to fully take effect. It will run in `permissive` mode until then.
 
+
 ### Deploy a custom module
 
 ```puppet
@@ -92,6 +116,29 @@ selinux::boolean { 'puppetagent_manage_all_files': }
 
 ## Development
 
+### Things to remember
+
+* The SELinux tools behave odd when SELinux is disabled
+    * `semanage` requires `--noreload` while in disabled mode when
+      adding or changing something
+    * Only few `--list` operations work
+
+### Facter facts
+
+The fact values might be unexpected while in disabled mode. One could expect 
+the config\_mode to be set, but only the boolean `enabled` is set.
+
+The most important facts:
+
+| Fact                                      | Fact (old)                | Mode: disabled | Mode: permissive                        | Mode:  enforcing                        |
+|-------------------------------------------|---------------------------|----------------|-----------------------------------------|-----------------------------------------|
+| `$facts['os']['selinux']['enabled']`      | `$::selinux`              | false          | true                                    | true                                    |
+| `$facts['os']['selinux'['config_mode']`   | `$::selinux_config_mode`  | undef          | Value of SELINUX in /etc/selinux/config | Value of SELINUX in /etc/selinux/config |
+| `$facts['os']['selinux']['current_mode']` | `$::selinux_current_mode` | undef          | Value of `getenforce` downcased         | Value of `getenforce` downcased         |
+
+
+
 ## Authors
 
-James Fryman <james@fryman.io>
+* VoxPupuli <voxpupuli@groups.io>
+* James Fryman <james@fryman.io>
