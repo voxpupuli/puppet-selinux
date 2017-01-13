@@ -1,23 +1,17 @@
 # Class: selinux::config
 #
-# Description
-#  This class is designed to configure the system to use SELinux on the system
+# THIS IS A PRIVATE CLASS
+# =======================
 #
-# Parameters:
-#  - $mode (enforcing|permissive|disabled) - sets the operating state for SELinux.
-#  - $type (targeted|minimum|mls) - sets SELinux policy.
-#  - $manage_package (boolean) - Whether or not to manage the SELinux management package.
-#  - $package_name (string) - sets the name of the selinux management package.
-#  - $sx_mod_dir (directory) - sets the operating sx_mod_dir for SELinux.
+# This class is designed to configure the system to use SELinux on the system.
 #
-# Actions:
-#  Configures SELinux to a specific state (enforced|permissive|disabled and targeted|minimum|mls)
+# It is included in the main class ::selinux
 #
-# Requires:
-#  This module has no requirements
-#
-# Sample Usage:
-#  This module should not be called directly.
+# @param mode See main class
+# @param type See main class
+# @param manage_package See main class
+# @param package_name See main class
+# @param sx_mod_dir See main class
 #
 class selinux::config (
   $mode           = $::selinux::mode,
