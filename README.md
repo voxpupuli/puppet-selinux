@@ -59,11 +59,10 @@ running system.
 
 ## Usage
 
-There is puppet-strings generated documentation available in the docs/ folder 
-of the github repo.
+Generated puppet strings documentation with examples is available from
+https://voxpupuli.org/puppet-selinux/
 
-It will be available at http://voxpupuli.org/pupppet-selinux some time in 
-the future.
+It's also included in the docs/ folder as simple html pages.
 
 ## Reference
 
@@ -135,8 +134,6 @@ The most important facts:
 | `$facts['os']['selinux']['enabled']`      | `$::selinux`              | false          | true                                    | true                                    |
 | `$facts['os']['selinux'['config_mode']`   | `$::selinux_config_mode`  | undef          | Value of SELINUX in /etc/selinux/config | Value of SELINUX in /etc/selinux/config |
 | `$facts['os']['selinux']['current_mode']` | `$::selinux_current_mode` | undef          | Value of `getenforce` downcased         | Value of `getenforce` downcased         |
-
-
 
 ## Authors
 
