@@ -1,5 +1,7 @@
+# selinux::restorecond::config
 #
-# Class selinux::restorecond::config
+# THIS IS A PRIVATE CLASS
+# =======================
 #
 class selinux::restorecond::config {
 

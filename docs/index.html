@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  File: README
+  
+    &mdash; Documentation by YARD 0.9.7
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "";
+  relpath = '';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="puppet_class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="_index.html">Index</a> &raquo; 
+    <span class="title">File: README</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="puppet_class_list_link"
+        href="puppet_class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><div id='filecontents'><h1>SELinux module for Puppet</h1>
+
+<p><a href="https://travis-ci.org/voxpupuli/puppet-selinux"><img src="https://travis-ci.org/voxpupuli/puppet-selinux.png?branch=master" alt="Build Status"></a>
+<a href="https://coveralls.io/github/voxpupuli/puppet-selinux"><img src="https://coveralls.io/repos/github/voxpupuli/puppet-selinux/badge.svg?branch=master" alt="Code Coverage"></a>
+<a href="https://forge.puppetlabs.com/puppet/selinux"><img src="https://img.shields.io/puppetforge/v/puppet/selinux.svg" alt="Puppet Forge"></a>
+<a href="https://forge.puppetlabs.com/puppet/selinux"><img src="https://img.shields.io/puppetforge/dt/puppet/selinux.svg" alt="Puppet Forge - downloads"></a>
+<a href="https://forge.puppetlabs.com/puppet/selinux"><img src="https://img.shields.io/puppetforge/e/puppet/selinux.svg" alt="Puppet Forge - endorsement"></a>
+<a href="https://forge.puppetlabs.com/puppet/selinux"><img src="https://img.shields.io/puppetforge/f/puppet/selinux.svg" alt="Puppet Forge - scores"></a></p>
+
+<h4>Table of Contents</h4>
+
+<ol>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#module-description">Module Description - What the module does and why it is useful</a></li>
+<li><a href="#usage">Usage - Configuration options and additional functionality</a></li>
+<li><a href="#reference">Reference - An under-the-hood peek at what the module is doing and how</a></li>
+<li><a href="#defined-types">Defined Types</a></li>
+<li><a href="#development">Development - Guide for contributing to the module</a></li>
+<li><a href="#authors">Authors</a></li>
+</ol>
+
+<h2>Overview</h2>
+
+<p>This class manages SELinux on RHEL based systems.</p>
+
+<h2>Requirements</h2>
+
+<ul>
+<li>Puppet 3.8.7 or later</li>
+</ul>
+
+<h2>Module Description</h2>
+
+<p>This module will configure SELinux and/or deploy SELinux based modules to
+running system.</p>
+
+<h2>Get in touch</h2>
+
+<ul>
+<li>IRC: <a href="irc://irc.freenode.net/voxpupuli">#voxpupuli on irc.freenode.net</a> 
+(<a href="http://webchat.freenode.net/?channels=%23voxpupuli">Freenode WebChat</a>)</li>
+<li>Mailinglist: <a href="mailto:voxpupuli@groups.io">voxpupuli@groups.io</a> 
+(<a href="https://groups.io/g/voxpupuli/topics">groups.io Webinterface</a>)</li>
+</ul>
+
+<h2>Known problems / limitations</h2>
+
+<ul>
+<li>If SELinux is disabled and you want to switch to permissive or enforcing you
+are required to reboot the system (limitation of SELinux). The module won&#39;t
+do this for you.</li>
+<li>If you add filecontexts with <code>semange fcontext</code> (what <code>selinux::fcontext</code> 
+does) the order is important. If you add /my/folder before /my/folder/subfolder
+only /my/folder will match (limitation of SELinux). There is no such limitation
+to file-contexts defined in SELinux modules. (GH-121)</li>
+<li><code>selinux::module</code> only allows to add a type enforcment file (<code>*.te</code>) but no
+interfaces (<code>*.if</code>) or file-contexts (<code>*.fc</code>).</li>
+<li>While SELinux is disabled the defined types <code>selinux::boolean</code>, 
+<code>selinux::fcontext</code>, <code>selinux::port</code> will produce puppet agent runtime errors 
+because the used tools fail.</li>
+<li><code>selinux::port</code> has the <code>action</code> parameter which  if you specify <code>-d</code> or 
+<code>--delete</code> silently does nothing. (GH-164)</li>
+<li><code>selinux::permissive</code> allows only to set a domain to permissive but not to
+remove it. (GH-165)</li>
+</ul>
+
+<h2>Usage</h2>
+
+<p>There is puppet-strings generated documentation available in the docs/ folder 
+of the github repo.</p>
+
+<p>It will be available at <a href="http://voxpupuli.org/pupppet-selinux">http://voxpupuli.org/pupppet-selinux</a> some time in 
+the future.</p>
+
+<h2>Reference</h2>
+
+<h3>Basic usage</h3>
+
+<pre class="code puppet"><code class="puppet">include selinux
+</code></pre>
+
+<p>This will include the module and allow you to use the provided defined types,
+but will not modify existing SELinux settings on the system.</p>
+
+<h3>More advanced usage</h3>
+
+<pre class="code puppet"><code class="puppet">class { selinux:
+  mode =&gt; &#39;enforcing&#39;,
+  type =&gt; &#39;targeted&#39;,
+}
+</code></pre>
+
+<p>This will include the module and manage the SELinux mode (possible values are
+<code>enforcing</code>, <code>permissive</code>, and <code>disabled</code>) and enforcement type (possible values
+are <code>target</code>, <code>minimum</code>, and <code>mls</code>). Note that disabling SELinux requires a reboot
+to fully take effect. It will run in <code>permissive</code> mode until then.</p>
+
+<h3>Deploy a custom module</h3>
+
+<pre class="code puppet"><code class="puppet">selinux::module { &#39;resnet-puppet&#39;:
+  ensure =&gt; &#39;present&#39;,
+  source =&gt; &#39;puppet:///modules/site_puppet/site-puppet.te&#39;,
+}
+</code></pre>
+
+<h3>Set a boolean value</h3>
+
+<pre class="code puppet"><code class="puppet">selinux::boolean { &#39;puppetagent_manage_all_files&#39;: }
+</code></pre>
+
+<h2>Defined Types</h2>
+
+<ul>
+<li><code>boolean</code> - Set seboolean values</li>
+<li><code>fcontext</code> - Define fcontext types and equals values</li>
+<li><code>module</code> - Manage an SELinux module</li>
+<li><code>permissive</code> - Set a context to <code>permissive</code>.</li>
+<li><code>port</code> - Set selinux port context policies</li>
+</ul>
+
+<h2>Development</h2>
+
+<h3>Things to remember</h3>
+
+<ul>
+<li>The SELinux tools behave odd when SELinux is disabled
+
+<ul>
+<li><code>semanage</code> requires <code>--noreload</code> while in disabled mode when
+adding or changing something</li>
+<li>Only few <code>--list</code> operations work</li>
+</ul></li>
+</ul>
+
+<h3>Facter facts</h3>
+
+<p>The fact values might be unexpected while in disabled mode. One could expect 
+the config_mode to be set, but only the boolean <code>enabled</code> is set.</p>
+
+<p>The most important facts:</p>
+
+<table><thead>
+<tr>
+<th>Fact</th>
+<th>Fact (old)</th>
+<th>Mode: disabled</th>
+<th>Mode: permissive</th>
+<th>Mode:  enforcing</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>$facts[&#39;os&#39;][&#39;selinux&#39;][&#39;enabled&#39;]</code></td>
+<td><code>$::selinux</code></td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+</tr>
+<tr>
+<td><code>$facts[&#39;os&#39;][&#39;selinux&#39;[&#39;config_mode&#39;]</code></td>
+<td><code>$::selinux_config_mode</code></td>
+<td>undef</td>
+<td>Value of SELINUX in /etc/selinux/config</td>
+<td>Value of SELINUX in /etc/selinux/config</td>
+</tr>
+<tr>
+<td><code>$facts[&#39;os&#39;][&#39;selinux&#39;][&#39;current_mode&#39;]</code></td>
+<td><code>$::selinux_current_mode</code></td>
+<td>undef</td>
+<td>Value of <code>getenforce</code> downcased</td>
+<td>Value of <code>getenforce</code> downcased</td>
+</tr>
+</tbody></table>
+
+<h2>Authors</h2>
+
+<ul>
+<li>VoxPupuli <a href="mailto:voxpupuli@groups.io">voxpupuli@groups.io</a></li>
+<li>James Fryman <a href="mailto:james@fryman.io">james@fryman.io</a></li>
+</ul>
+</div></div>
+
+      <div id="footer">
+  Generated on Fri Jan 13 15:43:22 2017 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.7 (ruby-2.3.3).
+</div>
+
+    </div>
+  </body>
+</html>

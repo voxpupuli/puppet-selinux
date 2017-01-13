@@ -1,3 +1,8 @@
+# selinux::restorecond::service
+#
+# THIS IS A PRIVATE CLASS
+# =======================
+#
 # manages restorecond service
 class selinux::restorecond::service {
 

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Defined Type: selinux::fcontext
+  
+    &mdash; Documentation by YARD 0.9.7
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "puppet_defined_types::selinux::fcontext";
+  relpath = '../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../puppet_defined_type_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../_index.html">Index (s)</a> &raquo;
+    <span class='title'><span class='object_link'>Defined Types</span></span>
+     &raquo; 
+    <span class="title">selinux::fcontext</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="puppet_class_list_link"
+        href="../puppet_class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Defined Type: selinux::fcontext</h1>
+<div class="box_info">
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>
+      manifests/fcontext.pp
+    </dd>
+  </dl>
+</div>
+<h2>Overview</h2>
+<div class="docstring">
+  <div class="discussion">
+    <p>selinux::fcontext</p>
+
+<p>This method will manage a local file context setting, and will persist it across reboots.
+It will perform a check to ensure the file context is not already set.</p>
+
+<p>example Add a file-context only for directory types
+  selinux::fcontext{&#39;set-non-home-user-dir_type_d&#39;:
+    filetype =&gt; true ,
+    filemode =&gt; &#39;d&#39; ,
+    context  =&gt; &#39;user_home_dir_t&#39; ,
+    pathname =&gt; &#39;/u/users/[^/]*&#39; ,
+  }</p>
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'><p>Add an path substition (equal) file-context</p>
+</div></p>
+      
+      <pre class="example code"><code>selinux::fcontext{&#39;set-postfix-instance1-spool&#39;:
+  equals      =&gt; true,
+  pathname    =&gt; &#39;/var/spool/postfix-instance1&#39;,
+  destination =&gt; &#39;/var/spool/postfix&#39;
+}</code></pre>
+    
+      
+        <p class="example_title"><div class='inline'><p>Add a file-context for mysql log files at non standard location</p>
+</div></p>
+      
+      <pre class="example code"><code>selinux::fcontext{&#39;set-mysql-log-context&#39;:
+  context =&gt; &quot;mysqld_log_t&quot;,
+  pathname =&gt; &quot;/u01/log/mysql(/.*)?&quot;,
+}</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>context</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>A particular file-context, like &quot;mysqld_log_t&quot;</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>pathname</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>An semanage fcontext-formatted pathname, like &quot;/var/log/mysql(/.*)?&quot;</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>destination</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>The destination path used with the equals parameter.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>equals</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>Boolean Value - Enables support for substituting target path with sourcepath when generating default label</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>filetype</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>Boolean Value - enables support for &quot;-f&quot; file type option of &quot;semanage fcontext&quot;</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>filemode</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;a&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>File Mode for policy (i.e. regular file, directory, block device, all files, etc.)</p>
+
+<ul>
+<li>Types:
+
+<ul>
+<li>a = all files (default value if not restricting filetype)</li>
+<li>f = regular file</li>
+<li>d = directory</li>
+<li>c = character device</li>
+<li>b = block device</li>
+<li>s = socket</li>
+<li>l = symbolic link</li>
+<li>p = named pipe</li>
+</ul></li>
+</ul>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>restorecond</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>true</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>Run restorecon against the path name upon changes (default true)</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>restorecond_path</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>Path name to use for restorecon (default $pathname)</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>restorecond_recurse</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>Run restorecon recursive?</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+
+</div><div class="method_details_list">
+  <table class="source_code">
+    <tr>
+      <td>
+        <pre class="lines">
+
+
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136</pre>
+      </td>
+      <td>
+        <pre class="code"><span class="info file"># File 'manifests/fcontext.pp', line 46</span>
+
+define selinux::fcontext (
+  $pathname,
+  $destination         = undef,
+  $context             = undef,
+  $filetype            = false,
+  $filemode            = &#39;a&#39;,
+  $equals              = false,
+  $restorecond         = true,
+  $restorecond_path    = undef,
+  $restorecond_recurse = false,
+) {
+
+  include ::selinux
+
+  Anchor[&#39;selinux::module post&#39;] -&gt;
+  Selinux::Fcontext[$title] -&gt;
+  Anchor[&#39;selinux::end&#39;]
+
+  validate_absolute_path($pathname)
+  validate_bool($filetype, $equals)
+
+  if $equals {
+    validate_absolute_path($destination)
+  } else {
+    validate_string($context)
+  }
+
+  $restorecond_path_private = $restorecond_path ? {
+    undef   =&gt; $pathname,
+    default =&gt; $restorecond_path
+  }
+
+  validate_absolute_path($restorecond_path_private)
+
+  $restorecond_resurse_private = $restorecond_recurse ? {
+    true  =&gt; [&#39;-R&#39;],
+    false =&gt; [],
+  }
+
+  if $equals and $filetype {
+    fail(&#39;Resource cannot contain both &quot;equals&quot; and &quot;filetype&quot; options&#39;)
+  }
+
+  if $equals {
+    $resource_name = &quot;add_${destination}_${pathname}&quot;
+    $command       = shellquote(&#39;semanage&#39;, &#39;fcontext&#39;,&#39;-a&#39;, &#39;-e&#39;, $destination, $pathname)
+    $unless        = sprintf(&#39;semanage fcontext -l | grep -Fx %s&#39;, shellquote(&quot;${pathname} = ${destination}&quot;))
+  } else {
+    if $filemode !~ /^(?:a|f|d|c|b|s|l|p)$/ {
+      fail(&#39;&quot;filemode&quot; must be one of: a,f,d,c,b,s,l,p - see &quot;man semanage-fcontext&quot;&#39;)
+    }
+    $resource_name = &quot;add_${context}_${pathname}_type_${filemode}&quot;
+    if $::osfamily == &#39;RedHat&#39; and $::operatingsystemmajrelease == &#39;6&#39; {
+      case $filemode {
+        &#39;a&#39;: {
+          $_filemode = &#39;all files&#39;
+          $_quotedfilemode = &#39;\&#39;all files\&#39;&#39;
+          }
+        default: {
+          $_filemode = $filemode
+          $_quotedfilemode = $_filemode
+        }
+      }
+    } else {
+      $_filemode = $filemode
+      $_quotedfilemode = $_filemode
+    }
+    $command       = shellquote(&#39;semanage&#39;, &#39;fcontext&#39;,&#39;-a&#39;, &#39;-f&#39;, $_filemode, &#39;-t&#39;, $context, $pathname)
+    $unless        = sprintf(&#39;semanage fcontext -E | grep -Fx %s&#39;, shellquote(&quot;fcontext -a -f ${_quotedfilemode} -t ${context} &#39;${pathname}&#39;&quot;))
+  }
+
+  Exec {
+    path =&gt; &#39;/bin:/sbin:/usr/bin:/usr/sbin&#39;,
+  }
+
+  exec { $resource_name:
+    command =&gt; $command,
+    unless  =&gt; $unless,
+    require =&gt; Class[&#39;selinux::package&#39;],
+  }
+
+  if $restorecond {
+    exec { &quot;restorecond ${resource_name}&quot;:
+      command     =&gt; shellquote(&#39;restorecon&#39;, $restorecond_resurse_private, $restorecond_path_private),
+      onlyif      =&gt; shellquote(&#39;test&#39;, &#39;-e&#39;, $restorecond_path_private),
+      refreshonly =&gt; true,
+      subscribe   =&gt; Exec[$resource_name],
+    }
+  }
+
+}</pre>
+      </td>
+    </tr>
+  </table>
+</div>
+</div>
+
+      <div id="footer">
+  Generated on Fri Jan 13 15:43:22 2017 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.7 (ruby-2.3.3).
+</div>
+
+    </div>
+  </body>
+</html>

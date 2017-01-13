@@ -1,30 +1,19 @@
-# Definition: selinux::boolean
+# selinux::boolean
 #
-# Description
-#  This class will set the state of an SELinux boolean.
-#  All pending values are written to the policy file on disk, so they will be persistant across reboots.
-#  Ensure that the manifest notifies a related service as a restart for that service may be required.
+# This class will set the state of an SELinux boolean.
 #
-# Class created by GreenOgre<aggibson@cogeco.ca>
-#  Adds to puppet-selinux by jfryman
-#   https://github.com/jfryman/puppet-selinux
+# @example Enable `named_write_master_zones`  boolean
+#   selinux::boolean{ 'named_write_master_zones':
+#      ensure     => "on",
+#   }
 #
-# Parameters:
-#   - $ensure: (on|off) - Sets the current state of a particular SELinux boolean
-#   - $persistent: (true|false) - Should a particular SELinux boolean persist across reboots
+# @example Ensure `named_write_master_zones` boolean is disabled
+#   selinux::boolean{ 'named_write_master_zones':
+#      ensure     => "off",
+#   }
 #
-# Actions:
-#  Wraps selboolean to set states
-#
-# Requires:
-#  - SELinux
-#
-# Sample Usage:
-#
-#  selinux::boolean{ 'named_write_master_zones':
-#     ensure     => "on",
-#     persistent => true,
-#  }
+# @param ensure Set to on or off
+# @param persistent Set to false if you don't want it to survive a reboot.
 #
 define selinux::boolean (
   $ensure     = 'on',

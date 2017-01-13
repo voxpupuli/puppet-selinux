@@ -1,6 +1,8 @@
+# selinux::restorecond::fragment
 #
-# Define selinux::restorecond::fragment
-#
+# @param content Fragment content (use either content or source)
+# @param source Fragment file source (use either content or source)
+# @param order Order of fragment
 define selinux::restorecond::fragment (
   $content = undef,
   $source = undef,

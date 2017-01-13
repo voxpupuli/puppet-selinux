@@ -37,14 +37,6 @@ running system.
 * Mailinglist: <voxpupuli@groups.io> 
   ([groups.io Webinterface](https://groups.io/g/voxpupuli/topics))
 
-## Usage
-
-Parameters:
-
-* `$mode` (enforced|permissive|disabled) - sets the operating state for SELinux.
-* `$type` (targeted|minimum|mls) - sets the enforcement type.
-* `$manage_package` (boolean) - Whether or not to manage the SELinux management package.
-* `$package_name` (string) - sets the name of the selinux management package.
 
 ## Known problems / limitations
 
@@ -64,6 +56,14 @@ Parameters:
   `--delete` silently does nothing. (GH-164)
 * `selinux::permissive` allows only to set a domain to permissive but not to
    remove it. (GH-165)
+
+## Usage
+
+There is puppet-strings generated documentation available in the docs/ folder 
+of the github repo.
+
+It will be available at http://voxpupuli.org/pupppet-selinux some time in 
+the future.
 
 ## Reference
 

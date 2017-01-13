@@ -1,10 +1,9 @@
-# Class: selinux::params
+# selinux::params
 #
-# Description
-#  This class provides default parameters for the selinux class
+# THIS IS A PRIVATE CLASS
+# =======================
 #
-# Sample Usage:
-#  sx_mod_dir = $selinux::sx_mod_dir
+# This class provides default parameters for the selinux class
 #
 class selinux::params {
   $makefile       = '/usr/share/selinux/devel/Makefile'
