@@ -20,7 +20,7 @@ describe 'selinux::port' do
         it { is_expected.to contain_selinux__port('myapp').that_comes_before('Anchor[selinux::end]') }
       end
 
-      %w(tcp udp).each do |protocol|
+      %w(tcp udp ipv4 ipv6).each do |protocol|
         context "valid protocol #{protocol}" do
           let(:params) do
             {
@@ -29,7 +29,7 @@ describe 'selinux::port' do
               protocol: protocol
             }
           end
-          it { is_expected.to contain_exec("add_http_port_t_8080_#{protocol}").with(command: "semanage port -a -t http_port_t -p #{protocol} 8080") }
+          it { is_expected.to contain_selinux_port("#{protocol}_8080").with(context: 'http_port_t') }
         end
         context "protocol #{protocol} and port as range" do
           let(:params) do
@@ -39,7 +39,7 @@ describe 'selinux::port' do
               protocol: protocol
             }
           end
-          it { is_expected.to contain_exec("add_http_port_t_8080-8089_#{protocol}").with(command: "semanage port -a -t http_port_t -p #{protocol} 8080-8089") }
+          it { is_expected.to contain_selinux_port("#{protocol}_8080-8089").with(context: 'http_port_t') }
         end
       end
 
@@ -61,7 +61,7 @@ describe 'selinux::port' do
             port: 8080
           }
         end
-        it { is_expected.to contain_exec('add_http_port_t_8080').with(command: 'semanage port -a -t http_port_t 8080') }
+        it { expect { is_expected.to compile }.to raise_error(%r{error during compilation}) }
       end
     end
   end
