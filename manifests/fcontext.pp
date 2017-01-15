@@ -28,7 +28,7 @@
 # @param pathname An semanage fcontext-formatted pathname, like "/var/log/mysql(/.*)?"
 # @param destination The destination path used with the equals parameter.
 # @param equals Boolean Value - Enables support for substituting target path with sourcepath when generating default label
-# @param filetype Boolean Value - enables support for "-f" file type option of "semanage fcontext"
+# @param filetype Boolean Value *deprecated* ignored
 # @param filemode File Mode for policy (i.e. regular file, directory, block device, all files, etc.)
 #   - Types:
 #       - a = all files (default value if not restricting filetype)
@@ -44,25 +44,29 @@
 # @param restorecond_recurse Run restorecon recursive?
 #
 define selinux::fcontext (
-  $pathname,
-  $destination         = undef,
-  $context             = undef,
-  $filetype            = false,
-  $filemode            = 'a',
-  $equals              = false,
-  $restorecond         = true,
-  $restorecond_path    = undef,
-  $restorecond_recurse = false,
+  String $pathname,
+  Enum['absent', 'present'] $ensure  = 'present',
+  Optional[String] $destination      = undef,
+  Optional[String] $context          = undef,
+  Boolean $filetype                  = false, # ignored, 
+  Optional[String] $user             = undef,
+  Optional[String] $filemode         = 'a',
+  Boolean $equals                    = false,
+  Boolean $restorecond               = true,
+  Optional[String] $restorecond_path = undef,
+  Boolean $restorecond_recurse       = false,
 ) {
 
   include ::selinux
-
   Anchor['selinux::module post'] ->
   Selinux::Fcontext[$title] ->
   Anchor['selinux::end']
 
   validate_absolute_path($pathname)
-  validate_bool($filetype, $equals)
+
+  if $filetype {
+    deprecation('selinux_fcontext_filetype', 'The selinux::fcontext::filetype parameter is deprecated and does nothing')
+  }
 
   if $equals {
     validate_absolute_path($destination)
@@ -82,55 +86,43 @@ define selinux::fcontext (
     false => [],
   }
 
-  if $equals and $filetype {
-    fail('Resource cannot contain both "equals" and "filetype" options')
+  if $equals and $context != undef {
+    fail('Resource cannot set both "equals" and "context" as they are mutually exclusive')
   }
 
   if $equals {
-    $resource_name = "add_${destination}_${pathname}"
-    $command       = shellquote('semanage', 'fcontext','-a', '-e', $destination, $pathname)
-    $unless        = sprintf('semanage fcontext -l | grep -Fx %s', shellquote("${pathname} = ${destination}"))
+    selinux_fcontext_equivalence {$pathname:
+      target => $destination,
+    }
+    if $restorecond {
+      Selinux_fcontext_equivalence[$pathname] ~> Exec["restorecond semanage::fcontext[${pathname}]"]
+    }
   } else {
     if $filemode !~ /^(?:a|f|d|c|b|s|l|p)$/ {
       fail('"filemode" must be one of: a,f,d,c,b,s,l,p - see "man semanage-fcontext"')
     }
-    $resource_name = "add_${context}_${pathname}_type_${filemode}"
-    if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == '6' {
-      case $filemode {
-        'a': {
-          $_filemode = 'all files'
-          $_quotedfilemode = '\'all files\''
-          }
-        default: {
-          $_filemode = $filemode
-          $_quotedfilemode = $_filemode
-        }
-      }
-    } else {
-      $_filemode = $filemode
-      $_quotedfilemode = $_filemode
+
+    # make sure the title is correct or the provider will misbehave
+    selinux_fcontext {"${pathname}_${filemode}":
+      pathspec  => $pathname,
+      context   => $context,
+      file_type => $filemode,
+      user      => $user,
     }
-    $command       = shellquote('semanage', 'fcontext','-a', '-f', $_filemode, '-t', $context, $pathname)
-    $unless        = sprintf('semanage fcontext -E | grep -Fx %s', shellquote("fcontext -a -f ${_quotedfilemode} -t ${context} '${pathname}'"))
+    if $restorecond {
+      Selinux_fcontext["${pathname}_${filemode}"] ~> Exec["restorecond semanage::fcontext[${pathname}]"]
+    }
   }
 
   Exec {
     path => '/bin:/sbin:/usr/bin:/usr/sbin',
   }
 
-  exec { $resource_name:
-    command => $command,
-    unless  => $unless,
-    require => Class['selinux::package'],
-  }
-
   if $restorecond {
-    exec { "restorecond ${resource_name}":
+    exec { "restorecond semanage::fcontext[${pathname}]":
       command     => shellquote('restorecon', $restorecond_resurse_private, $restorecond_path_private),
       onlyif      => shellquote('test', '-e', $restorecond_path_private),
       refreshonly => true,
-      subscribe   => Exec[$resource_name],
     }
   }
-
 }
