@@ -43,7 +43,11 @@ running system.
 * If SELinux is disabled and you want to switch to permissive or enforcing you
   are required to reboot the system (limitation of SELinux). The module won't
   do this for you.
-* If you add filecontexts with `semange fcontext` (what `selinux::fcontext` 
+* If SELinux is disabled and the user wants enforcing mode, the module
+  will downgrade to permissive mode instead to avoid transitioning directly from
+  disabled to enforcing state after a reboot and potentially breaking the system.
+  The user will receive a warning when this happens,
+* If you add filecontexts with `semanage fcontext` (what `selinux::fcontext`
   does) the order is important. If you add /my/folder before /my/folder/subfolder
   only /my/folder will match (limitation of SELinux). There is no such limitation
   to file-contexts defined in SELinux modules. (GH-121)
