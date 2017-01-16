@@ -11,7 +11,7 @@ describe 'selinux::port' do
       context 'ordering' do
         let(:params) do
           {
-            context: 'http_port_t',
+            seltype: 'http_port_t',
             port: 8080,
             protocol: 'tcp'
           }
@@ -24,29 +24,29 @@ describe 'selinux::port' do
         context "valid protocol #{protocol}" do
           let(:params) do
             {
-              context: 'http_port_t',
+              seltype: 'http_port_t',
               port: 8080,
               protocol: protocol
             }
           end
-          it { is_expected.to contain_selinux_port("#{protocol}_8080").with(context: 'http_port_t') }
+          it { is_expected.to contain_selinux_port("#{protocol}_8080").with(seltype: 'http_port_t') }
         end
         context "protocol #{protocol} and port as range" do
           let(:params) do
             {
-              context: 'http_port_t',
+              seltype: 'http_port_t',
               port: '8080-8089',
               protocol: protocol
             }
           end
-          it { is_expected.to contain_selinux_port("#{protocol}_8080-8089").with(context: 'http_port_t') }
+          it { is_expected.to contain_selinux_port("#{protocol}_8080-8089").with(seltype: 'http_port_t') }
         end
       end
 
       context 'invalid protocol' do
         let(:params) do
           {
-            context: 'http_port_t',
+            seltype: 'http_port_t',
             port: 8080,
             protocol: 'bad'
           }
@@ -57,7 +57,7 @@ describe 'selinux::port' do
       context 'no protocol' do
         let(:params) do
           {
-            context: 'http_port_t',
+            seltype: 'http_port_t',
             port: 8080
           }
         end

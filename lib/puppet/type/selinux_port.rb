@@ -33,9 +33,8 @@ Puppet::Type.newtype(:selinux_port) do
     isrequired
   end
 
-  newproperty(:context) do
-    desc 'The context of the SELinux port definition'
-    isrequired
+  newproperty(:seltype) do
+    desc 'The SELinux type of the SELinux port definition'
   end
 
   newproperty(:source) do

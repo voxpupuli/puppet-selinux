@@ -13,7 +13,7 @@ Puppet::Type.type(:selinux_port).provide(:semanage) do
     ret = {}
     lines.each do |line|
       split = line.split(%r{\s+})
-      context = split.shift
+      seltype = split.shift
       protocol = split.shift
       # The port-range list is comma-separated
       ports = split.map { |range| range.delete(',') }
@@ -24,7 +24,7 @@ Puppet::Type.type(:selinux_port).provide(:semanage) do
         ret[key] = {
           ensure: :present,
           name: key,
-          context: context,
+          seltype: seltype,
           ports: port,
           protocol: protocol.to_sym,
           source: source
@@ -68,14 +68,14 @@ Puppet::Type.type(:selinux_port).provide(:semanage) do
   end
 
   def create
-    semanage('port', '-a', '-t', @resource[:context], '-p', @resource[:protocol], @resource[:ports])
+    semanage('port', '-a', '-t', @resource[:seltype], '-p', @resource[:protocol], @resource[:ports])
   end
 
   def destroy
     semanage('port', '-d', '-p', @property_hash[:protocol], @property_hash[:ports])
   end
 
-  def context=(val)
+  def seltype=(val)
     semanage('port', '-m', '-t', val, '-p', @property_hash[:protocol], @property_hash[:ports])
   end
 

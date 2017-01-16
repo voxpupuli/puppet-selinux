@@ -17,7 +17,7 @@
 # @param port An network port number, like '8514', or a range like '1234-4321'
 #
 define selinux::port (
-  String                             $context,
+  String                             $seltype,
   Variant[Integer[1,65535],String]   $port,
   Enum['tcp', 'udp', 'ipv4', 'ipv6'] $protocol,
   Enum['present', 'absent']          $ensure = 'present',
@@ -40,7 +40,7 @@ define selinux::port (
   selinux_port {"${protocol}_${port}":
     ensure   => $ensure,
     ports    => $port, # type definition will validate this better in case it's a range
-    context  => $context,
+    seltype  => $seltype,
     protocol => $protocol,
   }
 }
