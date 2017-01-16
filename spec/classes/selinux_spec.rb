@@ -81,8 +81,8 @@ describe 'selinux' do
         let(:params) do
           {
             fcontext: {
-              'myfcontext1' => { 'context' => 'mysqld_log_t', 'pathname' => '/u01/log/mysql(/.*)?' },
-              'myfcontext2' => { 'context' => 'mysqld_log_t', 'pathname' => '/u02/log/mysql(/.*)?' }
+              'myfcontext1' => { 'seltype' => 'mysqld_log_t', 'pathname' => '/u01/log/mysql(/.*)?' },
+              'myfcontext2' => { 'seltype' => 'mysqld_log_t', 'pathname' => '/u02/log/mysql(/.*)?' }
             }
           }
         end

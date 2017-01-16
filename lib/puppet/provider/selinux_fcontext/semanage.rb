@@ -36,13 +36,20 @@ Puppet::Type.type(:selinux_fcontext).provide(:semanage) do
       path_spec  = split.shift
       file_type  = split.shift
       context_spec = split.shift.strip
+      user, role, type, range = context_spec.split(':')
+      if context_spec == '<<None>>'
+        type = :none
+        # I hope this doesn't mess things up too badly...
+        user = range = role = nil
+      end
       ft = file_type_map(file_type)
-      user, _role, type = context_spec.split(':')
       ret.push(new(ensure: :present,
                    name: "#{path_spec}_#{ft}",
                    pathspec: path_spec,
-                   context: type,
-                   user: user,
+                   seltype: type,
+                   seluser: user,
+                   selrole: role,
+                   selrange: range,
                    file_type: ft))
     end
     ret
@@ -64,21 +71,27 @@ Puppet::Type.type(:selinux_fcontext).provide(:semanage) do
   end
 
   def create
-    args = ['fcontext', '-a', '-t', @resource[:context], '-f', @resource[:file_type]]
-    args.concat(['-s', @resource[:user]]) if @resource[:user]
+    args = ['fcontext', '-a', '-t', @resource[:seltype], '-f', @resource[:file_type]]
+    args.concat(['-s', @resource[:seluser]]) if @resource[:seluser]
     args.push(@resource[:pathspec])
     semanage(*args)
   end
 
   def destroy
-    args = ['fcontext', '-d', '-t', @property_hash[:context], '-f', @property_hash[:file_type]]
-    args.concat(['-s', @property_hash[:user]]) if @property_hash[:user]
+    args = ['fcontext', '-d', '-t', @property_hash[:seltype], '-f', @property_hash[:file_type]]
+    args.concat(['-s', @property_hash[:seluser]]) if @property_hash[:seluser]
     args.push(@property_hash[:pathspec])
     semanage(*args)
   end
 
-  def context=(val)
+  def seltype=(val)
+    val = '<<none>>' if val == :none
     args = ['fcontext', '-m', '-t', val, '-f', @property_hash[:file_type], @property_hash[:pathspec]]
+    semanage(*args)
+  end
+
+  def seluser=(val)
+    args = ['fcontext', '-m', '-u', val, '-t', @property_hash[:seltype], '-f', @property_hash[:file_type], @property_hash[:pathspec]]
     semanage(*args)
   end
 

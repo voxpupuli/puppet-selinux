@@ -47,9 +47,9 @@ define selinux::fcontext (
   String $pathname,
   Enum['absent', 'present'] $ensure  = 'present',
   Optional[String] $destination      = undef,
-  Optional[String] $context          = undef,
+  Optional[String] $seltype          = undef,
   Boolean $filetype                  = false, # ignored, 
-  Optional[String] $user             = undef,
+  Optional[String] $seluser          = undef,
   Optional[String] $filemode         = 'a',
   Boolean $equals                    = false,
   Boolean $restorecond               = true,
@@ -71,7 +71,7 @@ define selinux::fcontext (
   if $equals {
     validate_absolute_path($destination)
   } else {
-    validate_string($context)
+    validate_string($seltype)
   }
 
   $restorecond_path_private = $restorecond_path ? {
@@ -86,8 +86,8 @@ define selinux::fcontext (
     false => [],
   }
 
-  if $equals and $context != undef {
-    fail('Resource cannot set both "equals" and "context" as they are mutually exclusive')
+  if $equals and $seltype != undef {
+    fail('Resource cannot set both "equals" and "seltype" as they are mutually exclusive')
   }
 
   if $equals {
@@ -105,9 +105,9 @@ define selinux::fcontext (
     # make sure the title is correct or the provider will misbehave
     selinux_fcontext {"${pathname}_${filemode}":
       pathspec  => $pathname,
-      context   => $context,
+      seltype   => $seltype,
       file_type => $filemode,
-      user      => $user,
+      seluser   => $seluser,
     }
     if $restorecond {
       Selinux_fcontext["${pathname}_${filemode}"] ~> Exec["restorecond semanage::fcontext[${pathname}]"]

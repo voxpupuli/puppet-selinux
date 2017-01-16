@@ -22,14 +22,26 @@ Puppet::Type.newtype(:selinux_fcontext) do
     isrequired
   end
 
-  newproperty(:context) do
+  newproperty(:seltype) do
     desc 'The SELinux type to apply to the paths'
     isrequired
+    # :none is the special value when the type is explicitly unset
+    newvalues(%r{\w+}, :none)
+  end
+
+  newproperty(:seluser) do
+    desc 'The SELinux user name'
     newvalues(%r{\w+})
   end
 
-  newproperty(:user) do
-    desc 'The SELinux user name'
+  # These can't actually be set via fcontext
+  newproperty(:selrole) do
+    desc 'The SELinux role'
+    newvalues(%r{\w+})
+  end
+
+  newproperty(:selrange) do
+    desc 'The SELinux range'
     newvalues(%r{\w+})
   end
 end
