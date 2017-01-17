@@ -73,19 +73,19 @@ class selinux (
   class { '::selinux::config': }
 
   if $boolean {
-    create_resources ( 'selinux::boolean', hiera_hash('selinux::boolean') )
+    create_resources ( 'selinux::boolean', hiera_hash('selinux::boolean', $boolean) )
   }
   if $fcontext {
-    create_resources ( 'selinux::fcontext', hiera_hash('selinux::fcontext') )
+    create_resources ( 'selinux::fcontext', hiera_hash('selinux::fcontext', $fcontext) )
   }
   if $module {
-    create_resources ( 'selinux::module', hiera_hash('selinux::module') )
+    create_resources ( 'selinux::module', hiera_hash('selinux::module', $module) )
   }
   if $permissive {
-    create_resources ( 'selinux::fcontext', hiera_hash('selinux::permissive') )
+    create_resources ( 'selinux::fcontext', hiera_hash('selinux::permissive', $permissive) )
   }
   if $port {
-    create_resources ( 'selinux::port', hiera_hash('selinux::port') )
+    create_resources ( 'selinux::port', hiera_hash('selinux::port', $port) )
   }
 
   # Ordering
