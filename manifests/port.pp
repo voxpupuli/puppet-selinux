@@ -29,8 +29,10 @@ define selinux::port (
   Selinux::Port[$title] ->
   Anchor['selinux::end']
 
+  validate_re("${port}", '^[0-9]+(-[0-9]+)?$') # lint:ignore:only_variable_string
+
   if $protocol {
-    validate_re($protocol, ['^tcp6?$', '^udp6?$'])
+    validate_re($protocol, ['^tcp$', '^udp$'])
     $protocol_switch = ['-p', $protocol]
     $protocol_check = "${protocol} "
     $port_exec_command = "add_${context}_${port}_${protocol}"
