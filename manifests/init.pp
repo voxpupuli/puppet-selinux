@@ -82,7 +82,7 @@ class selinux (
     create_resources ( 'selinux::module', hiera_hash('selinux::module', $module) )
   }
   if $permissive {
-    create_resources ( 'selinux::fcontext', hiera_hash('selinux::permissive', $permissive) )
+    create_resources ( 'selinux::permissive', hiera_hash('selinux::permissive', $permissive) )
   }
   if $port {
     create_resources ( 'selinux::port', hiera_hash('selinux::port', $port) )
