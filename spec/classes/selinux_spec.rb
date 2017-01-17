@@ -53,8 +53,8 @@ describe 'selinux' do
         let(:params) do
           {
             port: {
-              'myport1' => { 'context' => 'dummy', 'port' => '444', 'protocol' => 'tcp' },
-              'myport2' => { 'context' => 'dummy', 'port' => '445', 'protocol' => 'tcp' }
+              'myport1' => { 'seltype' => 'dummy', 'port' => '444', 'protocol' => 'tcp' },
+              'myport2' => { 'seltype' => 'dummy', 'port' => '445', 'protocol' => 'tcp' }
             }
           }
         end
