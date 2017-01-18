@@ -32,7 +32,7 @@ describe 'selinux::permissive' do
 
       context 'selinux_permissive oddjob_mkhomedir_t with title only' do
         let(:title) do
-            'oddjob_mkhomedir_t'
+          'oddjob_mkhomedir_t'
         end
         it { is_expected.to contain_selinux_permissive('oddjob_mkhomedir_t').with(ensure: 'present') }
         it { is_expected.to contain_selinux__permissive('oddjob_mkhomedir_t').that_requires('Anchor[selinux::module post]') }
