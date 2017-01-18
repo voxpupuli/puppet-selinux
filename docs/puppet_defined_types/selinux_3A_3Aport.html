@@ -6,7 +6,7 @@
 <title>
   Defined Type: selinux::port
   
-    &mdash; Documentation by YARD 0.9.7
+    &mdash; Documentation by YARD 0.9.8
   
 </title>
 
@@ -203,7 +203,9 @@ It will perform a check to ensure the network context is not already set.</p>
 47
 48
 49
-50</pre>
+50
+51
+52</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/port.pp', line 19</span>
@@ -221,8 +223,10 @@ define selinux::port (
   Selinux::Port[$title] -&gt;
   Anchor[&#39;selinux::end&#39;]
 
+  validate_re(&quot;${port}&quot;, &#39;^[0-9]+(-[0-9]+)?$&#39;) # lint:ignore:only_variable_string
+
   if $protocol {
-    validate_re($protocol, [&#39;^tcp6?$&#39;, &#39;^udp6?$&#39;])
+    validate_re($protocol, [&#39;^tcp$&#39;, &#39;^udp$&#39;])
     $protocol_switch = [&#39;-p&#39;, $protocol]
     $protocol_check = &quot;${protocol} &quot;
     $port_exec_command = &quot;add_${context}_${port}_${protocol}&quot;
@@ -247,9 +251,9 @@ define selinux::port (
 </div>
 
       <div id="footer">
-  Generated on Fri Jan 13 15:43:22 2017 by
+  Generated on Wed Jan 18 21:43:24 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.7 (ruby-2.3.3).
+  0.9.8 (ruby-2.3.3).
 </div>
 
     </div>
