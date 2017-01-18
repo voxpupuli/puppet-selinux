@@ -1,5 +1,22 @@
 # Change Log
 
+## 2017-01-18 - Release 1.0.0
+
+This release marks the interface of this module as stable.
+
+The 1.x series will only accept bugfixes and added deprecation notices.
+
+The 2.0.0 release is already on its way. It will introduce breaking changes
+like being Puppet 4 only, native puppet types and consistent naming of
+parameters.
+
+Notable changes in this release:
+
+* Bugfix: (GH-148) Make use of class selinux parameters
+* Bugfix: (GH-119) Don't accept udp6 and tcp6 as protocol name with selinux::port
+* Enhancement: Updated inline documentation to puppet strings
+* Enhancement: (GH-147) Add ordering of resources
+
 ## 2017-01-12 - Release 0.8.0
 
 This is the last release with Puppet 3 support!
