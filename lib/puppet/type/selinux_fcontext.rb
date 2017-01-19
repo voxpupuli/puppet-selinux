@@ -25,8 +25,8 @@ Puppet::Type.newtype(:selinux_fcontext) do
   newproperty(:seltype) do
     desc 'The SELinux type to apply to the paths'
     isrequired
-    # :none is the special value when the type is explicitly unset
-    newvalues(%r{\w+}, :none)
+    # <<none>> is the special value when the type is explicitly unset
+    newvalues(%r{\w+}, '<<none>>')
   end
 
   newproperty(:seluser) do

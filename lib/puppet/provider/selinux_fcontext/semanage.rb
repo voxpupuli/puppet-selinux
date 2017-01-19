@@ -9,17 +9,38 @@ Puppet::Type.type(:selinux_fcontext).provide(:semanage) do
 
   mk_resource_methods
 
+  osfamily  = Facter.value('osfamily')
+  osversion = Facter.value('operatingsystemmajrelease')
+  @old_semanage = false
+  if (osfamily == 'RedHat') && (Puppet::Util::Package.versioncmp(osversion, '6') <= 0)
+    @old_semanage = true
+  end
+
+  @file_types = {
+    'all files' => 'a',
+    'directory' => 'd',
+    'character device' => 'c',
+    'block device' => 'b',
+    'symbolic link' => 'l',
+    'named pipe' => 'p',
+    'regular file' => 'f',
+    'socket' => 's'
+  }
+
   def self.file_type_map(val)
-    {
-      'all files' => 'a',
-      'directory' => 'd',
-      'character device' => 'c',
-      'block device' => 'b',
-      'symbolic link' => 'l',
-      'named pipe' => 'p',
-      'regular file' => 'f',
-      'socket' => 's'
-    }[val]
+    @file_types[val]
+  end
+
+  def self.type_param(file_type)
+    return file_type unless @old_semanage
+    case file_type
+    when 'a'
+      'all files'
+    when 'f'
+      '--'
+    else
+      "-#{file_type}"
+    end
   end
 
   def self.parse_semanage_lines(lines)
@@ -33,13 +54,13 @@ Puppet::Type.type(:selinux_fcontext).provide(:semanage) do
       # The output should never be so tight that there's only one space
       # between the first and the second fields...
       split = line.split(%r{\s{2,}})
-      path_spec  = split.shift
-      file_type  = split.shift
+      path_spec  = split.shift.strip
+      file_type  = split.shift.strip
       context_spec = split.shift.strip
       user, role, type, range = context_spec.split(':')
       if context_spec == '<<None>>'
-        type = :none
-        # I hope this doesn't mess things up too badly...
+        # semanage is weird...
+        type = '<<none>>'
         user = range = role = nil
       end
       ft = file_type_map(file_type)
@@ -58,7 +79,8 @@ Puppet::Type.type(:selinux_fcontext).provide(:semanage) do
   def self.instances
     # With fcontext, we only need to care about local customisations as they
     # should never conflict with system policy
-    parse_semanage_lines(semanage('fcontext', '--list', '--locallist').split("\n"))
+    # Old semanage fails with --locallist, use -C
+    parse_semanage_lines(semanage('fcontext', '--list', '-C').split("\n"))
   end
 
   def self.prefetch(resources)
@@ -71,14 +93,15 @@ Puppet::Type.type(:selinux_fcontext).provide(:semanage) do
   end
 
   def create
-    args = ['fcontext', '-a', '-t', @resource[:seltype], '-f', @resource[:file_type]]
+    # is there really no way to have a provider-global helper function cleanly?
+    args = ['fcontext', '-a', '-t', @resource[:seltype], '-f', self.class.type_param(@resource[:file_type])]
     args.concat(['-s', @resource[:seluser]]) if @resource[:seluser]
     args.push(@resource[:pathspec])
     semanage(*args)
   end
 
   def destroy
-    args = ['fcontext', '-d', '-t', @property_hash[:seltype], '-f', @property_hash[:file_type]]
+    args = ['fcontext', '-d', '-t', @property_hash[:seltype], '-f', self.class.type_param(@property_hash[:file_type])]
     args.concat(['-s', @property_hash[:seluser]]) if @property_hash[:seluser]
     args.push(@property_hash[:pathspec])
     semanage(*args)
@@ -86,12 +109,12 @@ Puppet::Type.type(:selinux_fcontext).provide(:semanage) do
 
   def seltype=(val)
     val = '<<none>>' if val == :none
-    args = ['fcontext', '-m', '-t', val, '-f', @property_hash[:file_type], @property_hash[:pathspec]]
+    args = ['fcontext', '-m', '-t', val, '-f', self.class.type_param(@property_hash[:file_type]), @property_hash[:pathspec]]
     semanage(*args)
   end
 
   def seluser=(val)
-    args = ['fcontext', '-m', '-u', val, '-t', @property_hash[:seltype], '-f', @property_hash[:file_type], @property_hash[:pathspec]]
+    args = ['fcontext', '-m', '-s', val, '-t', @property_hash[:seltype], '-f', self.class.type_param(@property_hash[:file_type]), @property_hash[:pathspec]]
     semanage(*args)
   end
 
