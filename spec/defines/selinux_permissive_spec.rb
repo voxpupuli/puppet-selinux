@@ -7,18 +7,36 @@ describe 'selinux::permissive' do
       let(:facts) do
         facts
       end
-
-      context 'context allow-oddjob_mkhomedir_t to permissive' do
+      context 'ensure selinux_permissive oddjob_mkhomedir_t is present' do
         let(:params) do
           {
-            context: 'oddjob_mkhomedir_t'
+            seltype: 'oddjob_mkhomedir_t'
           }
         end
-        it do
-          is_expected.to contain_exec('add_oddjob_mkhomedir_t').with(command: 'semanage permissive -a oddjob_mkhomedir_t')
-          is_expected.to contain_selinux__permissive('mycontextp').that_requires('Anchor[selinux::module post]')
-          is_expected.to contain_selinux__permissive('mycontextp').that_comes_before('Anchor[selinux::end]')
+        it { is_expected.to contain_selinux_permissive('oddjob_mkhomedir_t').with(ensure: 'present') }
+        it { is_expected.to contain_selinux__permissive('mycontextp').that_requires('Anchor[selinux::module post]') }
+        it { is_expected.to contain_selinux__permissive('mycontextp').that_comes_before('Anchor[selinux::end]') }
+      end
+
+      context 'ensure selinux_permissive oddjob_mkhomedir_t is absent' do
+        let(:params) do
+          {
+            seltype: 'oddjob_mkhomedir_t',
+            ensure: 'absent'
+          }
         end
+        it { is_expected.to contain_selinux_permissive('oddjob_mkhomedir_t').with(ensure: 'absent') }
+        it { is_expected.to contain_selinux__permissive('mycontextp').that_requires('Anchor[selinux::start]') }
+        it { is_expected.to contain_selinux__permissive('mycontextp').that_comes_before('Anchor[selinux::module pre]') }
+      end
+
+      context 'selinux_permissive oddjob_mkhomedir_t with title only' do
+        let(:title) do
+            'oddjob_mkhomedir_t'
+        end
+        it { is_expected.to contain_selinux_permissive('oddjob_mkhomedir_t').with(ensure: 'present') }
+        it { is_expected.to contain_selinux__permissive('oddjob_mkhomedir_t').that_requires('Anchor[selinux::module post]') }
+        it { is_expected.to contain_selinux__permissive('oddjob_mkhomedir_t').that_comes_before('Anchor[selinux::end]') }
       end
     end
   end

@@ -1,28 +1,31 @@
 # selinux::permissive
 #
-# This method will set a context to permissive
+# This define will set an SELinux type to permissive
 #
-# @param context A particular domain-context, like "oddjob_mkhomedir_t"
+# @param seltype A particular selinux type to make permissive, like "oddjob_mkhomedir_t"
 #
 # @example Mark oddjob_mkhomedir_t permissive
-#   selinux::permissive { 'allow-oddjob_mkhomedir_t':
-#     context  => 'oddjob_mkhomedir_t',
+#   selinux::permissive { 'oddjob_mkhomedir_t':
+#     ensure => 'present'
 #   }
 #
 define selinux::permissive (
-  $context,
+  String $seltype = $title,
+  Enum['present', 'absent'] $ensure = 'present',
 ) {
 
   include ::selinux
+  if $ensure == 'present' {
+    Anchor['selinux::module post'] ->
+    Selinux::Permissive[$title] ->
+    Anchor['selinux::end']
+  } else {
+    Anchor['selinux::start'] ->
+    Selinux::Permissive[$title] ->
+    Anchor['selinux::module pre']
+  }
 
-  Anchor['selinux::module post'] ->
-  Selinux::Permissive[$title] ->
-  Anchor['selinux::end']
-
-  exec { "add_${context}":
-    command => shellquote('semanage', 'permissive', '-a', $context),
-    unless  => sprintf('semanage permissive -l | grep -Fx %s', shellquote($context)),
-    path    => '/bin:/sbin:/usr/bin:/usr/sbin',
-    require => Class['selinux::package'],
+  selinux_permissive {$seltype:
+    ensure => $ensure,
   }
 }
