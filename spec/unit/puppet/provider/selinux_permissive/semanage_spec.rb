@@ -32,7 +32,7 @@ describe semanage_provider do
                      ensure: :present)
     end
     let(:provider) do
-      resource.provider
+      resource.provider = described_class.new
     end
     context 'semanage list' do
       context 'without custom types' do
@@ -62,13 +62,13 @@ describe semanage_provider do
     end
     context 'Creating' do
       it 'runs semanage permissive -a' do
-        provider.expects(:semanage).with('permissive', '-a', 'test_t')
+        described_class.expects(:semanage).with('permissive', '-a', 'test_t')
         provider.create
       end
     end
     context 'Deleting' do
       it 'runs semanage permissive -d' do
-        provider.expects(:semanage).with('permissive', '-d', 'test_t')
+        described_class.expects(:semanage).with('permissive', '-d', 'test_t')
         provider.destroy
       end
     end
