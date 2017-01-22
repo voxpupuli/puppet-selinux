@@ -1,19 +1,19 @@
 require 'spec_helper'
 
+# Provide a dummy Selinux module for the test
+module Selinux
+  def selinux_file_context_subs_path
+    'spec_dummy'
+  end
+end
+
 semanage_provider = Puppet::Type.type(:selinux_fcontext_equivalence).provider(:semanage)
 fc_equiv = Puppet::Type.type(:selinux_fcontext_equivalence)
 
-semanage_output = <<-EOS
-SELinux fcontext                                   type               Context
-
-/foobar                                            all files            system_u:object_r:bin_t:s0
-/something/else                                    socket               <<None>>
-
-SELinux Local fcontext Equivalence
-
-/foobar = /var/lib/whatever
-/opt/my/other/app = /var/lib/whatever
-/opt/foo = /usr/share/wordpress
+fcontext_equivs = <<-EOS
+/foobar /var/lib/whatever
+/opt/my/other/app /var/lib/whatever
+/opt/foo /usr/share/wordpress
 EOS
 
 describe semanage_provider do
@@ -24,7 +24,9 @@ describe semanage_provider do
       end
       context 'with three custom equivalences' do
         before do
-          described_class.expects(:semanage).with('fcontext', '--list', '-C').returns(semanage_output)
+          Selinux.expects(:selinux_file_context_subs_path).returns('spec_dummy')
+          File.expects(:exist?).with('spec_dummy').returns(true)
+          File.expects(:readlines).with('spec_dummy').returns(fcontext_equivs.split("\n"))
         end
         it 'returns three resources' do
           expect(described_class.instances.size).to eq(3)
@@ -35,6 +37,15 @@ describe semanage_provider do
             name: '/foobar',
             target: '/var/lib/whatever'
           )
+        end
+      end
+      context 'with no equivalences file' do
+        before do
+          Selinux.expects(:selinux_file_context_subs_path).returns('spec_dummy')
+          File.expects(:exist?).with('spec_dummy').returns(false)
+        end
+        it 'returns no resources' do
+          expect(described_class.instances.size).to eq(0)
         end
       end
       context 'Creating' do
@@ -70,7 +81,9 @@ describe semanage_provider do
         end
         before do
           # prefetch should find the provider parsed from this:
-          described_class.expects(:semanage).with('fcontext', '--list', '-C').returns(semanage_output)
+          Selinux.expects(:selinux_file_context_subs_path).returns('spec_dummy')
+          File.expects(:exist?).with('spec_dummy').returns(true)
+          File.expects(:readlines).with('spec_dummy').returns(fcontext_equivs.split("\n"))
           semanage_provider.prefetch(resources)
         end
         it 'finds provider for /foobar' do

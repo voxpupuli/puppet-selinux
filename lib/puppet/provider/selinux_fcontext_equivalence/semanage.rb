@@ -8,17 +8,12 @@ Puppet::Type.type(:selinux_fcontext_equivalence).provide(:semanage) do
 
   mk_resource_methods
 
-  def self.parse_semanage_lines(lines)
+  def self.parse_fcontext_subs_lines(lines)
     ret = []
-    found_eqs = false
     lines.each do |line|
-      if line =~ %r{^SELinux(.*)Equivalence(.*)}
-        found_eqs = true
-        next
-      end
-      next unless found_eqs
       next if line.strip.empty?
-      source, _eq, target = line.split(%r{\s+})
+      next if line =~ %r{^#}
+      source, target = line.split(%r{\s+})
       ret.push(new(ensure: :present,
                    name: source,
                    target: target))
@@ -27,10 +22,15 @@ Puppet::Type.type(:selinux_fcontext_equivalence).provide(:semanage) do
   end
 
   def self.instances
-    # With fcontext, we only need to care about local customisations as they
-    # should never conflict with system policy
-    # --locallist does not work on older semanage, use -C
-    parse_semanage_lines(semanage('fcontext', '--list', '-C').split("\n"))
+    # Allow this to fail with an exception if it does not exist
+    path = Selinux.selinux_file_context_subs_path
+    if File.exist? path
+      lines = File.readlines(path)
+      parse_fcontext_subs_lines(lines)
+    else
+      # No file, no equivalences:
+      []
+    end
   end
 
   def self.prefetch(resources)

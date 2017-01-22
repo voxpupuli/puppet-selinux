@@ -18,13 +18,13 @@ Puppet::Type.type(:selinux_fcontext).provide(:semanage) do
 
   @file_types = {
     'all files' => 'a',
-    'directory' => 'd',
-    'character device' => 'c',
-    'block device' => 'b',
-    'symbolic link' => 'l',
-    'named pipe' => 'p',
-    'regular file' => 'f',
-    'socket' => 's'
+    '-d'        => 'd',
+    '-c'        => 'c',
+    '-b'        => 'b',
+    '-l'        => 'l',
+    '-p'        => 'p',
+    '--'        => 'f',
+    '-s'        => 's'
   }
 
   def self.file_type_map(val)
@@ -33,33 +33,23 @@ Puppet::Type.type(:selinux_fcontext).provide(:semanage) do
 
   def self.type_param(file_type)
     return file_type unless @old_semanage
-    case file_type
-    when 'a'
-      'all files'
-    when 'f'
-      '--'
-    else
-      "-#{file_type}"
-    end
+    @file_types.invert[file_type]
   end
 
-  def self.parse_semanage_lines(lines)
+  def self.parse_fcontext_lines(lines)
     ret = []
     lines.each do |line|
-      break if line =~ %r{^SELinux(.*)Equivalence(.*)}
-      next if line =~ %r{^SELinux}
       next if line.strip.empty?
-      # This is a bit of a hack... split only if >1 whitespace to get the
-      # entirety of the middle field which can have a single space.
-      # The output should never be so tight that there's only one space
-      # between the first and the second fields...
-      split = line.split(%r{\s{2,}})
-      path_spec  = split.shift.strip
-      file_type  = split.shift.strip
-      context_spec = split.shift.strip
+      next if line =~ %r{^#}
+      split = line.split(%r{\s+})
+      if split.length == 2
+        path_spec, context_spec = split
+        file_type = 'all files'
+      else
+        path_spec, file_type, context_spec = split
+      end
       user, role, type, range = context_spec.split(':')
-      if context_spec == '<<None>>'
-        # semanage is weird...
+      if context_spec == '<<none>>'
         type = '<<none>>'
         user = range = role = nil
       end
@@ -80,7 +70,13 @@ Puppet::Type.type(:selinux_fcontext).provide(:semanage) do
     # With fcontext, we only need to care about local customisations as they
     # should never conflict with system policy
     # Old semanage fails with --locallist, use -C
-    parse_semanage_lines(semanage('fcontext', '--list', '-C').split("\n"))
+    local_fcs = Selinux.selinux_file_context_local_path
+    if File.exist? local_fcs
+      parse_fcontext_lines(File.readlines(local_fcs))
+    else
+      # no file, no local contexts
+      []
+    end
   end
 
   def self.prefetch(resources)
