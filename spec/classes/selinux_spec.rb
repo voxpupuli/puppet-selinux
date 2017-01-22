@@ -81,14 +81,16 @@ describe 'selinux' do
         let(:params) do
           {
             fcontext: {
-              'myfcontext1' => { 'seltype' => 'mysqld_log_t', 'pathname' => '/u01/log/mysql(/.*)?' },
-              'myfcontext2' => { 'seltype' => 'mysqld_log_t', 'pathname' => '/u02/log/mysql(/.*)?' }
+              'myfcontext1'    => { 'seltype' => 'mysqld_log_t', 'pathspec' => '/u01/log/mysql(/.*)?' },
+              'myfcontext2'    => { 'seltype' => 'mysqld_log_t', 'pathspec' => '/u02/log/mysql(/.*)?' },
+              '/path/spec(.*)' => { 'seltype' => 'mysqld_log_t', 'pathspec' => '/path/spec(.*)' }
             }
           }
         end
 
         it { is_expected.to contain_selinux__fcontext('myfcontext1') }
         it { is_expected.to contain_selinux__fcontext('myfcontext2') }
+        it { is_expected.to contain_selinux__fcontext('/path/spec(.*)') }
       end
     end
   end
