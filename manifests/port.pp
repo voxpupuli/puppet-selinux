@@ -2,19 +2,19 @@
 #
 # This method will manage a local network port context setting, and will
 # persist it across reboots.
-# It will perform a check to ensure the network context is not already set.
 #
 # @example Add port-context syslogd_port_t to port 8514/tcp
 #   selinux::port { 'allow-syslog-relp':
 #     ensure   => 'present',
-#     context  => 'syslogd_port_t',
+#     seltype  => 'syslogd_port_t',
 #     protocol => 'tcp',
-#     port     => '8514',
+#     port     => 8514,
 #   }
 #
-# @param context A port-context name
+# @param seltype An SELinux port type
 # @param protocol Either 'tcp', 'udp', 'ipv4' or 'ipv6'
-# @param port An network port number, like '8514', or a range like '1234-4321'
+# @param port A network port number, like 8514,
+# @param port_rage A port-range tuple, eg. [9090, 9095].
 #
 define selinux::port (
   String                             $seltype,
