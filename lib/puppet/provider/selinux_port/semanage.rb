@@ -5,41 +5,43 @@ Puppet::Type.type(:selinux_port).provide(:semanage) do
   # SELinux must be enabled. Is there a way to get a better error message?
   confine selinux: true
 
-  commands semanage: 'semanage'
+  # current file path is lib/puppet/provider/selinux_port/semanage.rb
+  # semanage_ports.py is lib/puppet_x/voxpupuli/selinux/semanage_ports.py
+  PORTS_HELPER = File.expand_path('../../../../puppet_x/voxpupuli/selinux/semanage_ports.py', __FILE__)
+  commands semanage: 'semanage',
+           python: 'python'
 
   mk_resource_methods
 
-  def self.parse_semanage_lines(lines, source)
+  def self.parse_helper_lines(lines)
     ret = {}
     lines.each do |line|
       split = line.split(%r{\s+})
-      seltype = split.shift
-      protocol = split.shift
-      # The port-range list is comma-separated
-      ports = split.map { |range| range.delete(',') }
-      # interestingly enough, it is completely valid to define a port that overlaps with a port-range,
-      # but if an existing *exact* definition exists, that causes problems
-      ports.each do |port|
-        key = "#{protocol}_#{port}"
-        ret[key] = {
-          ensure: :present,
-          name: key,
-          seltype: seltype,
-          ports: port,
-          protocol: protocol.to_sym,
-          source: source
-        }
-      end
+      # helper format is:
+      # policy system_u:object_r:hi_reserved_port_t:s0 1023 512 tcp
+      # local  system_u:object_r:hi_reserved_port_t:s0 1023 512 udp
+      source, context, high, low, protocol = split
+      seltype = context.split(':')[2]
+      port = "#{low}-#{high}"
+      port = high if high == low
+      # the ports returned by the port helper are system policy first, so the provider for any local overrides
+      # will come last and "win", which is the desired behaviour
+      key = "#{protocol}_#{port}"
+      ret[key] = {
+        ensure: :present,
+        name: key,
+        seltype: seltype,
+        ports: port,
+        protocol: protocol.to_sym,
+        source: source.to_sym
+      }
     end
     ret
   end
 
   def self.instances
     # no way to do this with one call as far as I know
-    custom = parse_semanage_lines(semanage('port', '--list', '--locallist', '--noheading').split("\n"), :local)
-    policy = parse_semanage_lines(semanage('port', '--list', '--noheading').split("\n"), :policy)
-    # get rid of duplicates, as --list without --locallist returns local customisations as well
-    policy.merge!(custom)
+    policy = parse_helper_lines(python(PORTS_HELPER).split("\n"))
     policy.values.map do |item|
       new(item)
     end
