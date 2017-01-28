@@ -13,6 +13,16 @@ Puppet::Type.type(:selinux_port).provide(:semanage) do
 
   mk_resource_methods
 
+  def port_range(resource_hash)
+    low = resource_hash[:low_port]
+    high = resource_hash[:high_port]
+    if low == high
+      low.to_s
+    else
+      "#{low}-#{high}"
+    end
+  end
+
   def self.parse_helper_lines(lines)
     ret = {}
     lines.each do |line|
@@ -23,7 +33,6 @@ Puppet::Type.type(:selinux_port).provide(:semanage) do
       source, context, high, low, protocol = split
       seltype = context.split(':')[2]
       port = "#{low}-#{high}"
-      port = high if high == low
       # the ports returned by the port helper are system policy first, so the provider for any local overrides
       # will come last and "win", which is the desired behaviour
       key = "#{protocol}_#{port}"
@@ -31,7 +40,8 @@ Puppet::Type.type(:selinux_port).provide(:semanage) do
         ensure: :present,
         name: key,
         seltype: seltype,
-        ports: port,
+        low_port: low,
+        high_port: high,
         protocol: protocol.to_sym,
         source: source.to_sym
       }
@@ -53,14 +63,14 @@ Puppet::Type.type(:selinux_port).provide(:semanage) do
     instances.each do |provider|
       resource = resources[provider.name]
       if resource
-        unless resource[:ports] == provider.ports && resource[:protocol] == provider.protocol || resource.purging?
+        unless resource[:low_port].to_s == provider.low_port && resource[:high_port].to_s == provider.high_port && resource[:protocol] == provider.protocol || resource.purging?
           raise Puppet::ResourceError, "Selinux_port['#{resource[:name]}']: title does not match its port and protocol, and a conflicting resource exists"
         end
         resource.provider = provider
         resource[:ensure] = :present if provider.source == :policy
       else
         resources.values.each do |res|
-          next unless res[:ports] == provider.ports && res[:protocol] == provider.protocol
+          next unless res[:low_port] == provider.low_port && res[:high_port] == provider.high_port && res[:protocol] == provider.protocol
           warning("Selinux_port['#{resource[:name]}']: title does not match format protocol_port")
           resource.provider = provider
           resource[:ensure] = :present if provider.source == :policy
@@ -70,15 +80,15 @@ Puppet::Type.type(:selinux_port).provide(:semanage) do
   end
 
   def create
-    semanage('port', '-a', '-t', @resource[:seltype], '-p', @resource[:protocol], @resource[:ports])
+    semanage('port', '-a', '-t', @resource[:seltype], '-p', @resource[:protocol], port_range(@resource))
   end
 
   def destroy
-    semanage('port', '-d', '-p', @property_hash[:protocol], @property_hash[:ports])
+    semanage('port', '-d', '-p', @property_hash[:protocol], port_range(@property_hash))
   end
 
   def seltype=(val)
-    semanage('port', '-m', '-t', val, '-p', @property_hash[:protocol], @property_hash[:ports])
+    semanage('port', '-m', '-t', val, '-p', @property_hash[:protocol], port_range(@property_hash))
   end
 
   def exists?

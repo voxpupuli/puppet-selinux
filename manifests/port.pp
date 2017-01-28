@@ -18,8 +18,9 @@
 #
 define selinux::port (
   String                             $seltype,
-  Variant[Integer[1,65535],String]   $port,
   Enum['tcp', 'udp', 'ipv4', 'ipv6'] $protocol,
+  Optional[Integer[1,65535]]         $port = undef,
+  Optional[Tuple[Integer[1,65535], 2, 2]] $port_range = undef,
   Enum['present', 'absent']          $ensure = 'present',
 ) {
 
@@ -37,10 +38,28 @@ define selinux::port (
     fail('Unexpected $ensure value')
   }
 
-  selinux_port {"${protocol}_${port}":
-    ensure   => $ensure,
-    ports    => $port, # type definition will validate this better in case it's a range
-    seltype  => $seltype,
-    protocol => $protocol,
+  if ($port == undef and $port_range == undef) {
+    fail("You must define either 'port' or 'port_range'")
+  }
+  if ($port != undef and $port_range != undef) {
+    fail("You can't define both 'port' and 'port_range'")
+  }
+
+  $range = $port_range ? {
+    undef   => [$port, $port],
+    default => $port_range,
+  }
+
+  # this can only happen if port_range is used
+  if $range[0] > $range[1] {
+    fail("Malformed port range: ${port_range}")
+  }
+
+  selinux_port {"${protocol}_${range[0]}-${range[1]}":
+    ensure    => $ensure,
+    low_port  => $range[0],
+    high_port => $range[1],
+    seltype   => $seltype,
+    protocol  => $protocol,
   }
 }

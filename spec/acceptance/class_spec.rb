@@ -11,7 +11,7 @@ describe 'selinux class' do
 
       selinux::port { 'puppet_selinux_test_policy_port_t/tcp':
         seltype => 'puppet_selinux_test_policy_port_t',
-        port => '55555',
+        port => 55555,
         protocol => 'tcp',
       }
 

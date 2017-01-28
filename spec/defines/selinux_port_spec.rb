@@ -29,13 +29,13 @@ describe 'selinux::port' do
               protocol: protocol
             }
           end
-          it { is_expected.to contain_selinux_port("#{protocol}_8080").with(seltype: 'http_port_t') }
+          it { is_expected.to contain_selinux_port("#{protocol}_8080-8080").with(seltype: 'http_port_t') }
         end
-        context "protocol #{protocol} and port as range" do
+        context "protocol #{protocol} and port_range" do
           let(:params) do
             {
               seltype: 'http_port_t',
-              port: '8080-8089',
+              port_range: [8080, 8089],
               protocol: protocol
             }
           end
@@ -49,6 +49,18 @@ describe 'selinux::port' do
             seltype: 'http_port_t',
             port: 8080,
             protocol: 'bad'
+          }
+        end
+        it { expect { is_expected.to compile }.to raise_error(%r{error during compilation}) }
+      end
+
+      context 'both port and port_range' do
+        let(:params) do
+          {
+            seltype: 'http_port_t',
+            port: 8080,
+            port_range: [8080, 8081],
+            protocol: 'tcp'
           }
         end
         it { expect { is_expected.to compile }.to raise_error(%r{error during compilation}) }

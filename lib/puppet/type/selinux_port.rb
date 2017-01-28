@@ -4,25 +4,29 @@ Puppet::Type.newtype(:selinux_port) do
   ensurable
 
   newparam(:title, namevar: true) do
-    desc 'Should be of the form "protocol_port" or the type may misbehave'
+    desc 'Should be of the form "protocol_lowport-highport" or the type may misbehave'
   end
 
-  newproperty(:ports) do
-    desc 'The port or port range to manage'
+  newproperty(:low_port) do
+    desc 'The low end of the port range to manage'
     isrequired
 
-    validate do |value|
-      vals = value.split('-')
-      debug(vals)
-      vals.each do |val|
-        val = Integer(val)
-        if val < 1 || val > 65_535
-          raise ArgumentError, "Illegal port value '#{val}'"
-        end
+    validate do |val|
+      val = Integer(val)
+      if val < 1 || val > 65_535
+        raise ArgumentError, "Illegal port value '#{val}'"
       end
+    end
+  end
 
-      if (vals.count != 1) && (Integer(vals[0]) >= Integer(vals[1]))
-        raise ArgumentError, "Invalid port range #{value}"
+  newproperty(:high_port) do
+    desc 'The high end of the port range to manage'
+    isrequired
+
+    validate do |val|
+      val = Integer(val)
+      if val < 1 || val > 65_535
+        raise ArgumentError, "Illegal port value '#{val}'"
       end
     end
   end
