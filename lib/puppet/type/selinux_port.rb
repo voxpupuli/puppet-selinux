@@ -33,7 +33,7 @@ Puppet::Type.newtype(:selinux_port) do
 
   newproperty(:protocol) do
     desc 'The protocol of the SELinux port definition'
-    newvalues(:tcp, :udp, :ipv4, :ipv6)
+    newvalues(:tcp, :udp)
     isrequired
   end
 

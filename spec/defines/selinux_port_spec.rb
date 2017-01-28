@@ -20,7 +20,7 @@ describe 'selinux::port' do
         it { is_expected.to contain_selinux__port('myapp').that_comes_before('Anchor[selinux::end]') }
       end
 
-      %w(tcp udp ipv4 ipv6).each do |protocol|
+      %w(tcp udp).each do |protocol|
         context "valid protocol #{protocol}" do
           let(:params) do
             {

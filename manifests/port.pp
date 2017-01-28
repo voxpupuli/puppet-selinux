@@ -18,7 +18,7 @@
 #
 define selinux::port (
   String                             $seltype,
-  Enum['tcp', 'udp', 'ipv4', 'ipv6'] $protocol,
+  Enum['tcp', 'udp']                 $protocol,
   Optional[Integer[1,65535]]         $port = undef,
   Optional[Tuple[Integer[1,65535], 2, 2]] $port_range = undef,
   Enum['present', 'absent']          $ensure = 'present',
