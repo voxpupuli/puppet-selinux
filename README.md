@@ -61,6 +61,8 @@ running system.
 * The `selinux_port` provider may misbehave if the title does not correspond to
   the format it expects. Users should use the `selinux::port` define instead except
   when purging resources
+* Defining port ranges that overlap with existing ranges is currently not detected, and will
+  cause semanage to error when the resource is applied.
 
 ## Usage
 
