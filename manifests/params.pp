@@ -6,11 +6,15 @@
 # This class provides default parameters for the selinux class
 #
 class selinux::params {
-  $makefile       = '/usr/share/selinux/devel/Makefile'
-  $sx_mod_dir     = '/usr/share/selinux'
+  $refpolicy_makefile = '/usr/share/selinux/devel/Makefile'
   $mode           = undef
   $type           = undef
   $manage_package = true
+
+  $refpolicy_package_name = 'selinux-policy-devel'
+
+  validate_absolute_path($::selinux_agent_vardir)
+  $module_build_root = "${::selinux_agent_vardir}/puppet-selinux"
 
   if $::operatingsystemmajrelease {
     $os_maj_release = $::operatingsystemmajrelease

@@ -9,75 +9,114 @@
 # 
 # @example compile and load the apache module
 #   selinux::module{ 'apache':
-#     ensure => 'present',
-#     source => 'puppet:///modules/selinux/apache.te',
+#     ensure    => 'present',
+#     source_te => 'puppet:///modules/selinux/apache.te',
+#     builder   => 'simple'
 #   }
 #
 # @param ensure present or absent
-# @param sx_mod_dir path where source is stored and the module built. 
-#   Valid values: absolute path
-# @param source the source file (either a puppet URI or local file) of the SELinux .te file
-# @param content content of the source .te file
-# @param makefile absolute path to the selinux-devel Makefile
-# @param prefix (DEPRECATED) the prefix to add to the loaded module. Defaults to ''.
-#   Does not work with CentOS >= 7.2 and Fedora >= 24 SELinux tools.
+# @param source_te the source file (either a puppet URI or local file) of the SELinux .te file
+# @param source_fc the source file (either a puppet URI or local file) of the SELinux .fc file
+# @param source_if the source file (either a puppet URI or local file) of the SELinux .if file
+# @param builder either 'simple' or 'refpolicy'. The simple builder attempts to use checkmodule
+# to build the module, whereas 'refpolicy' uses the refpolicy framework, but requires 'make'
 # @param syncversion selmodule syncversion param
 define selinux::module(
-  $source       = undef,
-  $content      = undef,
-  $ensure       = 'present',
-  $makefile     = '/usr/share/selinux/devel/Makefile',
-  $prefix       = '',
-  $sx_mod_dir   = '/usr/share/selinux',
+  Optional[String] $source_te = undef,
+  Optional[String] $source_fc = undef,
+  Optional[String] $source_if = undef,
+  Enum['absent', 'present'] $ensure = 'present',
+  Optional[Enum['simple', 'refpolicy']] $builder = undef,
   $syncversion  = undef,
 ) {
 
+  if $builder == 'refpolicy' {
+    require ::selinux::refpolicy_package
+  }
+
   include ::selinux
+
+  if ($builder == 'simple' and $source_if != undef) {
+    fail("The simple builder does not support the 'source_if' parameter")
+  }
+
+  # let's just make doubly sure that this is an absolute path:
+  validate_absolute_path($::selinux::config::module_build_dir)
+
+  $module_dir = "${::selinux::config::module_build_dir}/${title}"
+  $module_file = "${module_dir}/${title}"
+
+  $build_command = pick($builder, $::selinux::default_builder, 'none') ? {
+      'simple'    => shellquote("${::selinux::config::module_build_dir}/selinux_build_module.sh", $title),
+      'refpolicy' => shellquote('make', '-f', '/usr/share/selinux/devel/Makefile', "${title}.pp"),
+      'none'      => fail('No builder or default builder specified')
+  }
 
   Anchor['selinux::module pre'] ->
   Selinux::Module[$title] ->
   Anchor['selinux::module post']
+  $has_source = (pick($source_te, $source_fc, $source_if, false) != false)
 
-  validate_re($ensure, [ '^present$', '^absent$' ], '$ensure must be "present" or "absent"')
-  if $ensure == 'present' and $source == undef and $content == undef {
-    fail("You must provide 'source' or 'content' field for selinux module")
+  if $has_source and $ensure == 'present' {
+    file {$module_dir:
+      ensure  => directory,
+    }
+
+    if $source_te {
+      file {"${module_file}.te":
+        ensure => 'file',
+        source => $source_te,
+        notify => Exec["clean-module-${title}"],
+      }
+    }
+    if $source_fc {
+      file {"${module_file}.fc":
+        ensure => 'file',
+        source => $source_fc,
+        notify => Exec["clean-module-${title}"],
+      }
+    }
+    if $source_if {
+      file {"${module_file}.if":
+        ensure => 'file',
+        source => $source_if,
+        notify => Exec["clean-module-${title}"],
+      }
+    }
+    exec { "clean-module-${title}":
+      path        => '/bin:/usr/bin',
+      cwd         => $module_dir,
+      command     => "rm -f '${title}.pp' loaded",
+      refreshonly => true,
+      notify      => Exec["build-module-${title}"],
+    }
+
+    exec { "build-module-${title}":
+      path    => '/bin:/usr/bin',
+      cwd     => $module_dir,
+      command => "${build_command} || (rm -f ${title}.pp loaded && exit 1)",
+      creates => "${module_file}.pp",
+      notify  => Exec["install-module-${title}"],
+    }
+    # we need to install the module manually because selmodule is kind of dumb. It ends up
+    # working fine, though.
+    exec { "install-module-${title}":
+      path    => '/sbin:/usr/sbin:/bin:/usr/bin',
+      cwd     => $module_dir,
+      command => "semodule -i ${title}.pp && touch loaded",
+      creates => "${module_dir}/loaded",
+      before  => Selmodule[$title],
+    }
   }
-  if $source != undef {
-    validate_string($source)
-  }
-  if $content != undef {
-    validate_string($content)
-  }
-  validate_string($prefix)
-  validate_absolute_path($sx_mod_dir)
-  validate_absolute_path($makefile)
-  if $syncversion != undef {
-    validate_bool($syncversion)
+  $module_path = $has_source ? {
+    true  => "${module_file}.pp",
+    false => undef
   }
 
-  ## Begin Configuration
-  file { "${sx_mod_dir}/${prefix}${name}.te":
-    ensure  => $ensure,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
-    source  => $source,
-    content => $content,
-  }
-  ~>
-  exec { "${sx_mod_dir}/${prefix}${name}.pp":
-  # Only allow refresh in the event that the initial .te file is updated.
-    command     => shellquote('make', '-f', $makefile, "${prefix}${name}.pp"),
-    path        => '/bin:/sbin:/usr/bin:/usr/sbin',
-    refreshonly => true,
-    cwd         => $sx_mod_dir,
-  }
-  ->
-  selmodule { $name:
+  selmodule { $title:
     # Load the module if it has changed or was not loaded
     # Warning: change the .te version!
     ensure        => $ensure,
-    selmodulepath => "${sx_mod_dir}/${prefix}${name}.pp",
-    syncversion   => $syncversion,
+    selmodulepath => $module_path,
   }
 }

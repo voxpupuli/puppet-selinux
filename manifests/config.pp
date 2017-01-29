@@ -11,24 +11,18 @@
 # @param type See main class
 # @param manage_package See main class
 # @param package_name See main class
-# @param sx_mod_dir See main class
+# @param module_build_root See main class
 #
 class selinux::config (
-  $mode           = $::selinux::mode,
-  $type           = $::selinux::type,
-  $sx_mod_dir     = $::selinux::sx_mod_dir,
-  $manage_package = $::selinux::manage_package,
-  $package_name   = $::selinux::package_name,
+  $mode              = $::selinux::mode,
+  $type              = $::selinux::type,
+  $manage_package    = $::selinux::manage_package,
+  $package_name      = $::selinux::package_name,
+  $module_build_root = $::selinux::module_build_root
 ) {
 
   if $caller_module_name != $module_name {
     fail("Use of private class ${name} by ${caller_module_name}")
-  }
-
-  file { $sx_mod_dir:
-    ensure => directory,
-    owner  => 'root',
-    group  => 'root',
   }
 
   if ($mode == 'enforcing' and !$::selinux) {
@@ -85,5 +79,35 @@ class selinux::config (
       line  => "SELINUXTYPE=${type}",
       match => '^SELINUXTYPE=\w+',
     }
+  }
+
+  # Module build config:
+  validate_absolute_path($module_build_root)
+
+  file {$module_build_root:
+    ensure => 'directory',
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0644',
+  }
+
+  # put helper in place:
+  file {"${module_build_root}/modules/selinux_build_module.sh":
+    ensure => 'present',
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0755',
+    source => "puppet:///modules/${module_name}/selinux_build_module.sh",
+  }
+
+  $module_build_dir = "${module_build_root}/modules"
+
+  file {$module_build_dir:
+    ensure  => 'directory',
+    owner   => 'root',
+    group   => 'root',
+    recurse => true,
+    purge   => true,
+    force   => true,
   }
 }
