@@ -15,12 +15,44 @@ describe 'selinux class' do
         protocol => 'tcp',
       }
 
-      # with puppet4 I would use a HERE DOC to make this pretty,
-      # but with puppet3 it's not possible.
+      # just something simple I found via Google:
+      file {'/tmp/selinux_simple_policy.te':
+        ensure  => 'file',
+        content => @("EOF")
+          module puppet_selinux_simple_policy 1.0;
+          require {
+              type httpd_log_t;
+              type postfix_postdrop_t;
+              class dir getattr;
+              class file { read getattr };
+          }
+          allow postfix_postdrop_t httpd_log_t:file getattr;
+        | EOF
+      }
+
+      file {'/tmp/selinux_test_policy.te':
+        ensure  => 'file',
+        content => @("EOF")
+          policy_module(puppet_selinux_test_policy, 1.0.0)
+          gen_tunable(puppet_selinux_test_policy_bool, false)
+          type puppet_selinux_test_policy_t;
+          type puppet_selinux_test_policy_exec_t;
+          init_daemon_domain(puppet_selinux_test_policy_t, puppet_selinux_test_policy_exec_t)
+          type puppet_selinux_test_policy_port_t;
+          corenet_port(puppet_selinux_test_policy_port_t)
+        | EOF
+      }
+
+      selinux::module { 'puppet_selinux_simple_policy':
+        source_te => 'file:///tmp/selinux_simple_policy.te',
+        builder   => 'simple',
+        require   => File['/tmp/selinux_simple_policy.te']
+      }
+
       selinux::module { 'puppet_selinux_test_policy':
-        content => "policy_module(puppet_selinux_test_policy, 1.0.0)\ngen_tunable(puppet_selinux_test_policy_bool, false)\ntype puppet_selinux_test_policy_t;\ntype puppet_selinux_test_policy_exec_t;\ninit_daemon_domain(puppet_selinux_test_policy_t, puppet_selinux_test_policy_exec_t)\ntype puppet_selinux_test_policy_port_t;\ncorenet_port(puppet_selinux_test_policy_port_t)\n",
-        prefix => '',
-        syncversion => undef,
+        source_te   => 'file:///tmp/selinux_test_policy.te',
+        builder     => 'refpolicy',
+        require     => File['/tmp/selinux_test_policy.te']
       }
 
       Class['selinux'] ->
@@ -76,13 +108,12 @@ describe 'selinux class' do
     its(:stdout) { is_expected.to match(%r{^Enforcing$}) }
   end
 
-  context 'the test module source should exist and the module should be loaded' do
-    describe file('/usr/share/selinux/puppet_selinux_test_policy.te') do
-      it { is_expected.to be_file }
-    end
-
+  context 'the compiled modules should be loaded' do
     describe command('semodule -l | grep puppet_selinux_test_policy') do
       its(:stdout) { is_expected.to match(%r{puppet_selinux_test_policy}) }
+    end
+    describe command('semodule -l | grep puppet_selinux_simple_policy') do
+      its(:stdout) { is_expected.to match(%r{puppet_selinux_simple_policy}) }
     end
   end
 

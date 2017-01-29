@@ -5,3 +5,5 @@ operatingsystemmajrelease: '7'
 # concat facts
 id: 0
 path: /tmp
+# custom fact for module building:
+selinux_agent_vardir: /var/lib/puppet
