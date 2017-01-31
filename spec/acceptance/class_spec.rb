@@ -7,7 +7,7 @@ describe 'selinux class' do
 
       selinux::boolean { 'puppet_selinux_test_policy_bool': }
 
-      selinux::permissive { 'puppet_selinux_test_policy_t': context => 'puppet_selinux_test_policy_t', }
+      selinux::permissive { 'puppet_selinux_test_policy_t': }
 
       selinux::port { 'puppet_selinux_test_policy_port_t/tcp':
         context => 'puppet_selinux_test_policy_port_t',

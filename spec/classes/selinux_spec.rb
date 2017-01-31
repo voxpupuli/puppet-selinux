@@ -67,8 +67,8 @@ describe 'selinux' do
         let(:params) do
           {
             permissive: {
-              'domain1' => { 'context' => 'domain1' },
-              'domain2' => { 'context' => 'domain2' }
+              'domain1' => { 'seltype' => 'domain1' },
+              'domain2' => { 'seltype' => 'domain2' }
             }
           }
         end

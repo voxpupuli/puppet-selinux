@@ -58,8 +58,8 @@ running system.
   because the used tools fail.
 * `selinux::port` has the `action` parameter which  if you specify `-d` or 
   `--delete` silently does nothing. (GH-164)
-* `selinux::permissive` allows only to set a domain to permissive but not to
-   remove it. (GH-165)
+* If you try to remove a built-in permissive type, the operation will appear to succeed
+  but will actually have no effect, making your puppet runs non-idempotent.
 
 ## Usage
 
