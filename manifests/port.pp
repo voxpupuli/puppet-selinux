@@ -1,52 +1,65 @@
-# selinux::fcontext
+# selinux::port
 #
 # This method will manage a local network port context setting, and will
 # persist it across reboots.
-# It will perform a check to ensure the network context is not already set.
 #
 # @example Add port-context syslogd_port_t to port 8514/tcp
 #   selinux::port { 'allow-syslog-relp':
-#     context  => 'syslogd_port_t',
+#     ensure   => 'present',
+#     seltype  => 'syslogd_port_t',
 #     protocol => 'tcp',
-#     port     => '8514',
+#     port     => 8514,
 #   }
 #
-# @param context A port-context name
-# @param protocol Either tcp or udp. If unset, omits -p flag from semanage.
-# @param port An network port number, like '8514'
-# @param argument An argument for semanage port. Default: "-a"
+# @param seltype An SELinux port type
+# @param protocol Either 'tcp', 'udp', 'ipv4' or 'ipv6'
+# @param port A network port number, like 8514,
+# @param port_rage A port-range tuple, eg. [9090, 9095].
 #
 define selinux::port (
-  $context,
-  $port,
-  $protocol = undef,
-  $argument = '-a',
+  String                             $seltype,
+  Enum['tcp', 'udp']                 $protocol,
+  Optional[Integer[1,65535]]         $port = undef,
+  Optional[Tuple[Integer[1,65535], 2, 2]] $port_range = undef,
+  Enum['present', 'absent']          $ensure = 'present',
 ) {
 
   include ::selinux
 
-  Anchor['selinux::module post'] ->
-  Selinux::Port[$title] ->
-  Anchor['selinux::end']
-
-  validate_re("${port}", '^[0-9]+(-[0-9]+)?$') # lint:ignore:only_variable_string
-
-  if $protocol {
-    validate_re($protocol, ['^tcp$', '^udp$'])
-    $protocol_switch = ['-p', $protocol]
-    $protocol_check = "${protocol} "
-    $port_exec_command = "add_${context}_${port}_${protocol}"
+  if $ensure == 'present' {
+    Anchor['selinux::module post'] ->
+    Selinux::Port[$title] ->
+    Anchor['selinux::end']
+  } elsif $ensure == 'absent' {
+    Class['selinux::config'] ->
+    Selinux::Port[$title] ->
+    Anchor['selinux::module pre']
   } else {
-    $protocol_switch = []
-    $protocol_check = '' # lint:ignore:empty_string_assignment variable is used to create regexp and undef is not possible
-    $port_exec_command = "add_${context}_${port}"
+    fail('Unexpected $ensure value')
   }
 
-  exec { $port_exec_command:
-    command => shellquote('semanage', 'port', $argument, '-t', $context, $protocol_switch, "${port}"), # lint:ignore:only_variable_string port can be number and we need to force it to be string for shellquote
-    # This works because there seems to be more than one space after protocol and before first port
-    unless  => sprintf('semanage port -l | grep -E %s', shellquote("^${context}  *${protocol_check}.* ${port}(\$|,)")),
-    path    => '/bin:/sbin:/usr/bin:/usr/sbin',
-    require => Class['selinux::package'],
+  if ($port == undef and $port_range == undef) {
+    fail("You must define either 'port' or 'port_range'")
+  }
+  if ($port != undef and $port_range != undef) {
+    fail("You can't define both 'port' and 'port_range'")
+  }
+
+  $range = $port_range ? {
+    undef   => [$port, $port],
+    default => $port_range,
+  }
+
+  # this can only happen if port_range is used
+  if $range[0] > $range[1] {
+    fail("Malformed port range: ${port_range}")
+  }
+
+  selinux_port {"${protocol}_${range[0]}-${range[1]}":
+    ensure    => $ensure,
+    low_port  => $range[0],
+    high_port => $range[1],
+    seltype   => $seltype,
+    protocol  => $protocol,
   }
 }

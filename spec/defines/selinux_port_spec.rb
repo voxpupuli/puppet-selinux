@@ -11,7 +11,7 @@ describe 'selinux::port' do
       context 'ordering' do
         let(:params) do
           {
-            context: 'http_port_t',
+            seltype: 'http_port_t',
             port: 8080,
             protocol: 'tcp'
           }
@@ -24,31 +24,43 @@ describe 'selinux::port' do
         context "valid protocol #{protocol}" do
           let(:params) do
             {
-              context: 'http_port_t',
+              seltype: 'http_port_t',
               port: 8080,
               protocol: protocol
             }
           end
-          it { is_expected.to contain_exec("add_http_port_t_8080_#{protocol}").with(command: "semanage port -a -t http_port_t -p #{protocol} 8080") }
+          it { is_expected.to contain_selinux_port("#{protocol}_8080-8080").with(seltype: 'http_port_t') }
         end
-        context "protocol #{protocol} and port as range" do
+        context "protocol #{protocol} and port_range" do
           let(:params) do
             {
-              context: 'http_port_t',
-              port: '8080-8089',
+              seltype: 'http_port_t',
+              port_range: [8080, 8089],
               protocol: protocol
             }
           end
-          it { is_expected.to contain_exec("add_http_port_t_8080-8089_#{protocol}").with(command: "semanage port -a -t http_port_t -p #{protocol} 8080-8089") }
+          it { is_expected.to contain_selinux_port("#{protocol}_8080-8089").with(seltype: 'http_port_t') }
         end
       end
 
       context 'invalid protocol' do
         let(:params) do
           {
-            context: 'http_port_t',
+            seltype: 'http_port_t',
             port: 8080,
             protocol: 'bad'
+          }
+        end
+        it { expect { is_expected.to compile }.to raise_error(%r{error during compilation}) }
+      end
+
+      context 'both port and port_range' do
+        let(:params) do
+          {
+            seltype: 'http_port_t',
+            port: 8080,
+            port_range: [8080, 8081],
+            protocol: 'tcp'
           }
         end
         it { expect { is_expected.to compile }.to raise_error(%r{error during compilation}) }
@@ -57,11 +69,11 @@ describe 'selinux::port' do
       context 'no protocol' do
         let(:params) do
           {
-            context: 'http_port_t',
+            seltype: 'http_port_t',
             port: 8080
           }
         end
-        it { is_expected.to contain_exec('add_http_port_t_8080').with(command: 'semanage port -a -t http_port_t 8080') }
+        it { expect { is_expected.to compile }.to raise_error(%r{error during compilation}) }
       end
     end
   end

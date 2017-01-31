@@ -56,10 +56,13 @@ running system.
 * While SELinux is disabled the defined types `selinux::boolean`, 
   `selinux::fcontext`, `selinux::port` will produce puppet agent runtime errors 
   because the used tools fail.
-* `selinux::port` has the `action` parameter which  if you specify `-d` or 
-  `--delete` silently does nothing. (GH-164)
 * If you try to remove a built-in permissive type, the operation will appear to succeed
   but will actually have no effect, making your puppet runs non-idempotent.
+* The `selinux_port` provider may misbehave if the title does not correspond to
+  the format it expects. Users should use the `selinux::port` define instead except
+  when purging resources
+* Defining port ranges that overlap with existing ranges is currently not detected, and will
+  cause semanage to error when the resource is applied.
 
 ## Usage
 

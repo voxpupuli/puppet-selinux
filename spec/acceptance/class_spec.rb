@@ -10,8 +10,8 @@ describe 'selinux class' do
       selinux::permissive { 'puppet_selinux_test_policy_t': }
 
       selinux::port { 'puppet_selinux_test_policy_port_t/tcp':
-        context => 'puppet_selinux_test_policy_port_t',
-        port => '55555',
+        seltype => 'puppet_selinux_test_policy_port_t',
+        port => 55555,
         protocol => 'tcp',
       }
 
