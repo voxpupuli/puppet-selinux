@@ -4,7 +4,7 @@
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>
-  Defined Type: selinux::boolean
+  Defined Type: selinux::fcontext::equivalence
   
     &mdash; Documentation by YARD 0.9.8
   
@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
 
 <script type="text/javascript" charset="utf-8">
-  pathId = "puppet_defined_types::selinux::boolean";
+  pathId = "puppet_defined_types::selinux::fcontext::equivalence";
   relpath = '../';
 </script>
 
@@ -39,7 +39,7 @@
     <a href="../_index.html">Index (s)</a> &raquo;
     <span class='title'><span class='object_link'>Defined Types</span></span>
      &raquo; 
-    <span class="title">selinux::boolean</span>
+    <span class="title">selinux::fcontext::equivalence</span>
   
 </div>
 
@@ -59,21 +59,21 @@
         <div class="clear"></div>
       </div>
 
-      <div id="content"><h1>Defined Type: selinux::boolean</h1>
+      <div id="content"><h1>Defined Type: selinux::fcontext::equivalence</h1>
 <div class="box_info">
   <dl>
     <dt>Defined in:</dt>
     <dd>
-      manifests/boolean.pp
+      manifests/fcontext/equivalence.pp
     </dd>
   </dl>
 </div>
 <h2>Overview</h2>
 <div class="docstring">
   <div class="discussion">
-    <p>selinux::boolean</p>
+    <p>selinux::fcontext::equivalence</p>
 
-<p>This class will set the state of an SELinux boolean.</p>
+<p>This define can be used to manage SELinux fcontext equivalences</p>
 
   </div>
 </div>
@@ -83,19 +83,12 @@
     <p class="tag_title">Examples:</p>
     
       
-        <p class="example_title"><div class='inline'><p>Enable <code>named_write_master_zones</code> boolean</p>
+        <p class="example_title"><div class='inline'><p>Make /opt/wordpress equivalent to /usr/share/wordpress</p>
 </div></p>
       
-      <pre class="example code"><code>selinux::boolean{ &#39;named_write_master_zones&#39;:
-   ensure     =&gt; &quot;on&quot;,
-}</code></pre>
-    
-      
-        <p class="example_title"><div class='inline'><p>Ensure <code>named_write_master_zones</code> boolean is disabled</p>
-</div></p>
-      
-      <pre class="example code"><code>selinux::boolean{ &#39;named_write_master_zones&#39;:
-   ensure     =&gt; &quot;off&quot;,
+      <pre class="example code"><code>selinux::fcontext::equivalence { &#39;/opt/wordpress&#39;:
+  ensure =&gt; &#39;present&#39;,
+  target =&gt; &#39;/usr/share/wordpress&#39;,
 }</code></pre>
     
   </div>
@@ -104,34 +97,49 @@
   
     <li>
       
-        <span class='name'>ensure</span>
+        <span class='name'>path</span>
       
       
-        <span class='type'>(<tt>Any</tt>)</span>
+        <span class='type'>(<tt>String</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>&#39;on&#39;</tt>)</em>
+        <em class="default">(defaults to: <tt>$title</tt>)</em>
       
       
         &mdash;
-        <div class='inline'><p>Set to on or off</p>
+        <div class='inline'><p>the path to define and equivalence for. Default: Resource title</p>
 </div>
       
     </li>
   
     <li>
       
-        <span class='name'>persistent</span>
+        <span class='name'>target</span>
       
       
-        <span class='type'>(<tt>Any</tt>)</span>
+        <span class='type'>(<tt>String</tt>)</span>
       
-      
-        <em class="default">(defaults to: <tt>true</tt>)</em>
       
       
         &mdash;
-        <div class='inline'><p>Set to false if you don&#39;t want it to survive a reboot.</p>
+        <div class='inline'><p>the path that this resource will be equivalent to.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>ensure</span>
+      
+      
+        <span class='type'>(<tt>Enum['present', 'absent']</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;present&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>the desired state of the equivalence. Default: present</p>
 </div>
       
     </li>
@@ -146,6 +154,9 @@
         <pre class="lines">
 
 
+15
+16
+17
 18
 19
 20
@@ -165,51 +176,32 @@
 34
 35
 36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48</pre>
+37</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/boolean.pp', line 18</span>
+        <pre class="code"><span class="info file"># File 'manifests/fcontext/equivalence.pp', line 15</span>
 
-define selinux::boolean (
-  $ensure     = &#39;on&#39;,
-  $persistent = true,
+define selinux::fcontext::equivalence(
+  String $target,
+  String $path = $title,
+  Enum[&#39;present&#39;, &#39;absent&#39;] $ensure = &#39;present&#39;
 ) {
 
   include ::selinux
 
-  Anchor[&#39;selinux::module post&#39;] -&gt;
-  Selinux::Boolean[$title] -&gt;
-  Anchor[&#39;selinux::end&#39;]
-
-  $ensure_real = $ensure ? {
-    true    =&gt; &#39;true&#39;, # lint:ignore:quoted_booleans
-    false   =&gt; &#39;false&#39;, # lint:ignore:quoted_booleans
-    default =&gt; $ensure,
+  if $ensure == &#39;present&#39; {
+    Anchor[&#39;selinux::module post&#39;] -&gt;
+    Selinux::Fcontext::Equivalence[$title] -&gt;
+    Anchor[&#39;selinux::end&#39;]
+  } else {
+    Anchor[&#39;selinux::start&#39;] -&gt;
+    Selinux::Fcontext::Equivalence[$title] -&gt;
+    Anchor[&#39;selinux::module pre&#39;]
   }
 
-  validate_re($ensure_real, [&#39;^on$&#39;, &#39;^true$&#39;, &#39;^present$&#39;, &#39;^off$&#39;, &#39;^false$&#39;, &#39;^absent$&#39;], &#39;Valid ensures must be one of on, true, present, off, false, or absent&#39;)
-  validate_bool($persistent)
-
-  $value = $ensure_real ? {
-    /(?i-mx:on|true|present)/  =&gt; &#39;on&#39;,
-    /(?i-mx:off|false|absent)/ =&gt; &#39;off&#39;,
-    default                    =&gt; undef,
-  }
-
-  selboolean { $name:
-    value      =&gt; $value,
-    persistent =&gt; $persistent,
+  selinux_fcontext_equivalence { $path:
+    ensure =&gt; $ensure,
+    target =&gt; $target,
   }
 }</pre>
       </td>

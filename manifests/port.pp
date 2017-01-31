@@ -11,10 +11,11 @@
 #     port     => 8514,
 #   }
 #
+# @param ensure Set to present to add or absent to remove a port context.
 # @param seltype An SELinux port type
 # @param protocol Either 'tcp', 'udp', 'ipv4' or 'ipv6'
 # @param port A network port number, like 8514,
-# @param port_rage A port-range tuple, eg. [9090, 9095].
+# @param port_range A port-range tuple, eg. [9090, 9095].
 #
 define selinux::port (
   String                             $seltype,

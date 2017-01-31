@@ -6,7 +6,7 @@
 <title>
   Defined Type: selinux::permissive
   
-    &mdash; Documentation by YARD 0.9.7
+    &mdash; Documentation by YARD 0.9.8
   
 </title>
 
@@ -73,7 +73,7 @@
   <div class="discussion">
     <p>selinux::permissive</p>
 
-<p>This method will set a context to permissive</p>
+<p>This define will set an SELinux type to permissive</p>
 
   </div>
 </div>
@@ -86,8 +86,8 @@
         <p class="example_title"><div class='inline'><p>Mark oddjob_mkhomedir_t permissive</p>
 </div></p>
       
-      <pre class="example code"><code>selinux::permissive { &#39;allow-oddjob_mkhomedir_t&#39;:
-  context  =&gt; &#39;oddjob_mkhomedir_t&#39;,
+      <pre class="example code"><code>selinux::permissive { &#39;oddjob_mkhomedir_t&#39;:
+  ensure =&gt; &#39;present&#39;
 }</code></pre>
     
   </div>
@@ -96,15 +96,34 @@
   
     <li>
       
-        <span class='name'>context</span>
+        <span class='name'>ensure</span>
       
       
-        <span class='type'>(<tt>Any</tt>)</span>
+        <span class='type'>(<tt>Enum['present', 'absent']</tt>)</span>
       
+      
+        <em class="default">(defaults to: <tt>&#39;present&#39;</tt>)</em>
       
       
         &mdash;
-        <div class='inline'><p>A particular domain-context, like &quot;oddjob_mkhomedir_t&quot;</p>
+        <div class='inline'><p>Set to present to add or absent to remove a permissive mode of a type</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>seltype</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$title</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>A particular selinux type to make permissive, like &quot;oddjob_mkhomedir_t&quot;</p>
 </div>
       
     </li>
@@ -119,7 +138,6 @@
         <pre class="lines">
 
 
-12
 13
 14
 15
@@ -135,26 +153,33 @@
 25
 26
 27
-28</pre>
+28
+29
+30
+31
+32</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/permissive.pp', line 12</span>
+        <pre class="code"><span class="info file"># File 'manifests/permissive.pp', line 13</span>
 
 define selinux::permissive (
-  $context,
+  String $seltype = $title,
+  Enum[&#39;present&#39;, &#39;absent&#39;] $ensure = &#39;present&#39;,
 ) {
 
   include ::selinux
+  if $ensure == &#39;present&#39; {
+    Anchor[&#39;selinux::module post&#39;] -&gt;
+    Selinux::Permissive[$title] -&gt;
+    Anchor[&#39;selinux::end&#39;]
+  } else {
+    Anchor[&#39;selinux::start&#39;] -&gt;
+    Selinux::Permissive[$title] -&gt;
+    Anchor[&#39;selinux::module pre&#39;]
+  }
 
-  Anchor[&#39;selinux::module post&#39;] -&gt;
-  Selinux::Permissive[$title] -&gt;
-  Anchor[&#39;selinux::end&#39;]
-
-  exec { &quot;add_${context}&quot;:
-    command =&gt; shellquote(&#39;semanage&#39;, &#39;permissive&#39;, &#39;-a&#39;, $context),
-    unless  =&gt; sprintf(&#39;semanage permissive -l | grep -Fx %s&#39;, shellquote($context)),
-    path    =&gt; &#39;/bin:/sbin:/usr/bin:/usr/sbin&#39;,
-    require =&gt; Class[&#39;selinux::package&#39;],
+  selinux_permissive {$seltype:
+    ensure =&gt; $ensure,
   }
 }</pre>
       </td>
@@ -164,9 +189,9 @@ define selinux::permissive (
 </div>
 
       <div id="footer">
-  Generated on Fri Jan 13 15:43:22 2017 by
+  Generated on Tue Jan 31 20:51:44 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.7 (ruby-2.3.3).
+  0.9.8 (ruby-2.3.3).
 </div>
 
     </div>

@@ -42,6 +42,7 @@ Puppet::Type.newtype(:selinux_port) do
   end
 
   newproperty(:source) do
+    desc 'Source of the port configuration - either policy or local'
     newvalues(:policy, :local)
 
     validate do |_value|

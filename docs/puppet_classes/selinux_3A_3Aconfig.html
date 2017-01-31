@@ -6,7 +6,7 @@
 <title>
   Puppet Class: selinux::config
   
-    &mdash; Documentation by YARD 0.9.7
+    &mdash; Documentation by YARD 0.9.8
   
 </title>
 
@@ -248,7 +248,14 @@
 79
 80
 81
-82</pre>
+82
+83
+84
+85
+86
+87
+88
+89</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/config.pp', line 16</span>
@@ -271,17 +278,24 @@ class selinux::config (
     group  =&gt; &#39;root&#39;,
   }
 
-  if $mode {
-    file_line { &quot;set-selinux-config-to-${mode}&quot;:
+  if ($mode == &#39;enforcing&#39; and !$::selinux) {
+    notice(&#39;SELinux is disabled. Forcing configuration to permissive to avoid problems. To disable this warning, explicitly set selinux::mode to permissive or disabled.&#39;)
+    $_real_mode = &#39;permissive&#39;
+  } else {
+    $_real_mode = $mode
+  }
+
+  if $_real_mode {
+    file_line { &quot;set-selinux-config-to-${_real_mode}&quot;:
       path  =&gt; &#39;/etc/selinux/config&#39;,
-      line  =&gt; &quot;SELINUX=${mode}&quot;,
+      line  =&gt; &quot;SELINUX=${_real_mode}&quot;,
       match =&gt; &#39;^SELINUX=\w+&#39;,
     }
 
-    case $mode {
+    case $_real_mode {
       &#39;permissive&#39;, &#39;disabled&#39;: {
         $sestatus = &#39;0&#39;
-        if $mode == &#39;disabled&#39; and defined(&#39;$::selinux_current_mode&#39;) and $::selinux_current_mode == &#39;permissive&#39; {
+        if $_real_mode == &#39;disabled&#39; and defined(&#39;$::selinux_current_mode&#39;) and $::selinux_current_mode == &#39;permissive&#39; {
           notice(&#39;A reboot is required to fully disable SELinux. SELinux will operate in Permissive mode until a reboot&#39;)
         }
       }
@@ -295,19 +309,19 @@ class selinux::config (
 
     # a complete relabeling is required when switching from disabled to
     # permissive or enforcing. Ensure the autorelabel trigger file is created.
-    if $mode in [&#39;enforcing&#39;,&#39;permissive&#39;] and
+    if $_real_mode in [&#39;enforcing&#39;,&#39;permissive&#39;] and
       !$::selinux {
       file { &#39;/.autorelabel&#39;:
         ensure  =&gt; &#39;file&#39;,
         owner   =&gt; &#39;root&#39;,
         group   =&gt; &#39;root&#39;,
-        content =&gt; &quot;# created by puppet for disabled to ${mode} switch\n&quot;,
+        content =&gt; &quot;# created by puppet for disabled to ${_real_mode} switch\n&quot;,
       }
     }
 
-    exec { &quot;change-selinux-status-to-${mode}&quot;:
+    exec { &quot;change-selinux-status-to-${_real_mode}&quot;:
       command =&gt; &quot;setenforce ${sestatus}&quot;,
-      unless  =&gt; &quot;getenforce | grep -Eqi &#39;${mode}|disabled&#39;&quot;,
+      unless  =&gt; &quot;getenforce | grep -Eqi &#39;${_real_mode}|disabled&#39;&quot;,
       path    =&gt; &#39;/bin:/sbin:/usr/bin:/usr/sbin&#39;,
     }
   }
@@ -327,9 +341,9 @@ class selinux::config (
 </div>
 
       <div id="footer">
-  Generated on Fri Jan 13 15:43:22 2017 by
+  Generated on Tue Jan 31 20:51:44 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.7 (ruby-2.3.3).
+  0.9.8 (ruby-2.3.3).
 </div>
 
     </div>

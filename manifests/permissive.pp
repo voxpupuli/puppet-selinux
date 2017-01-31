@@ -2,6 +2,7 @@
 #
 # This define will set an SELinux type to permissive
 #
+# @param ensure Set to present to add or absent to remove a permissive mode of a type
 # @param seltype A particular selinux type to make permissive, like "oddjob_mkhomedir_t"
 #
 # @example Mark oddjob_mkhomedir_t permissive

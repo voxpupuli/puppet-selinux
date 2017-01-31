@@ -6,7 +6,7 @@
 <title>
   File: README
   
-    &mdash; Documentation by YARD 0.9.7
+    &mdash; Documentation by YARD 0.9.8
   
 </title>
 
@@ -85,7 +85,7 @@
 <h2>Requirements</h2>
 
 <ul>
-<li>Puppet 3.8.7 or later</li>
+<li>Puppet 4 or later</li>
 </ul>
 
 <h2>Module Description</h2>
@@ -108,7 +108,11 @@ running system.</p>
 <li>If SELinux is disabled and you want to switch to permissive or enforcing you
 are required to reboot the system (limitation of SELinux). The module won&#39;t
 do this for you.</li>
-<li>If you add filecontexts with <code>semange fcontext</code> (what <code>selinux::fcontext</code> 
+<li>If SELinux is disabled and the user wants enforcing mode, the module
+will downgrade to permissive mode instead to avoid transitioning directly from
+disabled to enforcing state after a reboot and potentially breaking the system.
+The user will receive a warning when this happens,</li>
+<li>If you add filecontexts with <code>semanage fcontext</code> (what <code>selinux::fcontext</code>
 does) the order is important. If you add /my/folder before /my/folder/subfolder
 only /my/folder will match (limitation of SELinux). There is no such limitation
 to file-contexts defined in SELinux modules. (GH-121)</li>
@@ -117,19 +121,21 @@ interfaces (<code>*.if</code>) or file-contexts (<code>*.fc</code>).</li>
 <li>While SELinux is disabled the defined types <code>selinux::boolean</code>, 
 <code>selinux::fcontext</code>, <code>selinux::port</code> will produce puppet agent runtime errors 
 because the used tools fail.</li>
-<li><code>selinux::port</code> has the <code>action</code> parameter which  if you specify <code>-d</code> or 
-<code>--delete</code> silently does nothing. (GH-164)</li>
-<li><code>selinux::permissive</code> allows only to set a domain to permissive but not to
-remove it. (GH-165)</li>
+<li>If you try to remove a built-in permissive type, the operation will appear to succeed
+but will actually have no effect, making your puppet runs non-idempotent.</li>
+<li>The <code>selinux_port</code> provider may misbehave if the title does not correspond to
+the format it expects. Users should use the <code>selinux::port</code> define instead except
+when purging resources</li>
+<li>Defining port ranges that overlap with existing ranges is currently not detected, and will
+cause semanage to error when the resource is applied.</li>
 </ul>
 
 <h2>Usage</h2>
 
-<p>There is puppet-strings generated documentation available in the docs/ folder 
-of the github repo.</p>
+<p>Generated puppet strings documentation with examples is available from
+<a href="https://voxpupuli.org/puppet-selinux/">https://voxpupuli.org/puppet-selinux/</a></p>
 
-<p>It will be available at <a href="http://voxpupuli.org/pupppet-selinux">http://voxpupuli.org/pupppet-selinux</a> some time in 
-the future.</p>
+<p>It&#39;s also included in the docs/ folder as simple html pages.</p>
 
 <h2>Reference</h2>
 
@@ -189,7 +195,14 @@ to fully take effect. It will run in <code>permissive</code> mode until then.</p
 adding or changing something</li>
 <li>Only few <code>--list</code> operations work</li>
 </ul></li>
+<li>run acceptance tests:</li>
 </ul>
+
+<pre class="code ruby"><code class="ruby">BEAKER_debug=yes BEAKER_set=&quot;centos-6-x64&quot; PUPPET_INSTALL_TYPE=&quot;agent&quot; be rake beaker
+BEAKER_debug=yes BEAKER_set=&quot;centos-7-x64&quot; PUPPET_INSTALL_TYPE=&quot;agent&quot; be rake beaker
+BEAKER_debug=yes BEAKER_set=&quot;fedora-24-x64&quot; PUPPET_INSTALL_TYPE=&quot;agent&quot; be rake beaker
+BEAKER_debug=yes BEAKER_set=&quot;fedora-25-x64&quot; PUPPET_INSTALL_TYPE=&quot;agent&quot; be rake beaker
+</code></pre>
 
 <h3>Facter facts</h3>
 
@@ -239,9 +252,9 @@ the config_mode to be set, but only the boolean <code>enabled</code> is set.</p>
 </div></div>
 
       <div id="footer">
-  Generated on Fri Jan 13 15:43:22 2017 by
+  Generated on Tue Jan 31 20:51:44 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.7 (ruby-2.3.3).
+  0.9.8 (ruby-2.3.3).
 </div>
 
     </div>

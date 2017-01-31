@@ -6,7 +6,7 @@
 <title>
   Defined Type: selinux::fcontext
   
-    &mdash; Documentation by YARD 0.9.7
+    &mdash; Documentation by YARD 0.9.8
   
 </title>
 
@@ -73,16 +73,8 @@
   <div class="discussion">
     <p>selinux::fcontext</p>
 
-<p>This method will manage a local file context setting, and will persist it across reboots.
-It will perform a check to ensure the file context is not already set.</p>
-
-<p>example Add a file-context only for directory types
-  selinux::fcontext{&#39;set-non-home-user-dir_type_d&#39;:
-    filetype =&gt; true ,
-    filemode =&gt; &#39;d&#39; ,
-    context  =&gt; &#39;user_home_dir_t&#39; ,
-    pathname =&gt; &#39;/u/users/[^/]*&#39; ,
-  }</p>
+<p>This define can be used to manage custom SELinux fcontexts. For fcontext
+equivalences, see selinux::fcontext::equivalence</p>
 
   </div>
 </div>
@@ -92,22 +84,21 @@ It will perform a check to ensure the file context is not already set.</p>
     <p class="tag_title">Examples:</p>
     
       
-        <p class="example_title"><div class='inline'><p>Add an path substition (equal) file-context</p>
-</div></p>
-      
-      <pre class="example code"><code>selinux::fcontext{&#39;set-postfix-instance1-spool&#39;:
-  equals      =&gt; true,
-  pathname    =&gt; &#39;/var/spool/postfix-instance1&#39;,
-  destination =&gt; &#39;/var/spool/postfix&#39;
-}</code></pre>
-    
-      
         <p class="example_title"><div class='inline'><p>Add a file-context for mysql log files at non standard location</p>
 </div></p>
       
       <pre class="example code"><code>selinux::fcontext{&#39;set-mysql-log-context&#39;:
-  context =&gt; &quot;mysqld_log_t&quot;,
+  seltype =&gt; &quot;mysqld_log_t&quot;,
   pathname =&gt; &quot;/u01/log/mysql(/.*)?&quot;,
+}</code></pre>
+    
+      
+        <p class="example_title"><div class='inline'><p>Add a file-context only for directory types</p>
+</div></p>
+      
+      <pre class="example code"><code>selinux::fcontext{&#39;/u/users/[^/]*&#39;:
+  filetype =&gt; &#39;d&#39;,
+  seltype  =&gt; &#39;user_home_dir_t&#39; ,
 }</code></pre>
     
   </div>
@@ -116,66 +107,69 @@ It will perform a check to ensure the file context is not already set.</p>
   
     <li>
       
-        <span class='name'>context</span>
+        <span class='name'>ensure</span>
       
       
-        <span class='type'>(<tt>Any</tt>)</span>
+        <span class='type'>(<tt>Enum['absent', 'present']</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;present&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>The desired state of the resource. Default: &#39;present&#39;</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>seltype</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>undef</tt>)</em>
       
       
         &mdash;
-        <div class='inline'><p>A particular file-context, like &quot;mysqld_log_t&quot;</p>
+        <div class='inline'><p>String A particular SELinux type, like &quot;mysqld_log_t&quot;</p>
 </div>
       
     </li>
   
     <li>
       
-        <span class='name'>pathname</span>
+        <span class='name'>seluser</span>
       
       
-        <span class='type'>(<tt>Any</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'><p>An semanage fcontext-formatted pathname, like &quot;/var/log/mysql(/.*)?&quot;</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>destination</span>
-      
-      
-        <span class='type'>(<tt>Any</tt>)</span>
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>undef</tt>)</em>
       
       
         &mdash;
-        <div class='inline'><p>The destination path used with the equals parameter.</p>
+        <div class='inline'><p>String A particular SELinux user, like &quot;sysadm_u&quot;</p>
 </div>
       
     </li>
   
     <li>
       
-        <span class='name'>equals</span>
+        <span class='name'>pathspec</span>
       
       
-        <span class='type'>(<tt>Any</tt>)</span>
+        <span class='type'>(<tt>String</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>false</tt>)</em>
+        <em class="default">(defaults to: <tt>$title</tt>)</em>
       
       
         &mdash;
-        <div class='inline'><p>Boolean Value - Enables support for substituting target path with sourcepath when generating default label</p>
+        <div class='inline'><p>String An semanage fcontext-formatted path specification,
+like &quot;/var/log/mysql(/.*)?&quot;. Defaults to title</p>
 </div>
       
     </li>
@@ -185,31 +179,14 @@ It will perform a check to ensure the file context is not already set.</p>
         <span class='name'>filetype</span>
       
       
-        <span class='type'>(<tt>Any</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>false</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'><p>Boolean Value - enables support for &quot;-f&quot; file type option of &quot;semanage fcontext&quot;</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>filemode</span>
-      
-      
-        <span class='type'>(<tt>Any</tt>)</span>
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>&#39;a&#39;</tt>)</em>
       
       
         &mdash;
-        <div class='inline'><p>File Mode for policy (i.e. regular file, directory, block device, all files, etc.)</p>
+        <div class='inline'><p>File type the context applies to (i.e. regular file, directory, block device, all files, etc.)</p>
 
 <ul>
 <li>Types:
@@ -229,57 +206,6 @@ It will perform a check to ensure the file context is not already set.</p>
       
     </li>
   
-    <li>
-      
-        <span class='name'>restorecond</span>
-      
-      
-        <span class='type'>(<tt>Any</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>true</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'><p>Run restorecon against the path name upon changes (default true)</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>restorecond_path</span>
-      
-      
-        <span class='type'>(<tt>Any</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>undef</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'><p>Path name to use for restorecon (default $pathname)</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>restorecond_recurse</span>
-      
-      
-        <span class='type'>(<tt>Any</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>false</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'><p>Run restorecon recursive?</p>
-</div>
-      
-    </li>
-  
 </ul>
 
 
@@ -290,6 +216,19 @@ It will perform a check to ensure the file context is not already set.</p>
         <pre class="lines">
 
 
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
 46
 47
 48
@@ -307,174 +246,41 @@ It will perform a check to ensure the file context is not already set.</p>
 60
 61
 62
-63
-64
-65
-66
-67
-68
-69
-70
-71
-72
-73
-74
-75
-76
-77
-78
-79
-80
-81
-82
-83
-84
-85
-86
-87
-88
-89
-90
-91
-92
-93
-94
-95
-96
-97
-98
-99
-100
-101
-102
-103
-104
-105
-106
-107
-108
-109
-110
-111
-112
-113
-114
-115
-116
-117
-118
-119
-120
-121
-122
-123
-124
-125
-126
-127
-128
-129
-130
-131
-132
-133
-134
-135
-136</pre>
+63</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/fcontext.pp', line 46</span>
+        <pre class="code"><span class="info file"># File 'manifests/fcontext.pp', line 33</span>
 
-define selinux::fcontext (
-  $pathname,
-  $destination         = undef,
-  $context             = undef,
-  $filetype            = false,
-  $filemode            = &#39;a&#39;,
-  $equals              = false,
-  $restorecond         = true,
-  $restorecond_path    = undef,
-  $restorecond_recurse = false,
+define selinux::fcontext(
+  String $pathspec                  = $title,
+  Enum[&#39;absent&#39;, &#39;present&#39;] $ensure = &#39;present&#39;,
+  Optional[String] $seltype         = undef,
+  Optional[String] $seluser         = undef,
+  Optional[String] $filetype        = &#39;a&#39;,
 ) {
 
   include ::selinux
-
+  if $ensure == &#39;present&#39; {
   Anchor[&#39;selinux::module post&#39;] -&gt;
   Selinux::Fcontext[$title] -&gt;
   Anchor[&#39;selinux::end&#39;]
-
-  validate_absolute_path($pathname)
-  validate_bool($filetype, $equals)
-
-  if $equals {
-    validate_absolute_path($destination)
   } else {
-    validate_string($context)
+    Anchor[&#39;selinux::start&#39;] -&gt;
+    Selinux::Fcontext[$title] -&gt;
+    Anchor[&#39;selinux::module::pre&#39;]
   }
 
-  $restorecond_path_private = $restorecond_path ? {
-    undef   =&gt; $pathname,
-    default =&gt; $restorecond_path
+  if $filetype !~ /^(?:a|f|d|c|b|s|l|p)$/ {
+    fail(&#39;&quot;filetype&quot; must be one of: a,f,d,c,b,s,l,p - see &quot;man semanage-fcontext&quot;&#39;)
   }
 
-  validate_absolute_path($restorecond_path_private)
-
-  $restorecond_resurse_private = $restorecond_recurse ? {
-    true  =&gt; [&#39;-R&#39;],
-    false =&gt; [],
+  # make sure the title is correct or the provider will misbehave
+  selinux_fcontext {&quot;${pathspec}_${filetype}&quot;:
+    pathspec  =&gt; $pathspec,
+    seltype   =&gt; $seltype,
+    file_type =&gt; $filetype,
+    seluser   =&gt; $seluser,
   }
-
-  if $equals and $filetype {
-    fail(&#39;Resource cannot contain both &quot;equals&quot; and &quot;filetype&quot; options&#39;)
-  }
-
-  if $equals {
-    $resource_name = &quot;add_${destination}_${pathname}&quot;
-    $command       = shellquote(&#39;semanage&#39;, &#39;fcontext&#39;,&#39;-a&#39;, &#39;-e&#39;, $destination, $pathname)
-    $unless        = sprintf(&#39;semanage fcontext -l | grep -Fx %s&#39;, shellquote(&quot;${pathname} = ${destination}&quot;))
-  } else {
-    if $filemode !~ /^(?:a|f|d|c|b|s|l|p)$/ {
-      fail(&#39;&quot;filemode&quot; must be one of: a,f,d,c,b,s,l,p - see &quot;man semanage-fcontext&quot;&#39;)
-    }
-    $resource_name = &quot;add_${context}_${pathname}_type_${filemode}&quot;
-    if $::osfamily == &#39;RedHat&#39; and $::operatingsystemmajrelease == &#39;6&#39; {
-      case $filemode {
-        &#39;a&#39;: {
-          $_filemode = &#39;all files&#39;
-          $_quotedfilemode = &#39;\&#39;all files\&#39;&#39;
-          }
-        default: {
-          $_filemode = $filemode
-          $_quotedfilemode = $_filemode
-        }
-      }
-    } else {
-      $_filemode = $filemode
-      $_quotedfilemode = $_filemode
-    }
-    $command       = shellquote(&#39;semanage&#39;, &#39;fcontext&#39;,&#39;-a&#39;, &#39;-f&#39;, $_filemode, &#39;-t&#39;, $context, $pathname)
-    $unless        = sprintf(&#39;semanage fcontext -E | grep -Fx %s&#39;, shellquote(&quot;fcontext -a -f ${_quotedfilemode} -t ${context} &#39;${pathname}&#39;&quot;))
-  }
-
-  Exec {
-    path =&gt; &#39;/bin:/sbin:/usr/bin:/usr/sbin&#39;,
-  }
-
-  exec { $resource_name:
-    command =&gt; $command,
-    unless  =&gt; $unless,
-    require =&gt; Class[&#39;selinux::package&#39;],
-  }
-
-  if $restorecond {
-    exec { &quot;restorecond ${resource_name}&quot;:
-      command     =&gt; shellquote(&#39;restorecon&#39;, $restorecond_resurse_private, $restorecond_path_private),
-      onlyif      =&gt; shellquote(&#39;test&#39;, &#39;-e&#39;, $restorecond_path_private),
-      refreshonly =&gt; true,
-      subscribe   =&gt; Exec[$resource_name],
-    }
-  }
-
 }</pre>
       </td>
     </tr>
@@ -483,9 +289,9 @@ define selinux::fcontext (
 </div>
 
       <div id="footer">
-  Generated on Fri Jan 13 15:43:22 2017 by
+  Generated on Tue Jan 31 20:51:44 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.7 (ruby-2.3.3).
+  0.9.8 (ruby-2.3.3).
 </div>
 
     </div>

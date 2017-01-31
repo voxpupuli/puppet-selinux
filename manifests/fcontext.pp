@@ -17,6 +17,7 @@
 #
 # @param ensure   The desired state of the resource. Default: 'present'
 # @param seltype  String A particular SELinux type, like "mysqld_log_t"
+# @param seluser  String A particular SELinux user, like "sysadm_u"
 # @param pathspec String An semanage fcontext-formatted path specification, 
 #                        like "/var/log/mysql(/.*)?". Defaults to title
 # @param filetype File type the context applies to (i.e. regular file, directory, block device, all files, etc.)

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>
-  Puppet Class: selinux::restorecond::config
+  Provider: semanage
   
     &mdash; Documentation by YARD 0.9.8
   
@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
 
 <script type="text/javascript" charset="utf-8">
-  pathId = "puppet_classes::selinux::restorecond::config";
+  pathId = "puppet_providers_selinux_fcontext::semanage";
   relpath = '../';
 </script>
 
@@ -28,7 +28,7 @@
   </head>
   <body>
     <div class="nav_wrap">
-      <iframe id="nav" src="../puppet_class_list.html?1"></iframe>
+      <iframe id="nav" src="../puppet_provider_list.html?1"></iframe>
       <div id="resizer"></div>
     </div>
 
@@ -37,9 +37,9 @@
         <div id="menu">
   
     <a href="../_index.html">Index (s)</a> &raquo;
-    <span class='title'><span class='object_link'>Puppet Classes</span></span>
+    <span class='title'><span class='object_link'>Providers</span></span>
      &raquo; 
-    <span class="title">selinux::restorecond::config</span>
+    <span class="title">semanage</span>
   
 </div>
 
@@ -59,76 +59,69 @@
         <div class="clear"></div>
       </div>
 
-      <div id="content"><h1>Puppet Class: selinux::restorecond::config</h1>
+      <div id="content"><h1>Provider: semanage</h1>
 <div class="box_info">
-  
-  
   <dl>
     <dt>Defined in:</dt>
     <dd>
-      manifests/restorecond/config.pp
+      lib/puppet/provider/selinux_fcontext/semanage.rb
     </dd>
+  </dl>
+  <dl>
+    <dt>Resource type:</dt>
+    <dd><span class='object_link'><a href="../puppet_types/selinux_fcontext.html" title="puppet_types::selinux_fcontext (puppet_type)">selinux_fcontext</a></span></dd>
   </dl>
 </div>
 <h2>Overview</h2>
 <div class="docstring">
   <div class="discussion">
-    <p>selinux::restorecond::config</p>
-
-<h1>THIS IS A PRIVATE CLASS</h1>
+    <p>Support managing SELinux custom fcontext definitions via semanage</p>
 
   </div>
 </div>
 <div class="tags">
   
 
-</div><div class="method_details_list">
-  <table class="source_code">
-    <tr>
-      <td>
-        <pre class="lines">
-
-
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21</pre>
-      </td>
-      <td>
-        <pre class="code"><span class="info file"># File 'manifests/restorecond/config.pp', line 6</span>
-
-class selinux::restorecond::config {
-
-  concat { $selinux::restorecond::config_file:
-    ensure =&gt; present,
-    mode   =&gt; $selinux::restorecond::config_file_mode,
-    owner  =&gt; $selinux::restorecond::config_file_owner,
-    group  =&gt; $selinux::restorecond::config_file_group,
-    notify =&gt; Service[&#39;restorecond&#39;],
-  }
-
-  concat::fragment {&#39;restorecond_config_default&#39;:
-    target =&gt; $selinux::restorecond::config_file,
-    source =&gt; &#39;puppet:///modules/selinux/restorecond.conf&#39;,
-    order  =&gt; &#39;01&#39;,
-  }
-}</pre>
-      </td>
-    </tr>
-  </table>
 </div>
+
+<div class="tags">
+  <p class="tag_title">Confines</p>
+  <ul>
+
+  
+    
+      <li><tt>selinux &mdash; true</tt></li>
+    
+  
+  </ul>
+</div>
+
+
+<div class="tags">
+  <p class="tag_title">Default Provider For</p>
+  <ul>
+
+  
+    
+      <li><tt>kernel &mdash; Linux</tt></li>
+    
+  
+  </ul>
+</div>
+
+
+<div class="tags">
+  <p class="tag_title">Commands</p>
+  <ul>
+
+  
+    
+      <li><tt>semanage &mdash; semanage</tt></li>
+    
+  
+  </ul>
+</div>
+
 </div>
 
       <div id="footer">
