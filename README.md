@@ -23,7 +23,7 @@ This class manages SELinux on RHEL based systems.
 
 ## Requirements
 
-* Puppet 3.8.7 or later
+* Puppet 4 or later
 
 ## Module Description
 
@@ -128,6 +128,14 @@ selinux::boolean { 'puppetagent_manage_all_files': }
     * `semanage` requires `--noreload` while in disabled mode when
       adding or changing something
     * Only few `--list` operations work
+* run acceptance tests:
+
+```
+BEAKER_debug=yes BEAKER_set="centos-6-x64" PUPPET_INSTALL_TYPE="agent" bundle exec rake beaker
+BEAKER_debug=yes BEAKER_set="centos-7-x64" PUPPET_INSTALL_TYPE="agent" bundle exec rake beaker
+BEAKER_debug=yes BEAKER_set="fedora-24-x64" PUPPET_INSTALL_TYPE="agent" bundle exec rake beaker
+BEAKER_debug=yes BEAKER_set="fedora-25-x64" PUPPET_INSTALL_TYPE="agent" bundle exec rake beaker
+```
 
 ### Facter facts
 
