@@ -31,17 +31,24 @@ class selinux::config (
     group  => 'root',
   }
 
-  if $mode {
-    file_line { "set-selinux-config-to-${mode}":
+  if ($mode == 'enforcing' and !$::selinux) {
+    notice('SELinux is disabled. Forcing configuration to permissive to avoid problems. To disable this warning, explicitly set selinux::mode to permissive or disabled.')
+    $_real_mode = 'permissive'
+  } else {
+    $_real_mode = $mode
+  }
+
+  if $_real_mode {
+    file_line { "set-selinux-config-to-${_real_mode}":
       path  => '/etc/selinux/config',
-      line  => "SELINUX=${mode}",
+      line  => "SELINUX=${_real_mode}",
       match => '^SELINUX=\w+',
     }
 
-    case $mode {
+    case $_real_mode {
       'permissive', 'disabled': {
         $sestatus = '0'
-        if $mode == 'disabled' and defined('$::selinux_current_mode') and $::selinux_current_mode == 'permissive' {
+        if $_real_mode == 'disabled' and defined('$::selinux_current_mode') and $::selinux_current_mode == 'permissive' {
           notice('A reboot is required to fully disable SELinux. SELinux will operate in Permissive mode until a reboot')
         }
       }
@@ -55,19 +62,19 @@ class selinux::config (
 
     # a complete relabeling is required when switching from disabled to
     # permissive or enforcing. Ensure the autorelabel trigger file is created.
-    if $mode in ['enforcing','permissive'] and
+    if $_real_mode in ['enforcing','permissive'] and
       !$::selinux {
       file { '/.autorelabel':
         ensure  => 'file',
         owner   => 'root',
         group   => 'root',
-        content => "# created by puppet for disabled to ${mode} switch\n",
+        content => "# created by puppet for disabled to ${_real_mode} switch\n",
       }
     }
 
-    exec { "change-selinux-status-to-${mode}":
+    exec { "change-selinux-status-to-${_real_mode}":
       command => "setenforce ${sestatus}",
-      unless  => "getenforce | grep -Eqi '${mode}|disabled'",
+      unless  => "getenforce | grep -Eqi '${_real_mode}|disabled'",
       path    => '/bin:/sbin:/usr/bin:/usr/sbin',
     }
   }
