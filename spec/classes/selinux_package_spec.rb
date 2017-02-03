@@ -2,19 +2,6 @@ require 'spec_helper'
 
 describe 'selinux' do
   context 'package' do
-    context 'on RedHat 5 based OSes' do
-      let(:facts) do
-        {
-          osfamily: 'RedHat',
-          operatingsystem: 'RedHat',
-          operatingsystemmajrelease: '5',
-          selinux_current_mode: 'enforcing'
-        }
-      end
-
-      it { is_expected.to contain_package('policycoreutils').with(ensure: 'present') }
-    end
-
     %w(6).each do |majrelease|
       context "On RedHat #{majrelease} based OSes" do
         let(:facts) do
@@ -45,35 +32,7 @@ describe 'selinux' do
       end
     end
 
-    %w(19 20).each do |majrelease|
-      context "On Fedora #{majrelease}" do
-        let(:facts) do
-          {
-            osfamily: 'RedHat',
-            operatingsystem: 'Fedora',
-            operatingsystemmajrelease: majrelease,
-            selinux_current_mode: 'enforcing'
-          }
-        end
-        it { is_expected.to contain_package('policycoreutils-python').with(ensure: 'present') }
-      end
-    end
-
-    %w(21 22 23).each do |majrelease|
-      context "On Fedora #{majrelease}" do
-        let(:facts) do
-          {
-            osfamily: 'RedHat',
-            operatingsystem: 'Fedora',
-            operatingsystemmajrelease: majrelease,
-            selinux_current_mode: 'enforcing'
-          }
-        end
-        it { is_expected.to contain_package('policycoreutils-devel').with(ensure: 'present') }
-      end
-    end
-
-    %w(24).each do |majrelease|
+    %w(24 25).each do |majrelease|
       context "On Fedora #{majrelease}" do
         let(:facts) do
           {
@@ -92,7 +51,7 @@ describe 'selinux' do
         {
           osfamily: 'RedHat',
           operatingsystem: 'RedHat',
-          operatingsystemmajrelease: '5'
+          operatingsystemmajrelease: '7'
         }
       end
       let(:params) do
@@ -109,7 +68,7 @@ describe 'selinux' do
         {
           osfamily: 'RedHat',
           operatingsystem: 'RedHat',
-          operatingsystemmajrelease: '5'
+          operatingsystemmajrelease: '7'
         }
       end
       let(:params) do
