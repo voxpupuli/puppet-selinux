@@ -37,6 +37,15 @@ running system.
 * Mailinglist: <voxpupuli@groups.io> 
   ([groups.io Webinterface](https://groups.io/g/voxpupuli/topics))
 
+## Upgrading from puppet-selinux 0.8.x
+
+* Previously, module building always used the refpolicy framework. The default
+  module builder is now 'simple', which uses only checkmodule. Not all features are
+  supported with this builder.
+
+  To build modules using the refpolicy framework like previous versions did,
+  specify the  'refpolicy' builder either explicitly per module or globally
+  via the main class
 
 ## Known problems / limitations
 
@@ -51,8 +60,6 @@ running system.
   does) the order is important. If you add /my/folder before /my/folder/subfolder
   only /my/folder will match (limitation of SELinux). There is no such limitation
   to file-contexts defined in SELinux modules. (GH-121)
-* `selinux::module` only allows to add a type enforcment file (`*.te`) but no
-  interfaces (`*.if`) or file-contexts (`*.fc`).
 * While SELinux is disabled the defined types `selinux::boolean`, 
   `selinux::fcontext`, `selinux::port` will produce puppet agent runtime errors 
   because the used tools fail.
@@ -97,12 +104,15 @@ are `target`, `minimum`, and `mls`). Note that disabling SELinux requires a rebo
 to fully take effect. It will run in `permissive` mode until then.
 
 
-### Deploy a custom module
+### Deploy a custom module using the refpolicy framework
 
 ```puppet
 selinux::module { 'resnet-puppet':
-  ensure => 'present',
-  source => 'puppet:///modules/site_puppet/site-puppet.te',
+  ensure    => 'present',
+  source_te => 'puppet:///modules/site_puppet/site-puppet.te',
+  source_fc => 'puppet:///modules/site_puppet/site-puppet.fc',
+  source_if => 'puppet:///modules/site_puppet/site-puppet.if',
+  builder   => 'refpolicy'
 }
 ```
 
