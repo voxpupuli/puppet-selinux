@@ -25,7 +25,7 @@
 # refpolicy module builder
 #   Default value: OS dependent (see params.pp)
 # @param default_builder which builder to use by default with selinux::module
-#   Default value: refpolicy
+#   Default value: simple
 # @param boolean Hash of selinux::boolean resource parameters
 # @param fcontext Hash of selinux::fcontext resource parameters
 # @param module Hash of selinux::module resource parameters
