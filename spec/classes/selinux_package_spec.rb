@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'selinux' do
   context 'package' do
-    %w(6).each do |majrelease|
+    %w(6 7).each do |majrelease|
       context "On RedHat #{majrelease} based OSes" do
         let(:facts) do
           {
@@ -17,21 +17,6 @@ describe 'selinux' do
       end
     end
 
-    %w(7).each do |majrelease|
-      context "On RedHat #{majrelease} based OSes" do
-        let(:facts) do
-          {
-            osfamily: 'RedHat',
-            operatingsystem: 'RedHat',
-            operatingsystemmajrelease: majrelease,
-            selinux_current_mode: 'enforcing'
-          }
-        end
-
-        it { is_expected.to contain_package('selinux-policy-devel').with(ensure: 'present') }
-      end
-    end
-
     %w(24 25).each do |majrelease|
       context "On Fedora #{majrelease}" do
         let(:facts) do
@@ -42,7 +27,7 @@ describe 'selinux' do
             selinux_current_mode: 'enforcing'
           }
         end
-        it { is_expected.to contain_package('selinux-policy-devel').with(ensure: 'present') }
+        it { is_expected.to contain_package('policycoreutils-python-utils').with(ensure: 'present') }
       end
     end
 
@@ -60,7 +45,7 @@ describe 'selinux' do
         }
       end
 
-      it { is_expected.not_to contain_package('policycoreutils').with(ensure: 'present') }
+      it { is_expected.not_to contain_package('policycoreutils-python').with(ensure: 'present') }
     end
 
     context 'install a different package name' do

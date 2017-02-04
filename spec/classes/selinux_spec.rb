@@ -25,8 +25,8 @@ describe 'selinux' do
         let(:params) do
           {
             module: {
-              'mymodule1' =>  { 'content' => 'dummy' },
-              'mymodule2' =>  { 'content' => 'dummy' }
+              'mymodule1' =>  { 'source_te' => 'dummy' },
+              'mymodule2' =>  { 'source_te' => 'dummy' }
             }
           }
         end
