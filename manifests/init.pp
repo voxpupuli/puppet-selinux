@@ -33,14 +33,14 @@
 # @param port Hash of selinux::port resource parameters
 #
 class selinux (
-  $mode                   = $::selinux::params::mode,
-  $type                   = $::selinux::params::type,
-  $refpolicy_makefile     = $::selinux::params::refpolicy_makefile,
-  $manage_package         = $::selinux::params::manage_package,
-  $package_name           = $::selinux::params::package_name,
-  $refpolicy_package_name = $::selinux::params::refpolicy_package_name,
-  $module_build_root      = $::selinux::params::module_build_root,
-  $default_builder        = 'simple',
+  Optional[Enum['enforcing', 'permissive', 'disabled']] $mode = $::selinux::params::mode,
+  Optional[Enum['targeted', 'minimum', 'mls']] $type          = $::selinux::params::type,
+  String  $refpolicy_makefile                                 = $::selinux::params::refpolicy_makefile,
+  Boolean $manage_package                                     = $::selinux::params::manage_package,
+  String $package_name                                        = $::selinux::params::package_name,
+  String $refpolicy_package_name                              = $::selinux::params::refpolicy_package_name,
+  String $module_build_root                                   = $::selinux::params::module_build_root,
+  Enum['refpolicy', 'simple'] $default_builder                = 'simple',
 
   ### START Hiera Lookups ###
   $boolean        = undef,
@@ -51,22 +51,6 @@ class selinux (
   ### END Hiera Lookups ###
 
 ) inherits selinux::params {
-
-  $mode_real = $mode ? {
-    /\w+/   => $mode,
-    default => 'undef',
-  }
-
-  $type_real = $type ? {
-    /\w+/   => $type,
-    default => 'undef',
-  }
-
-  validate_re($mode_real, ['^enforcing$', '^permissive$', '^disabled$', '^undef$'], "Valid modes are enforcing, permissive, and disabled.  Received: ${mode}")
-  validate_re($type_real, ['^targeted$', '^minimum$', '^mls$', '^undef$'], "Valid types are targeted, minimum, and mls.  Received: ${type}")
-  validate_string($refpolicy_makefile)
-  validate_bool($manage_package)
-  validate_string($package_name)
 
   class { '::selinux::package':
     manage_package => $manage_package,

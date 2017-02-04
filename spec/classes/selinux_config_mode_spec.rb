@@ -15,7 +15,7 @@ describe 'selinux' do
       context 'config' do
         context 'invalid mode' do
           let(:params) { { mode: 'invalid' } }
-          it { expect { is_expected.to create_class('selinux') }.to raise_error(%r{Valid modes are enforcing, permissive, and disabled.  Received: invalid}) }
+          it { expect { is_expected.to create_class('selinux') }.to raise_error(Puppet::Error, %r{Enum}) }
         end
 
         context 'undef mode' do

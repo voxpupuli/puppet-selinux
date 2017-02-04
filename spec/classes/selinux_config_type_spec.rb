@@ -9,7 +9,7 @@ describe 'selinux' do
       context 'config' do
         context 'invalid type' do
           let(:params) { { type: 'invalid' } }
-          it { expect { is_expected.to create_class('selinux') }.to raise_error(%r{Valid types are targeted, minimum, and mls.  Received: invalid}) }
+          it { expect { is_expected.to create_class('selinux') }.to raise_error(Puppet::Error, %r{Enum}) }
         end
         context 'undef type' do
           it { is_expected.to have_file_resource_count(3) }
