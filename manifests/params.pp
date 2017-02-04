@@ -47,7 +47,7 @@ class selinux::params {
           case $os_maj_release {
             '7': {
               $sx_fs_mount = '/sys/fs/selinux'
-              $package_name = 'selinux-policy-devel'
+              $package_name = 'policycoreutils-python'
             }
             '6': {
               $sx_fs_mount = '/selinux'
