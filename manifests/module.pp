@@ -29,12 +29,12 @@ define selinux::module(
   Optional[Enum['simple', 'refpolicy']] $builder = undef,
   $syncversion  = undef,
 ) {
+  include ::selinux
 
   if $builder == 'refpolicy' {
     require ::selinux::refpolicy_package
   }
 
-  include ::selinux
 
   if ($builder == 'simple' and $source_if != undef) {
     fail("The simple builder does not support the 'source_if' parameter")
@@ -42,13 +42,14 @@ define selinux::module(
 
   # let's just make doubly sure that this is an absolute path:
   validate_absolute_path($::selinux::config::module_build_dir)
+  validate_absolute_path($::selinux::refpolicy_makefile)
 
   $module_dir = "${::selinux::config::module_build_dir}/${title}"
   $module_file = "${module_dir}/${title}"
 
   $build_command = pick($builder, $::selinux::default_builder, 'none') ? {
       'simple'    => shellquote("${::selinux::config::module_build_dir}/selinux_build_module.sh", $title),
-      'refpolicy' => shellquote('make', '-f', '/usr/share/selinux/devel/Makefile', "${title}.pp"),
+      'refpolicy' => shellquote('make', '-f', $::selinux::refpolicy_makefile, "${title}.pp"),
       'none'      => fail('No builder or default builder specified')
   }
 

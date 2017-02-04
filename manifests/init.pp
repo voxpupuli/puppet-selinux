@@ -14,7 +14,7 @@
 # @param type sets the selinux type
 #   Default value: undef
 #   Allowed values: (targeted|minimum|mls|undef)
-# @param makefile the path to the system's SELinux makefile
+# @param refpolicy_makefile the path to the system's SELinux makefile for the refpolicy framework
 #   Default value: /usr/share/selinux/devel/Makefile
 #   Allowed value: absolute path
 # @param manage_package manage the package for selinux tools and refpolicy
@@ -35,7 +35,7 @@
 class selinux (
   $mode                   = $::selinux::params::mode,
   $type                   = $::selinux::params::type,
-  $makefile               = $::selinux::params::refpolicy_makefile,
+  $refpolicy_makefile     = $::selinux::params::refpolicy_makefile,
   $manage_package         = $::selinux::params::manage_package,
   $package_name           = $::selinux::params::package_name,
   $refpolicy_package_name = $::selinux::params::refpolicy_package_name,
@@ -64,7 +64,7 @@ class selinux (
 
   validate_re($mode_real, ['^enforcing$', '^permissive$', '^disabled$', '^undef$'], "Valid modes are enforcing, permissive, and disabled.  Received: ${mode}")
   validate_re($type_real, ['^targeted$', '^minimum$', '^mls$', '^undef$'], "Valid types are targeted, minimum, and mls.  Received: ${type}")
-  validate_string($makefile)
+  validate_string($refpolicy_makefile)
   validate_bool($manage_package)
   validate_string($package_name)
 
