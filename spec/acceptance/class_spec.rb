@@ -19,27 +19,27 @@ describe 'selinux class' do
       file {'/tmp/selinux_simple_policy.te':
         ensure  => 'file',
         content => @("EOF")
-        module puppet_selinux_simple_policy 1.0;
-        require {
-            type httpd_log_t;
-            type postfix_postdrop_t;
-            class dir getattr;
-            class file { read getattr };
-        }
-        allow postfix_postdrop_t httpd_log_t:file getattr;
+          module puppet_selinux_simple_policy 1.0;
+          require {
+              type httpd_log_t;
+              type postfix_postdrop_t;
+              class dir getattr;
+              class file { read getattr };
+          }
+          allow postfix_postdrop_t httpd_log_t:file getattr;
         | EOF
       }
 
       file {'/tmp/selinux_test_policy.te':
         ensure  => 'file',
         content => @("EOF")
-        policy_module(puppet_selinux_test_policy, 1.0.0)
-        gen_tunable(puppet_selinux_test_policy_bool, false)
-        type puppet_selinux_test_policy_t;
-        type puppet_selinux_test_policy_exec_t;
-        init_daemon_domain(puppet_selinux_test_policy_t, puppet_selinux_test_policy_exec_t)
-        type puppet_selinux_test_policy_port_t;
-        corenet_port(puppet_selinux_test_policy_port_t)
+          policy_module(puppet_selinux_test_policy, 1.0.0)
+          gen_tunable(puppet_selinux_test_policy_bool, false)
+          type puppet_selinux_test_policy_t;
+          type puppet_selinux_test_policy_exec_t;
+          init_daemon_domain(puppet_selinux_test_policy_t, puppet_selinux_test_policy_exec_t)
+          type puppet_selinux_test_policy_port_t;
+          corenet_port(puppet_selinux_test_policy_port_t)
         | EOF
       }
 
