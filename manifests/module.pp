@@ -7,10 +7,21 @@
 # Concepts incorporated from:
 # http://stuckinadoloop.wordpress.com/2011/06/15/puppet-managed-deployment-of-selinux-modules/
 # 
-# @example compile and load the apache module
+# @example compile and load the apache module - does not require make or the policy
+#   devel package
 #   selinux::module{ 'apache':
 #     ensure    => 'present',
 #     source_te => 'puppet:///modules/selinux/apache.te',
+#     builder   => 'simple'
+#   }
+#
+# @example compile a module the refpolicy way. It will install the policy devel and
+#   dependent packages like make.
+#   selinux::module{ 'mymodule':
+#     ensure    => 'present',
+#     source_te => 'puppet:///modules/profile/selinux/mymodule.te',
+#     source_fc => 'puppet:///modules/profile/selinux/mymodule.fc',
+#     source_if => 'puppet:///modules/profile/selinux/mymodule.if',
 #     builder   => 'simple'
 #   }
 #
@@ -27,14 +38,12 @@ define selinux::module(
   Optional[String] $source_if = undef,
   Enum['absent', 'present'] $ensure = 'present',
   Optional[Enum['simple', 'refpolicy']] $builder = undef,
-  $syncversion  = undef,
 ) {
   include ::selinux
 
   if $builder == 'refpolicy' {
     require ::selinux::refpolicy_package
   }
-
 
   if ($builder == 'simple' and $source_if != undef) {
     fail("The simple builder does not support the 'source_if' parameter")
@@ -44,11 +53,11 @@ define selinux::module(
   validate_absolute_path($::selinux::config::module_build_dir)
   validate_absolute_path($::selinux::refpolicy_makefile)
 
-  $module_dir = "${::selinux::config::module_build_dir}/${title}"
+  $module_dir = $::selinux::config::module_build_dir
   $module_file = "${module_dir}/${title}"
 
   $build_command = pick($builder, $::selinux::default_builder, 'none') ? {
-      'simple'    => shellquote("${::selinux::config::module_build_dir}/selinux_build_module.sh", $title),
+      'simple'    => shellquote("${::selinux::module_build_root}/bin/selinux_build_module_simple.sh", $title, $module_dir),
       'refpolicy' => shellquote('make', '-f', $::selinux::refpolicy_makefile, "${title}.pp"),
       'none'      => fail('No builder or default builder specified')
   }
@@ -59,35 +68,34 @@ define selinux::module(
   $has_source = (pick($source_te, $source_fc, $source_if, false) != false)
 
   if $has_source and $ensure == 'present' {
-    file {$module_dir:
-      ensure  => directory,
+    file {"${module_file}.te":
+      ensure => 'file',
+      source => $source_te,
+      notify => Exec["clean-module-${title}"],
     }
 
-    if $source_te {
-      file {"${module_file}.te":
-        ensure => 'file',
-        source => $source_te,
-        notify => Exec["clean-module-${title}"],
-      }
+    $content_fc = $source_fc ? { undef => '', default => undef }
+    file {"${module_file}.fc":
+      ensure  => 'file',
+      source  => $source_fc,
+      content => $content_fc,
+      notify  => Exec["clean-module-${title}"],
     }
-    if $source_fc {
-      file {"${module_file}.fc":
-        ensure => 'file',
-        source => $source_fc,
-        notify => Exec["clean-module-${title}"],
-      }
+
+    $content_if = $source_if ? { undef => '', default => undef }
+    file {"${module_file}.if":
+      ensure  => 'file',
+      source  => $source_if,
+      content => $content_if,
+      notify  => Exec["clean-module-${title}"],
     }
-    if $source_if {
-      file {"${module_file}.if":
-        ensure => 'file',
-        source => $source_if,
-        notify => Exec["clean-module-${title}"],
-      }
-    }
+    # ensure it doesn't get purged if it exists
+    file {"${module_file}.pp": selinux_ignore_defaults => true }
+
     exec { "clean-module-${title}":
       path        => '/bin:/usr/bin',
       cwd         => $module_dir,
-      command     => "rm -f '${title}.pp' loaded",
+      command     => "rm -f '${module_file}.pp' '${module_file}.loaded'",
       refreshonly => true,
       notify      => Exec["build-module-${title}"],
     }
@@ -95,7 +103,7 @@ define selinux::module(
     exec { "build-module-${title}":
       path    => '/bin:/usr/bin',
       cwd     => $module_dir,
-      command => "${build_command} || (rm -f ${title}.pp loaded && exit 1)",
+      command => "${build_command} || (rm -f ${module_file}.pp ${module_file}.loaded && exit 1)",
       creates => "${module_file}.pp",
       notify  => Exec["install-module-${title}"],
     }
@@ -104,10 +112,13 @@ define selinux::module(
     exec { "install-module-${title}":
       path    => '/sbin:/usr/sbin:/bin:/usr/bin',
       cwd     => $module_dir,
-      command => "semodule -i ${title}.pp && touch loaded",
-      creates => "${module_dir}/loaded",
+      command => "semodule -i ${module_file}.pp && touch ${module_file}.loaded",
+      creates => "${module_file}.loaded",
       before  => Selmodule[$title],
     }
+
+    # ensure it doesn't get purged if it exists
+    file { "${module_file}.loaded": }
   }
   $module_path = $has_source ? {
     true  => "${module_file}.pp",
@@ -115,8 +126,6 @@ define selinux::module(
   }
 
   selmodule { $title:
-    # Load the module if it has changed or was not loaded
-    # Warning: change the .te version!
     ensure        => $ensure,
     selmodulepath => $module_path,
   }

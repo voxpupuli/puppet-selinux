@@ -1,6 +1,11 @@
 require 'spec_helper_acceptance'
 
-describe 'selinux class' do
+#
+# Test if refpolicy builder can build module A and B
+# where module B depends on an interface provided by
+# module A.
+#
+describe 'selinux module refpolicy' do
   let(:pp) do
     <<-EOS
       class { 'selinux': }
@@ -22,11 +27,11 @@ describe 'selinux class' do
         content => @(EOF)
           interface(`puppet_test_a_domtrans',`
             gen_require(`
-              type usr_t, puppet_test_a_exec_t;
+              type puppet_test_a_t, puppet_test_a_exec_t;
             ')
 
             corecmd_search_bin($1)
-            domtrans_pattern($1, puppet_test_a_exec_t, usr_t)
+            domtrans_pattern($1, puppet_test_a_exec_t, puppet_test_a_t)
           ')
           | EOF
       } ->
@@ -52,5 +57,4 @@ describe 'selinux class' do
   end
 
   it_behaves_like 'a idempotent resource'
-
 end

@@ -7,6 +7,20 @@
 #
 # It is included in the main class ::selinux
 #
+#
+#
+# Config for module building
+# --------------------------
+#
+# The module building requires the following file structure:
+#
+# ```
+# $module_build_root/
+#   bin/ # for simple module build script
+#   modules/ # module source files and compiled policies
+#   modules/tmp # repolicy tempfiles (created by scripts)
+# ```
+#
 # @param mode See main class
 # @param type See main class
 # @param manage_package See main class
@@ -88,16 +102,23 @@ class selinux::config (
     ensure => 'directory',
     owner  => 'root',
     group  => 'root',
-    mode   => '0644',
+    mode   => '0755',
+  }
+
+  file {"${module_build_root}/bin":
+    ensure => 'directory',
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0755',
   }
 
   # put helper in place:
-  file {"${module_build_root}/modules/selinux_build_module.sh":
+  file {"${module_build_root}/bin/selinux_build_module_simple.sh":
     ensure => 'present',
     owner  => 'root',
     group  => 'root',
     mode   => '0755',
-    source => "puppet:///modules/${module_name}/selinux_build_module.sh",
+    source => "puppet:///modules/${module_name}/selinux_build_module_simple.sh",
   }
 
   $module_build_dir = "${module_build_root}/modules"
@@ -110,4 +131,8 @@ class selinux::config (
     purge   => true,
     force   => true,
   }
+
+  # created by refpolicy builder and our simple builder
+  # ensure it does not get purged
+  file {"${module_build_dir}/tmp": selinux_ignore_defaults => true }
 }

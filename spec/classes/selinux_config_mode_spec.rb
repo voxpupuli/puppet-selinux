@@ -19,10 +19,13 @@ describe 'selinux' do
         end
 
         context 'undef mode' do
-          it { is_expected.to have_file_resource_count(3) }
+          it { is_expected.to have_file_resource_count(5) }
           it { is_expected.to have_file_line_resource_count(0) }
           it { is_expected.to have_exec_resource_count(0) }
           it { is_expected.to contain_file('/var/lib/puppet/puppet-selinux') }
+          it { is_expected.to contain_file('/var/lib/puppet/puppet-selinux/bin') }
+          it { is_expected.to contain_file('/var/lib/puppet/puppet-selinux/bin/selinux_build_module_simple.sh') }
+          it { is_expected.to contain_file('/var/lib/puppet/puppet-selinux/modules') }
           it { is_expected.not_to contain_file_line('set-selinux-config-to-enforcing') }
           it { is_expected.not_to contain_file_line('set-selinux-config-to-permissive') }
           it { is_expected.not_to contain_file_line('set-selinux-config-to-disabled') }
