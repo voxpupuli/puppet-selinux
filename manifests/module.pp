@@ -30,8 +30,7 @@
 # @param source_fc the source file (either a puppet URI or local file) of the SELinux .fc file
 # @param source_if the source file (either a puppet URI or local file) of the SELinux .if file
 # @param builder either 'simple' or 'refpolicy'. The simple builder attempts to use checkmodule
-# to build the module, whereas 'refpolicy' uses the refpolicy framework, but requires 'make'
-# @param syncversion selmodule syncversion param
+#   to build the module, whereas 'refpolicy' uses the refpolicy framework, but requires 'make'
 define selinux::module(
   Optional[String] $source_te = undef,
   Optional[String] $source_fc = undef,

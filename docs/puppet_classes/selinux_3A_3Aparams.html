@@ -177,24 +177,21 @@
 80
 81
 82
-83
-84
-85
-86
-87
-88
-89
-90</pre>
+83</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/params.pp', line 8</span>
 
 class selinux::params {
-  $makefile       = &#39;/usr/share/selinux/devel/Makefile&#39;
-  $sx_mod_dir     = &#39;/usr/share/selinux&#39;
+  $refpolicy_makefile = &#39;/usr/share/selinux/devel/Makefile&#39;
   $mode           = undef
   $type           = undef
   $manage_package = true
+
+  $refpolicy_package_name = &#39;selinux-policy-devel&#39;
+
+  validate_absolute_path($::selinux_agent_vardir)
+  $module_build_root = &quot;${::selinux_agent_vardir}/puppet-selinux&quot;
 
   if $::operatingsystemmajrelease {
     $os_maj_release = $::operatingsystemmajrelease
@@ -216,18 +213,7 @@ class selinux::params {
               $package_name = &#39;policycoreutils-devel&#39;
             }
             &#39;24&#39;, &#39;25&#39; : {
-              $package_name = &#39;selinux-policy-devel&#39;
-            }
-            default: {
-              fail(&quot;${::operatingsystem}-${::os_maj_release} is not supported&quot;)
-            }
-          }
-        }
-        &#39;Amazon&#39;: {
-          $sx_fs_mount = &#39;/selinux&#39;
-          case $os_maj_release {
-            &#39;4&#39;: {
-              $package_name = &#39;policycoreutils-python&#39;
+              $package_name = &#39;policycoreutils-python-utils&#39;
             }
             default: {
               fail(&quot;${::operatingsystem}-${::os_maj_release} is not supported&quot;)
@@ -238,7 +224,7 @@ class selinux::params {
           case $os_maj_release {
             &#39;7&#39;: {
               $sx_fs_mount = &#39;/sys/fs/selinux&#39;
-              $package_name = &#39;selinux-policy-devel&#39;
+              $package_name = &#39;policycoreutils-python&#39;
             }
             &#39;6&#39;: {
               $sx_fs_mount = &#39;/selinux&#39;
@@ -279,7 +265,7 @@ class selinux::params {
 </div>
 
       <div id="footer">
-  Generated on Tue Jan 31 20:51:44 2017 by
+  Generated on Fri Feb 17 09:39:19 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.8 (ruby-2.3.3).
 </div>

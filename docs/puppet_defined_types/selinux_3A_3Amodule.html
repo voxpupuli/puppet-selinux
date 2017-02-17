@@ -88,12 +88,27 @@ allowing the system to compile and manage SELinux modules.</p>
     <p class="tag_title">Examples:</p>
     
       
-        <p class="example_title"><div class='inline'><p>compile and load the apache module</p>
+        <p class="example_title"><div class='inline'><p>compile and load the apache module - does not require make or the policy</p>
 </div></p>
       
-      <pre class="example code"><code>selinux::module{ &#39;apache&#39;:
-  ensure =&gt; &#39;present&#39;,
-  source =&gt; &#39;puppet:///modules/selinux/apache.te&#39;,
+      <pre class="example code"><code>devel package
+selinux::module{ &#39;apache&#39;:
+  ensure    =&gt; &#39;present&#39;,
+  source_te =&gt; &#39;puppet:///modules/selinux/apache.te&#39;,
+  builder   =&gt; &#39;simple&#39;
+}</code></pre>
+    
+      
+        <p class="example_title"><div class='inline'><p>compile a module the refpolicy way. It will install the policy devel and</p>
+</div></p>
+      
+      <pre class="example code"><code>dependent packages like make.
+selinux::module{ &#39;mymodule&#39;:
+  ensure    =&gt; &#39;present&#39;,
+  source_te =&gt; &#39;puppet:///modules/profile/selinux/mymodule.te&#39;,
+  source_fc =&gt; &#39;puppet:///modules/profile/selinux/mymodule.fc&#39;,
+  source_if =&gt; &#39;puppet:///modules/profile/selinux/mymodule.if&#39;,
+  builder   =&gt; &#39;simple&#39;
 }</code></pre>
     
   </div>
@@ -105,7 +120,7 @@ allowing the system to compile and manage SELinux modules.</p>
         <span class='name'>ensure</span>
       
       
-        <span class='type'>(<tt>Any</tt>)</span>
+        <span class='type'>(<tt>Enum['absent', 'present']</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>&#39;present&#39;</tt>)</em>
@@ -119,28 +134,10 @@ allowing the system to compile and manage SELinux modules.</p>
   
     <li>
       
-        <span class='name'>sx_mod_dir</span>
+        <span class='name'>source_te</span>
       
       
-        <span class='type'>(<tt>Any</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>&#39;/usr/share/selinux&#39;</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'><p>path where source is stored and the module built.
-Valid values: absolute path</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>source</span>
-      
-      
-        <span class='type'>(<tt>Any</tt>)</span>
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>undef</tt>)</em>
@@ -154,69 +151,52 @@ Valid values: absolute path</p>
   
     <li>
       
-        <span class='name'>content</span>
+        <span class='name'>source_fc</span>
       
       
-        <span class='type'>(<tt>Any</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>undef</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'><p>content of the source .te file</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>makefile</span>
-      
-      
-        <span class='type'>(<tt>Any</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>&#39;/usr/share/selinux/devel/Makefile&#39;</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'><p>absolute path to the selinux-devel Makefile</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>prefix</span>
-      
-      
-        <span class='type'>(<tt>DEPRECATED</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>&#39;&#39;</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'><p>the prefix to add to the loaded module. Defaults to &#39;&#39;.
-Does not work with CentOS &gt;= 7.2 and Fedora &gt;= 24 SELinux tools.</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>syncversion</span>
-      
-      
-        <span class='type'>(<tt>Any</tt>)</span>
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>undef</tt>)</em>
       
       
         &mdash;
-        <div class='inline'><p>selmodule syncversion param</p>
+        <div class='inline'><p>the source file (either a puppet URI or local file) of the SELinux .fc file</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>source_if</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>the source file (either a puppet URI or local file) of the SELinux .if file</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>builder</span>
+      
+      
+        <span class='type'>(<tt>Optional[Enum['simple', 'refpolicy']]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>either &#39;simple&#39; or &#39;refpolicy&#39;. The simple builder attempts to use checkmodule
+to build the module, whereas &#39;refpolicy&#39; uses the refpolicy framework, but requires &#39;make&#39;</p>
 </div>
       
     </li>
@@ -231,15 +211,6 @@ Does not work with CentOS &gt;= 7.2 and Fedora &gt;= 24 SELinux tools.</p>
         <pre class="lines">
 
 
-25
-26
-27
-28
-29
-30
-31
-32
-33
 34
 35
 36
@@ -289,68 +260,155 @@ Does not work with CentOS &gt;= 7.2 and Fedora &gt;= 24 SELinux tools.</p>
 80
 81
 82
-83</pre>
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/module.pp', line 25</span>
+        <pre class="code"><span class="info file"># File 'manifests/module.pp', line 34</span>
 
 define selinux::module(
-  $source       = undef,
-  $content      = undef,
-  $ensure       = &#39;present&#39;,
-  $makefile     = &#39;/usr/share/selinux/devel/Makefile&#39;,
-  $prefix       = &#39;&#39;,
-  $sx_mod_dir   = &#39;/usr/share/selinux&#39;,
-  $syncversion  = undef,
+  Optional[String] $source_te = undef,
+  Optional[String] $source_fc = undef,
+  Optional[String] $source_if = undef,
+  Enum[&#39;absent&#39;, &#39;present&#39;] $ensure = &#39;present&#39;,
+  Optional[Enum[&#39;simple&#39;, &#39;refpolicy&#39;]] $builder = undef,
 ) {
-
   include ::selinux
+
+  if $builder == &#39;refpolicy&#39; {
+    require ::selinux::refpolicy_package
+  }
+
+  if ($builder == &#39;simple&#39; and $source_if != undef) {
+    fail(&quot;The simple builder does not support the &#39;source_if&#39; parameter&quot;)
+  }
+
+  # let&#39;s just make doubly sure that this is an absolute path:
+  validate_absolute_path($::selinux::config::module_build_dir)
+  validate_absolute_path($::selinux::refpolicy_makefile)
+
+  $module_dir = $::selinux::config::module_build_dir
+  $module_file = &quot;${module_dir}/${title}&quot;
+
+  $build_command = pick($builder, $::selinux::default_builder, &#39;none&#39;) ? {
+      &#39;simple&#39;    =&gt; shellquote(&quot;${::selinux::module_build_root}/bin/selinux_build_module_simple.sh&quot;, $title, $module_dir),
+      &#39;refpolicy&#39; =&gt; shellquote(&#39;make&#39;, &#39;-f&#39;, $::selinux::refpolicy_makefile, &quot;${title}.pp&quot;),
+      &#39;none&#39;      =&gt; fail(&#39;No builder or default builder specified&#39;)
+  }
 
   Anchor[&#39;selinux::module pre&#39;] -&gt;
   Selinux::Module[$title] -&gt;
   Anchor[&#39;selinux::module post&#39;]
+  $has_source = (pick($source_te, $source_fc, $source_if, false) != false)
 
-  validate_re($ensure, [ &#39;^present$&#39;, &#39;^absent$&#39; ], &#39;$ensure must be &quot;present&quot; or &quot;absent&quot;&#39;)
-  if $ensure == &#39;present&#39; and $source == undef and $content == undef {
-    fail(&quot;You must provide &#39;source&#39; or &#39;content&#39; field for selinux module&quot;)
+  if $has_source and $ensure == &#39;present&#39; {
+    file {&quot;${module_file}.te&quot;:
+      ensure =&gt; &#39;file&#39;,
+      source =&gt; $source_te,
+      notify =&gt; Exec[&quot;clean-module-${title}&quot;],
+    }
+
+    $content_fc = $source_fc ? { undef =&gt; &#39;&#39;, default =&gt; undef }
+    file {&quot;${module_file}.fc&quot;:
+      ensure  =&gt; &#39;file&#39;,
+      source  =&gt; $source_fc,
+      content =&gt; $content_fc,
+      notify  =&gt; Exec[&quot;clean-module-${title}&quot;],
+    }
+
+    $content_if = $source_if ? { undef =&gt; &#39;&#39;, default =&gt; undef }
+    file {&quot;${module_file}.if&quot;:
+      ensure  =&gt; &#39;file&#39;,
+      source  =&gt; $source_if,
+      content =&gt; $content_if,
+      notify  =&gt; Exec[&quot;clean-module-${title}&quot;],
+    }
+    # ensure it doesn&#39;t get purged if it exists
+    file {&quot;${module_file}.pp&quot;: selinux_ignore_defaults =&gt; true }
+
+    exec { &quot;clean-module-${title}&quot;:
+      path        =&gt; &#39;/bin:/usr/bin&#39;,
+      cwd         =&gt; $module_dir,
+      command     =&gt; &quot;rm -f &#39;${module_file}.pp&#39; &#39;${module_file}.loaded&#39;&quot;,
+      refreshonly =&gt; true,
+      notify      =&gt; Exec[&quot;build-module-${title}&quot;],
+    }
+
+    exec { &quot;build-module-${title}&quot;:
+      path    =&gt; &#39;/bin:/usr/bin&#39;,
+      cwd     =&gt; $module_dir,
+      command =&gt; &quot;${build_command} || (rm -f ${module_file}.pp ${module_file}.loaded &amp;&amp; exit 1)&quot;,
+      creates =&gt; &quot;${module_file}.pp&quot;,
+      notify  =&gt; Exec[&quot;install-module-${title}&quot;],
+    }
+    # we need to install the module manually because selmodule is kind of dumb. It ends up
+    # working fine, though.
+    exec { &quot;install-module-${title}&quot;:
+      path    =&gt; &#39;/sbin:/usr/sbin:/bin:/usr/bin&#39;,
+      cwd     =&gt; $module_dir,
+      command =&gt; &quot;semodule -i ${module_file}.pp &amp;&amp; touch ${module_file}.loaded&quot;,
+      creates =&gt; &quot;${module_file}.loaded&quot;,
+      before  =&gt; Selmodule[$title],
+    }
+
+    # ensure it doesn&#39;t get purged if it exists
+    file { &quot;${module_file}.loaded&quot;: }
   }
-  if $source != undef {
-    validate_string($source)
-  }
-  if $content != undef {
-    validate_string($content)
-  }
-  validate_string($prefix)
-  validate_absolute_path($sx_mod_dir)
-  validate_absolute_path($makefile)
-  if $syncversion != undef {
-    validate_bool($syncversion)
+  $module_path = $has_source ? {
+    true  =&gt; &quot;${module_file}.pp&quot;,
+    false =&gt; undef
   }
 
-  ## Begin Configuration
-  file { &quot;${sx_mod_dir}/${prefix}${name}.te&quot;:
-    ensure  =&gt; $ensure,
-    owner   =&gt; &#39;root&#39;,
-    group   =&gt; &#39;root&#39;,
-    mode    =&gt; &#39;0644&#39;,
-    source  =&gt; $source,
-    content =&gt; $content,
-  }
-  ~&gt;
-  exec { &quot;${sx_mod_dir}/${prefix}${name}.pp&quot;:
-  # Only allow refresh in the event that the initial .te file is updated.
-    command     =&gt; shellquote(&#39;make&#39;, &#39;-f&#39;, $makefile, &quot;${prefix}${name}.pp&quot;),
-    path        =&gt; &#39;/bin:/sbin:/usr/bin:/usr/sbin&#39;,
-    refreshonly =&gt; true,
-    cwd         =&gt; $sx_mod_dir,
-  }
-  -&gt;
-  selmodule { $name:
-    # Load the module if it has changed or was not loaded
-    # Warning: change the .te version!
+  selmodule { $title:
     ensure        =&gt; $ensure,
-    selmodulepath =&gt; &quot;${sx_mod_dir}/${prefix}${name}.pp&quot;,
-    syncversion   =&gt; $syncversion,
+    selmodulepath =&gt; $module_path,
   }
 }</pre>
       </td>
@@ -360,7 +418,7 @@ define selinux::module(
 </div>
 
       <div id="footer">
-  Generated on Tue Jan 31 20:51:44 2017 by
+  Generated on Fri Feb 17 09:39:19 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.8 (ruby-2.3.3).
 </div>
