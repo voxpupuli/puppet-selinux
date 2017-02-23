@@ -22,8 +22,9 @@
 # @param package_name sets the name for the selinux tools package
 #   Default value: OS dependent (see params.pp)
 # @param refpolicy_package_name sets the name for the refpolicy development package, required for the
-# refpolicy module builder
+#   refpolicy module builder
 #   Default value: OS dependent (see params.pp)
+# @param module_build_root directory where modules are built. Defaults to `$vardir/puppet-selinux`
 # @param default_builder which builder to use by default with selinux::module
 #   Default value: simple
 # @param boolean Hash of selinux::boolean resource parameters

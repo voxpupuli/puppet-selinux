@@ -102,6 +102,18 @@ running system.</p>
 (<a href="https://groups.io/g/voxpupuli/topics">groups.io Webinterface</a>)</li>
 </ul>
 
+<h2>Upgrading from puppet-selinux 0.8.x</h2>
+
+<ul>
+<li>Previously, module building always used the refpolicy framework. The default
+module builder is now &#39;simple&#39;, which uses only checkmodule. Not all features are
+supported with this builder.</li>
+</ul>
+
+<p>To build modules using the refpolicy framework like previous versions did,
+  specify the  &#39;refpolicy&#39; builder either explicitly per module or globally
+  via the main class</p>
+
 <h2>Known problems / limitations</h2>
 
 <ul>
@@ -116,8 +128,6 @@ The user will receive a warning when this happens,</li>
 does) the order is important. If you add /my/folder before /my/folder/subfolder
 only /my/folder will match (limitation of SELinux). There is no such limitation
 to file-contexts defined in SELinux modules. (GH-121)</li>
-<li><code>selinux::module</code> only allows to add a type enforcment file (<code>*.te</code>) but no
-interfaces (<code>*.if</code>) or file-contexts (<code>*.fc</code>).</li>
 <li>While SELinux is disabled the defined types <code>selinux::boolean</code>, 
 <code>selinux::fcontext</code>, <code>selinux::port</code> will produce puppet agent runtime errors 
 because the used tools fail.</li>
@@ -160,11 +170,14 @@ but will not modify existing SELinux settings on the system.</p>
 are <code>target</code>, <code>minimum</code>, and <code>mls</code>). Note that disabling SELinux requires a reboot
 to fully take effect. It will run in <code>permissive</code> mode until then.</p>
 
-<h3>Deploy a custom module</h3>
+<h3>Deploy a custom module using the refpolicy framework</h3>
 
 <pre class="code puppet"><code class="puppet">selinux::module { &#39;resnet-puppet&#39;:
-  ensure =&gt; &#39;present&#39;,
-  source =&gt; &#39;puppet:///modules/site_puppet/site-puppet.te&#39;,
+  ensure    =&gt; &#39;present&#39;,
+  source_te =&gt; &#39;puppet:///modules/site_puppet/site-puppet.te&#39;,
+  source_fc =&gt; &#39;puppet:///modules/site_puppet/site-puppet.fc&#39;,
+  source_if =&gt; &#39;puppet:///modules/site_puppet/site-puppet.if&#39;,
+  builder   =&gt; &#39;refpolicy&#39;
 }
 </code></pre>
 
@@ -198,10 +211,10 @@ adding or changing something</li>
 <li>run acceptance tests:</li>
 </ul>
 
-<pre class="code ruby"><code class="ruby">BEAKER_debug=yes BEAKER_set=&quot;centos-6-x64&quot; PUPPET_INSTALL_TYPE=&quot;agent&quot; be rake beaker
-BEAKER_debug=yes BEAKER_set=&quot;centos-7-x64&quot; PUPPET_INSTALL_TYPE=&quot;agent&quot; be rake beaker
-BEAKER_debug=yes BEAKER_set=&quot;fedora-24-x64&quot; PUPPET_INSTALL_TYPE=&quot;agent&quot; be rake beaker
-BEAKER_debug=yes BEAKER_set=&quot;fedora-25-x64&quot; PUPPET_INSTALL_TYPE=&quot;agent&quot; be rake beaker
+<pre class="code ruby"><code class="ruby">BEAKER_debug=yes BEAKER_set=&quot;centos-6-x64&quot; PUPPET_INSTALL_TYPE=&quot;agent&quot; bundle exec rake beaker &amp;&amp;
+BEAKER_debug=yes BEAKER_set=&quot;centos-7-x64&quot; PUPPET_INSTALL_TYPE=&quot;agent&quot; bundle exec rake beaker &amp;&amp;
+BEAKER_debug=yes BEAKER_set=&quot;fedora-24-x64&quot; PUPPET_INSTALL_TYPE=&quot;agent&quot; bundle exec rake beaker &amp;&amp;
+BEAKER_debug=yes BEAKER_set=&quot;fedora-25-x64&quot; PUPPET_INSTALL_TYPE=&quot;agent&quot; bundle exec rake beaker
 </code></pre>
 
 <h3>Facter facts</h3>
@@ -252,7 +265,7 @@ the config_mode to be set, but only the boolean <code>enabled</code> is set.</p>
 </div></div>
 
       <div id="footer">
-  Generated on Tue Jan 31 20:51:44 2017 by
+  Generated on Fri Feb 17 09:39:19 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.8 (ruby-2.3.3).
 </div>

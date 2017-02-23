@@ -4,7 +4,7 @@
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>
-  Puppet Class: selinux::restorecond::config
+  Puppet Class: selinux::refpolicy_package
   
     &mdash; Documentation by YARD 0.9.8
   
@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
 
 <script type="text/javascript" charset="utf-8">
-  pathId = "puppet_classes::selinux::restorecond::config";
+  pathId = "puppet_classes::selinux::refpolicy_package";
   relpath = '../';
 </script>
 
@@ -39,7 +39,7 @@
     <a href="../_index.html">Index (s)</a> &raquo;
     <span class='title'><span class='object_link'>Puppet Classes</span></span>
      &raquo; 
-    <span class="title">selinux::restorecond::config</span>
+    <span class="title">selinux::refpolicy_package</span>
   
 </div>
 
@@ -59,28 +59,73 @@
         <div class="clear"></div>
       </div>
 
-      <div id="content"><h1>Puppet Class: selinux::restorecond::config</h1>
+      <div id="content"><h1>Puppet Class: selinux::refpolicy_package</h1>
 <div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd>::selinux</dd>
+  </dl>
   
   
   <dl>
     <dt>Defined in:</dt>
     <dd>
-      manifests/restorecond/config.pp
+      manifests/refpolicy_package.pp
     </dd>
   </dl>
 </div>
 <h2>Overview</h2>
 <div class="docstring">
   <div class="discussion">
-    <p>selinux::restorecond::config</p>
+    <p>selinux::package</p>
 
 <h1>THIS IS A PRIVATE CLASS</h1>
+
+<p>This module manages additional packages required to support some of the functions.</p>
 
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>manage_package</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::selinux::manage_package</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>See main class</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>package_name</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::selinux::refpolicy_package_name</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>See main class</p>
+</div>
+      
+    </li>
+  
+</ul>
+
 
 </div><div class="method_details_list">
   <table class="source_code">
@@ -89,11 +134,6 @@
         <pre class="lines">
 
 
-6
-7
-8
-9
-10
 11
 12
 13
@@ -107,22 +147,17 @@
 21</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/restorecond/config.pp', line 6</span>
+        <pre class="code"><span class="info file"># File 'manifests/refpolicy_package.pp', line 11</span>
 
-class selinux::restorecond::config {
-
-  concat { $selinux::restorecond::config_file:
-    ensure =&gt; present,
-    mode   =&gt; $selinux::restorecond::config_file_mode,
-    owner  =&gt; $selinux::restorecond::config_file_owner,
-    group  =&gt; $selinux::restorecond::config_file_group,
-    notify =&gt; Service[&#39;restorecond&#39;],
+class selinux::refpolicy_package (
+  $manage_package = $::selinux::manage_package,
+  $package_name   = $::selinux::refpolicy_package_name,
+) inherits ::selinux {
+  if $caller_module_name != $module_name {
+    fail(&quot;Use of private class ${name} by ${caller_module_name}&quot;)
   }
-
-  concat::fragment {&#39;restorecond_config_default&#39;:
-    target =&gt; $selinux::restorecond::config_file,
-    source =&gt; &#39;puppet:///modules/selinux/restorecond.conf&#39;,
-    order  =&gt; &#39;01&#39;,
+  if $manage_package {
+    ensure_packages ($package_name)
   }
 }</pre>
       </td>
