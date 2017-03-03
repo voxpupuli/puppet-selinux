@@ -13,7 +13,6 @@ class selinux::params {
 
   $refpolicy_package_name = 'selinux-policy-devel'
 
-  validate_absolute_path($::selinux_agent_vardir)
   $module_build_root = "${::selinux_agent_vardir}/puppet-selinux"
 
   if $::operatingsystemmajrelease {
