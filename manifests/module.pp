@@ -48,10 +48,6 @@ define selinux::module(
     fail("The simple builder does not support the 'source_if' parameter")
   }
 
-  # let's just make doubly sure that this is an absolute path:
-  validate_absolute_path($::selinux::config::module_build_dir)
-  validate_absolute_path($::selinux::refpolicy_makefile)
-
   $module_dir = $::selinux::config::module_build_dir
   $module_file = "${module_dir}/${title}"
 
