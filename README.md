@@ -32,9 +32,9 @@ running system.
 
 ## Get in touch
 
-* IRC: [#voxpupuli on irc.freenode.net](irc://irc.freenode.net/voxpupuli) 
+* IRC: [#voxpupuli on irc.freenode.net](irc://irc.freenode.net/voxpupuli)
   ([Freenode WebChat](http://webchat.freenode.net/?channels=%23voxpupuli))
-* Mailinglist: <voxpupuli@groups.io> 
+* Mailinglist: <voxpupuli@groups.io>
   ([groups.io Webinterface](https://groups.io/g/voxpupuli/topics))
 
 ## Upgrading from puppet-selinux 0.8.x
@@ -60,8 +60,8 @@ running system.
   does) the order is important. If you add /my/folder before /my/folder/subfolder
   only /my/folder will match (limitation of SELinux). There is no such limitation
   to file-contexts defined in SELinux modules. (GH-121)
-* While SELinux is disabled the defined types `selinux::boolean`, 
-  `selinux::fcontext`, `selinux::port` will produce puppet agent runtime errors 
+* While SELinux is disabled the defined types `selinux::boolean`,
+  `selinux::fcontext`, `selinux::port` will produce puppet agent runtime errors
   because the used tools fail.
 * If you try to remove a built-in permissive type, the operation will appear to succeed
   but will actually have no effect, making your puppet runs non-idempotent.
@@ -100,7 +100,7 @@ class { selinux:
 
 This will include the module and manage the SELinux mode (possible values are
 `enforcing`, `permissive`, and `disabled`) and enforcement type (possible values
-are `target`, `minimum`, and `mls`). Note that disabling SELinux requires a reboot
+are `targeted`, `minimum`, and `mls`). Note that disabling SELinux requires a reboot
 to fully take effect. It will run in `permissive` mode until then.
 
 
@@ -149,7 +149,7 @@ BEAKER_debug=yes BEAKER_set="fedora-25-x64" PUPPET_INSTALL_TYPE="agent" bundle e
 
 ### Facter facts
 
-The fact values might be unexpected while in disabled mode. One could expect 
+The fact values might be unexpected while in disabled mode. One could expect
 the config\_mode to be set, but only the boolean `enabled` is set.
 
 The most important facts:
