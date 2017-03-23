@@ -20,6 +20,13 @@ describe 'selinux' do
           it { is_expected.not_to contain_file_line('set-selinux-config-type-to-minimum') }
           it { is_expected.not_to contain_file_line('set-selinux-config-type-to-mls') }
         end
+
+        context 'strict' do
+          let(:params) { { type: 'strict' } }
+
+          it { is_expected.to contain_file('/usr/share/selinux').with(ensure: 'directory') }
+          it { is_expected.to contain_file_line('set-selinux-config-type-to-strict').with(line: 'SELINUXTYPE=strict') }
+        end
         context 'targeted' do
           let(:params) { { type: 'targeted' } }
 

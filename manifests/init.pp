@@ -60,7 +60,7 @@ class selinux (
 
   validate_absolute_path($sx_mod_dir)
   validate_re($mode_real, ['^enforcing$', '^permissive$', '^disabled$', '^undef$'], "Valid modes are enforcing, permissive, and disabled.  Received: ${mode}")
-  validate_re($type_real, ['^targeted$', '^minimum$', '^mls$', '^undef$'], "Valid types are targeted, minimum, and mls.  Received: ${type}")
+  validate_re($type_real, ['^strict$', '^targeted$', '^minimum$', '^mls$', '^undef$'], "Valid types are strict, targeted, minimum, and mls.  Received: ${type}")
   validate_string($makefile)
   validate_bool($manage_package)
   validate_string($package_name)
