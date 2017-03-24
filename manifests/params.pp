@@ -74,9 +74,4 @@ class selinux::params {
       fail("${::osfamily} is not supported")
     }
   }
-
-  $restorecond_config_file       = '/etc/selinux/restorecond.conf'
-  $restorecond_config_file_mode  = '0644'
-  $restorecond_config_file_owner = 'root'
-  $restorecond_config_file_group = 'root'
 }

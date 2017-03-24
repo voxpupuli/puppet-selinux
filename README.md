@@ -52,6 +52,7 @@ running system.
 
   You will need to update your manifests to use the new parameter names.
 
+* The selinux::restorecond manifest to manage the restorecond service no longer exists
 
 ## Known problems / limitations
 
