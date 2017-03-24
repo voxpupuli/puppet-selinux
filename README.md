@@ -47,6 +47,12 @@ running system.
   specify the  'refpolicy' builder either explicitly per module or globally
   via the main class
 
+* The interfaces to the various helper manifests has been changed to be more in line
+  with Puppet file resource naming conventions.
+
+  You will need to update your manifests to use the new parameter names.
+
+
 ## Known problems / limitations
 
 * If SELinux is disabled and you want to switch to permissive or enforcing you
