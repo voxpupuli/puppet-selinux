@@ -6,7 +6,7 @@
 # @example Add a file-context for mysql log files at non standard location
 #   selinux::fcontext{'set-mysql-log-context':
 #     seltype => "mysqld_log_t",
-#     pathname => "/u01/log/mysql(/.*)?",
+#     pathspec => "/u01/log/mysql(/.*)?",
 #   }
 #
 # @example Add a file-context only for directory types 
