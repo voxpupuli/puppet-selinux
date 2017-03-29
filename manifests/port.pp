@@ -28,13 +28,13 @@ define selinux::port (
   include ::selinux
 
   if $ensure == 'present' {
-    Anchor['selinux::module post'] ->
-    Selinux::Port[$title] ->
-    Anchor['selinux::end']
+    Anchor['selinux::module post']
+    -> Selinux::Port[$title]
+    -> Anchor['selinux::end']
   } elsif $ensure == 'absent' {
-    Class['selinux::config'] ->
-    Selinux::Port[$title] ->
-    Anchor['selinux::module pre']
+    Class['selinux::config']
+    -> Selinux::Port[$title]
+    -> Anchor['selinux::module pre']
   } else {
     fail('Unexpected $ensure value')
   }

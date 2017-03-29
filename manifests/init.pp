@@ -77,10 +77,10 @@ class selinux (
   }
 
   # Ordering
-  anchor { 'selinux::start': } ->
-  Class['selinux::package'] ->
-  Class['selinux::config'] ->
-  anchor { 'selinux::module pre': } ->
-  anchor { 'selinux::module post': } ->
-  anchor { 'selinux::end': }
+  anchor { 'selinux::start': }
+  -> Class['selinux::package']
+  -> Class['selinux::config']
+  -> anchor { 'selinux::module pre': }
+  -> anchor { 'selinux::module post': }
+  -> anchor { 'selinux::end': }
 }

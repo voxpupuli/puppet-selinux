@@ -22,9 +22,9 @@ define selinux::boolean (
 
   include ::selinux
 
-  Anchor['selinux::module post'] ->
-  Selinux::Boolean[$title] ->
-  Anchor['selinux::end']
+  Anchor['selinux::module post']
+  -> Selinux::Boolean[$title]
+  -> Anchor['selinux::end']
 
   $ensure_real = $ensure ? {
     true    => 'on',

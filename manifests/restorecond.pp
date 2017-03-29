@@ -15,7 +15,7 @@ class selinux::restorecond (
 ) inherits selinux::params {
 
   include ::selinux
-  Class['selinux'] ->
-  class{'::selinux::restorecond::config':} ~>
-  class{'::selinux::restorecond::service':}
+  Class['selinux']
+  -> class{'::selinux::restorecond::config':}
+  ~> class{'::selinux::restorecond::service':}
 }
