@@ -40,13 +40,13 @@ define selinux::fcontext(
 
   include ::selinux
   if $ensure == 'present' {
-  Anchor['selinux::module post'] ->
-  Selinux::Fcontext[$title] ->
-  Anchor['selinux::end']
+  Anchor['selinux::module post']
+  -> Selinux::Fcontext[$title]
+  -> Anchor['selinux::end']
   } else {
-    Anchor['selinux::start'] ->
-    Selinux::Fcontext[$title] ->
-    Anchor['selinux::module::pre']
+    Anchor['selinux::start']
+    -> Selinux::Fcontext[$title]
+    -> Anchor['selinux::module::pre']
   }
 
   if $filetype !~ /^(?:a|f|d|c|b|s|l|p)$/ {

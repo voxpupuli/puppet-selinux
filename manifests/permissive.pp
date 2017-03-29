@@ -17,13 +17,13 @@ define selinux::permissive (
 
   include ::selinux
   if $ensure == 'present' {
-    Anchor['selinux::module post'] ->
-    Selinux::Permissive[$title] ->
-    Anchor['selinux::end']
+    Anchor['selinux::module post']
+    -> Selinux::Permissive[$title]
+    -> Anchor['selinux::end']
   } else {
-    Anchor['selinux::start'] ->
-    Selinux::Permissive[$title] ->
-    Anchor['selinux::module pre']
+    Anchor['selinux::start']
+    -> Selinux::Permissive[$title]
+    -> Anchor['selinux::module pre']
   }
 
   selinux_permissive {$seltype:

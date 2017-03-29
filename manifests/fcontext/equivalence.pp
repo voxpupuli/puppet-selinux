@@ -21,13 +21,13 @@ define selinux::fcontext::equivalence(
   include ::selinux
 
   if $ensure == 'present' {
-    Anchor['selinux::module post'] ->
-    Selinux::Fcontext::Equivalence[$title] ->
-    Anchor['selinux::end']
+    Anchor['selinux::module post']
+    -> Selinux::Fcontext::Equivalence[$title]
+    -> Anchor['selinux::end']
   } else {
-    Anchor['selinux::start'] ->
-    Selinux::Fcontext::Equivalence[$title] ->
-    Anchor['selinux::module pre']
+    Anchor['selinux::start']
+    -> Selinux::Fcontext::Equivalence[$title]
+    -> Anchor['selinux::module pre']
   }
 
   selinux_fcontext_equivalence { $path:

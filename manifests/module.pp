@@ -57,9 +57,9 @@ define selinux::module(
       'none'      => fail('No builder or default builder specified')
   }
 
-  Anchor['selinux::module pre'] ->
-  Selinux::Module[$title] ->
-  Anchor['selinux::module post']
+  Anchor['selinux::module pre']
+  -> Selinux::Module[$title]
+  -> Anchor['selinux::module post']
   $has_source = (pick($source_te, $source_fc, $source_if, false) != false)
 
   if $has_source and $ensure == 'present' {
