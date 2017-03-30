@@ -18,6 +18,17 @@ describe 'selinux::fcontext' do
         it { is_expected.to contain_selinux__fcontext('myfile').that_requires('Anchor[selinux::module post]') }
         it { is_expected.to contain_selinux__fcontext('myfile').that_comes_before('Anchor[selinux::end]') }
       end
+      context 'removal ordering' do
+        let(:params) do
+          {
+            ensure: 'absent',
+            pathspec: '/tmp/file1',
+            seltype: 'user_home_dir_t'
+          }
+        end
+        it { is_expected.to contain_selinux__fcontext('myfile').that_requires('Anchor[selinux::start]') }
+        it { is_expected.to contain_selinux__fcontext('myfile').that_comes_before('Anchor[selinux::module pre]') }
+      end
 
       context 'invalid filetype' do
         let(:params) do

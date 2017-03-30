@@ -46,7 +46,7 @@ define selinux::fcontext(
   } else {
     Anchor['selinux::start']
     -> Selinux::Fcontext[$title]
-    -> Anchor['selinux::module::pre']
+    -> Anchor['selinux::module pre']
   }
 
   if $filetype !~ /^(?:a|f|d|c|b|s|l|p)$/ {
