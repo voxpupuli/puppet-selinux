@@ -27,6 +27,7 @@ describe 'selinux::fcontext' do
           }
         end
         it { is_expected.to contain_selinux__fcontext('myfile').that_requires('Anchor[selinux::start]') }
+        it { is_expected.to contain_selinux__fcontext('myfile').with(ensure: 'absent') }
         it { is_expected.to contain_selinux__fcontext('myfile').that_comes_before('Anchor[selinux::module pre]') }
       end
 
