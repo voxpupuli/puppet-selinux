@@ -89,7 +89,7 @@ equivalences, see selinux::fcontext::equivalence</p>
       
       <pre class="example code"><code>selinux::fcontext{&#39;set-mysql-log-context&#39;:
   seltype =&gt; &quot;mysqld_log_t&quot;,
-  pathname =&gt; &quot;/u01/log/mysql(/.*)?&quot;,
+  pathspec =&gt; &quot;/u01/log/mysql(/.*)?&quot;,
 }</code></pre>
     
       
@@ -246,7 +246,8 @@ like &quot;/var/log/mysql(/.*)?&quot;. Defaults to title</p>
 60
 61
 62
-63</pre>
+63
+64</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/fcontext.pp', line 33</span>
@@ -261,13 +262,13 @@ define selinux::fcontext(
 
   include ::selinux
   if $ensure == &#39;present&#39; {
-  Anchor[&#39;selinux::module post&#39;] -&gt;
-  Selinux::Fcontext[$title] -&gt;
-  Anchor[&#39;selinux::end&#39;]
+  Anchor[&#39;selinux::module post&#39;]
+  -&gt; Selinux::Fcontext[$title]
+  -&gt; Anchor[&#39;selinux::end&#39;]
   } else {
-    Anchor[&#39;selinux::start&#39;] -&gt;
-    Selinux::Fcontext[$title] -&gt;
-    Anchor[&#39;selinux::module::pre&#39;]
+    Anchor[&#39;selinux::start&#39;]
+    -&gt; Selinux::Fcontext[$title]
+    -&gt; Anchor[&#39;selinux::module pre&#39;]
   }
 
   if $filetype !~ /^(?:a|f|d|c|b|s|l|p)$/ {
@@ -276,6 +277,7 @@ define selinux::fcontext(
 
   # make sure the title is correct or the provider will misbehave
   selinux_fcontext {&quot;${pathspec}_${filetype}&quot;:
+    ensure    =&gt; $ensure,
     pathspec  =&gt; $pathspec,
     seltype   =&gt; $seltype,
     file_type =&gt; $filetype,
@@ -289,7 +291,7 @@ define selinux::fcontext(
 </div>
 
       <div id="footer">
-  Generated on Fri Feb 17 09:39:19 2017 by
+  Generated on Sat Apr  1 21:16:40 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.8 (ruby-2.3.3).
 </div>

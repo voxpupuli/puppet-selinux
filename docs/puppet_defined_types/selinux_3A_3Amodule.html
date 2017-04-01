@@ -304,11 +304,7 @@ to build the module, whereas &#39;refpolicy&#39; uses the refpolicy framework, b
 124
 125
 126
-127
-128
-129
-130
-131</pre>
+127</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/module.pp', line 34</span>
@@ -330,10 +326,6 @@ define selinux::module(
     fail(&quot;The simple builder does not support the &#39;source_if&#39; parameter&quot;)
   }
 
-  # let&#39;s just make doubly sure that this is an absolute path:
-  validate_absolute_path($::selinux::config::module_build_dir)
-  validate_absolute_path($::selinux::refpolicy_makefile)
-
   $module_dir = $::selinux::config::module_build_dir
   $module_file = &quot;${module_dir}/${title}&quot;
 
@@ -343,9 +335,9 @@ define selinux::module(
       &#39;none&#39;      =&gt; fail(&#39;No builder or default builder specified&#39;)
   }
 
-  Anchor[&#39;selinux::module pre&#39;] -&gt;
-  Selinux::Module[$title] -&gt;
-  Anchor[&#39;selinux::module post&#39;]
+  Anchor[&#39;selinux::module pre&#39;]
+  -&gt; Selinux::Module[$title]
+  -&gt; Anchor[&#39;selinux::module post&#39;]
   $has_source = (pick($source_te, $source_fc, $source_if, false) != false)
 
   if $has_source and $ensure == &#39;present&#39; {
@@ -418,7 +410,7 @@ define selinux::module(
 </div>
 
       <div id="footer">
-  Generated on Fri Feb 17 09:39:19 2017 by
+  Generated on Sat Apr  1 21:16:40 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.8 (ruby-2.3.3).
 </div>

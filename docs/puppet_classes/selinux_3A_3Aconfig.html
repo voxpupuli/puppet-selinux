@@ -170,7 +170,7 @@
         <span class='name'>module_build_root</span>
       
       
-        <span class='type'>(<tt>Any</tt>)</span>
+        <span class='type'>(<tt>Stdlib::Absolutepath</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>$::selinux::module_build_root</tt>)</em>
@@ -297,20 +297,17 @@
 132
 133
 134
-135
-136
-137
-138</pre>
+135</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/config.pp', line 30</span>
 
 class selinux::config (
-  $mode              = $::selinux::mode,
-  $type              = $::selinux::type,
-  $manage_package    = $::selinux::manage_package,
-  $package_name      = $::selinux::package_name,
-  $module_build_root = $::selinux::module_build_root
+  $mode                                   = $::selinux::mode,
+  $type                                   = $::selinux::type,
+  $manage_package                         = $::selinux::manage_package,
+  $package_name                           = $::selinux::package_name,
+  Stdlib::Absolutepath $module_build_root = $::selinux::module_build_root
 ) {
 
   if $caller_module_name != $module_name {
@@ -373,9 +370,6 @@ class selinux::config (
     }
   }
 
-  # Module build config:
-  validate_absolute_path($module_build_root)
-
   file {$module_build_root:
     ensure =&gt; &#39;directory&#39;,
     owner  =&gt; &#39;root&#39;,
@@ -421,7 +415,7 @@ class selinux::config (
 </div>
 
       <div id="footer">
-  Generated on Fri Feb 17 09:39:19 2017 by
+  Generated on Sat Apr  1 21:16:40 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.8 (ruby-2.3.3).
 </div>
