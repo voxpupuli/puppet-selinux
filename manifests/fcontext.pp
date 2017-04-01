@@ -55,6 +55,7 @@ define selinux::fcontext(
 
   # make sure the title is correct or the provider will misbehave
   selinux_fcontext {"${pathspec}_${filetype}":
+    ensure    => $ensure,
     pathspec  => $pathspec,
     seltype   => $seltype,
     file_type => $filetype,
