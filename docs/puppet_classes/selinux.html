@@ -145,7 +145,7 @@ Allowed values: (targeted|minimum|mls|undef)</p>
         <span class='name'>refpolicy_makefile</span>
       
       
-        <span class='type'>(<tt>String</tt>)</span>
+        <span class='type'>(<tt>Stdlib::Absolutepath</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>$::selinux::params::refpolicy_makefile</tt>)</em>
@@ -219,7 +219,7 @@ Default value: OS dependent (see params.pp)</p>
         <span class='name'>module_build_root</span>
       
       
-        <span class='type'>(<tt>String</tt>)</span>
+        <span class='type'>(<tt>Stdlib::Absolutepath</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>$::selinux::params::module_build_root</tt>)</em>
@@ -402,11 +402,11 @@ Default value: simple</p>
 class selinux (
   Optional[Enum[&#39;enforcing&#39;, &#39;permissive&#39;, &#39;disabled&#39;]] $mode = $::selinux::params::mode,
   Optional[Enum[&#39;targeted&#39;, &#39;minimum&#39;, &#39;mls&#39;]] $type          = $::selinux::params::type,
-  String  $refpolicy_makefile                                 = $::selinux::params::refpolicy_makefile,
+  Stdlib::Absolutepath $refpolicy_makefile                    = $::selinux::params::refpolicy_makefile,
   Boolean $manage_package                                     = $::selinux::params::manage_package,
   String $package_name                                        = $::selinux::params::package_name,
   String $refpolicy_package_name                              = $::selinux::params::refpolicy_package_name,
-  String $module_build_root                                   = $::selinux::params::module_build_root,
+  Stdlib::Absolutepath $module_build_root                     = $::selinux::params::module_build_root,
   Enum[&#39;refpolicy&#39;, &#39;simple&#39;] $default_builder                = &#39;simple&#39;,
 
   ### START Hiera Lookups ###
@@ -443,12 +443,12 @@ class selinux (
   }
 
   # Ordering
-  anchor { &#39;selinux::start&#39;: } -&gt;
-  Class[&#39;selinux::package&#39;] -&gt;
-  Class[&#39;selinux::config&#39;] -&gt;
-  anchor { &#39;selinux::module pre&#39;: } -&gt;
-  anchor { &#39;selinux::module post&#39;: } -&gt;
-  anchor { &#39;selinux::end&#39;: }
+  anchor { &#39;selinux::start&#39;: }
+  -&gt; Class[&#39;selinux::package&#39;]
+  -&gt; Class[&#39;selinux::config&#39;]
+  -&gt; anchor { &#39;selinux::module pre&#39;: }
+  -&gt; anchor { &#39;selinux::module post&#39;: }
+  -&gt; anchor { &#39;selinux::end&#39;: }
 }</pre>
       </td>
     </tr>
@@ -457,7 +457,7 @@ class selinux (
 </div>
 
       <div id="footer">
-  Generated on Fri Feb 17 09:39:19 2017 by
+  Generated on Sat Apr  1 21:16:40 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.8 (ruby-2.3.3).
 </div>

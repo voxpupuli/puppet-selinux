@@ -69,8 +69,6 @@
       
       <span class='object_link'><a href="selinux.html" title="puppet_classes::selinux (puppet_class)">selinux</a></span><br/>
       
-      <span class='object_link'><a href="selinux_3A_3Arestorecond.html" title="puppet_classes::selinux::restorecond (puppet_class)">selinux::restorecond</a></span><br/>
-      
     </dd>
   </dl>
   
@@ -171,13 +169,7 @@
 74
 75
 76
-77
-78
-79
-80
-81
-82
-83</pre>
+77</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/params.pp', line 8</span>
@@ -190,7 +182,6 @@ class selinux::params {
 
   $refpolicy_package_name = &#39;selinux-policy-devel&#39;
 
-  validate_absolute_path($::selinux_agent_vardir)
   $module_build_root = &quot;${::selinux_agent_vardir}/puppet-selinux&quot;
 
   if $::operatingsystemmajrelease {
@@ -252,11 +243,6 @@ class selinux::params {
       fail(&quot;${::osfamily} is not supported&quot;)
     }
   }
-
-  $restorecond_config_file       = &#39;/etc/selinux/restorecond.conf&#39;
-  $restorecond_config_file_mode  = &#39;0644&#39;
-  $restorecond_config_file_owner = &#39;root&#39;
-  $restorecond_config_file_group = &#39;root&#39;
 }</pre>
       </td>
     </tr>
@@ -265,7 +251,7 @@ class selinux::params {
 </div>
 
       <div id="footer">
-  Generated on Fri Feb 17 09:39:19 2017 by
+  Generated on Sat Apr  1 21:16:40 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.8 (ruby-2.3.3).
 </div>
