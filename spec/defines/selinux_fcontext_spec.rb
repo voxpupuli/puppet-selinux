@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe 'selinux::fcontext' do
   let(:title) { 'myfile' }
+
   on_supported_os.each do |os, facts|
     context "on #{os}" do
       let(:facts) do
@@ -15,6 +16,7 @@ describe 'selinux::fcontext' do
             seltype: 'user_home_dir_t'
           }
         end
+
         it { is_expected.to contain_selinux__fcontext('myfile').that_requires('Anchor[selinux::module post]') }
         it { is_expected.to contain_selinux__fcontext('myfile').that_comes_before('Anchor[selinux::end]') }
       end
@@ -26,6 +28,7 @@ describe 'selinux::fcontext' do
             seltype: 'user_home_dir_t'
           }
         end
+
         it { is_expected.to contain_selinux__fcontext('myfile').that_requires('Anchor[selinux::start]') }
         it { is_expected.to contain_selinux__fcontext('myfile').with(ensure: 'absent') }
         it { is_expected.to contain_selinux__fcontext('myfile').that_comes_before('Anchor[selinux::module pre]') }
@@ -39,6 +42,7 @@ describe 'selinux::fcontext' do
             seltype: 'user_home_dir_t'
           }
         end
+
         it { expect { is_expected.to compile }.to raise_error(%r{"filetype" must be one of: a,f,d,c,b,s,l,p - see "man semanage-fcontext"}) }
       end
       context 'invalid multiple filetype' do
@@ -49,6 +53,7 @@ describe 'selinux::fcontext' do
             seltype: 'user_home_dir_t'
           }
         end
+
         it { expect { is_expected.to compile }.to raise_error(%r{"filetype" must be one of: a,f,d,c,b,s,l,p - see "man semanage-fcontext"}) }
       end
       context 'set filemode and context' do
@@ -59,6 +64,7 @@ describe 'selinux::fcontext' do
             seltype: 'user_home_dir_t'
           }
         end
+
         it { is_expected.to contain_selinux_fcontext('/tmp/file1_a').with(pathspec: '/tmp/file1', seltype: 'user_home_dir_t', file_type: 'a') }
       end
       context 'set context' do
@@ -68,6 +74,7 @@ describe 'selinux::fcontext' do
             seltype: 'user_home_dir_t'
           }
         end
+
         it { is_expected.to contain_selinux_fcontext('/tmp/file1_a').with(pathspec: '/tmp/file1', seltype: 'user_home_dir_t', file_type: 'a') }
       end
     end

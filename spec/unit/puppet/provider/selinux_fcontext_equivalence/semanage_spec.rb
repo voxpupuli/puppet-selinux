@@ -22,6 +22,7 @@ describe semanage_provider do
       let(:facts) do
         facts
       end
+
       context 'with three custom equivalences' do
         before do
           Selinux.expects(:selinux_file_context_subs_path).returns('spec_dummy')
@@ -54,6 +55,7 @@ describe semanage_provider do
           res.provider = semanage_provider.new
           res
         end
+
         it 'runs semanage fcontext -a -e' do
           described_class.expects(:semanage).with('fcontext', '-a', '-e', '/something', '/foobar')
           resource.provider.create
@@ -63,6 +65,7 @@ describe semanage_provider do
         let(:provider) do
           semanage_provider.new(name: '/foobar', ensure: :present, target: '/something')
         end
+
         it 'runs semanage fcontext -d -e' do
           described_class.expects(:semanage).with('fcontext', '-d', '-e', '/something', '/foobar')
           provider.destroy
@@ -79,6 +82,7 @@ describe semanage_provider do
                      target: '/somewhere_else'
                    ) }
         end
+
         before do
           # prefetch should find the provider parsed from this:
           Selinux.expects(:selinux_file_context_subs_path).returns('spec_dummy')
@@ -92,6 +96,7 @@ describe semanage_provider do
         end
         context 'has the correct target' do
           let(:p) { resources['/foobar'].provider }
+
           it { expect(p.target).to eq('/var/lib/whatever') }
         end
         it 'can change target by doing a non-reloading delete' do

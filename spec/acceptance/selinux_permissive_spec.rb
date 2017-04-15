@@ -6,6 +6,7 @@ describe 'selinux::permissive define' do
       manifest = "selinux::permissive {'passwd_t':}"
       apply_manifest(manifest, catch_failures: true)
     end
+
     after :all do
       # cleanup
       shell('semanage permissive -d passwd_t', acceptable_exit_codes: [0, 1])
@@ -28,6 +29,7 @@ describe 'selinux::permissive define' do
       EOS
       apply_manifest(manifest, catch_failures: true)
     end
+
     after :all do
       # clean up
       shell('semanage permissive -d passwd_t', acceptable_exit_codes: [0, 1])
@@ -52,6 +54,7 @@ describe 'selinux::permissive define' do
       manifest = "selinux::permissive {'kernel_t': ensure => 'absent'}"
       apply_manifest(manifest, catch_failures: true)
     end
+
     after :all do
       # clean up
       shell('semanage permissive -d passwd_t', acceptable_exit_codes: [0, 1])

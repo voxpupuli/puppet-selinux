@@ -21,6 +21,7 @@ describe 'selinux::module' do
             source_te: 'puppet:///modules/mymodule/selinux/mymodule.te'
           }
         end
+
         it { is_expected.to contain_selinux__module('mymodule').that_requires('Anchor[selinux::module pre]') }
         it { is_expected.to contain_selinux__module('mymodule').that_comes_before('Anchor[selinux::module post]') }
       end

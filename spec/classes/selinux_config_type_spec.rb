@@ -6,9 +6,11 @@ describe 'selinux' do
       let(:facts) do
         facts
       end
+
       context 'config' do
         context 'invalid type' do
           let(:params) { { type: 'invalid' } }
+
           it { expect { is_expected.to create_class('selinux') }.to raise_error(Puppet::Error, %r{Enum}) }
         end
         context 'undef type' do

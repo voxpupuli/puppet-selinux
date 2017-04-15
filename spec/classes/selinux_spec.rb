@@ -6,6 +6,7 @@ describe 'selinux' do
       let(:facts) do
         facts
       end
+
       it { is_expected.to contain_class('selinux').without_mode }
       it { is_expected.to contain_class('selinux').without_type }
       it { is_expected.to contain_class('selinux').without_module }

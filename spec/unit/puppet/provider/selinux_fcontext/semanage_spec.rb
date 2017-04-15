@@ -25,6 +25,7 @@ describe semanage_provider do
       let(:facts) do
         facts
       end
+
       context "with a single #{name} fcontext" do
         before do
           Selinux.expects(:selinux_file_context_local_path).returns('spec_dummy')
@@ -74,6 +75,7 @@ describe semanage_provider do
           res.provider = semanage_provider.new
           res
         end
+
         it 'runs semanage fcontext -a ' do
           described_class.expects(:semanage).with('fcontext', '-a', '-t', 'some_type_t', '-f', 'a', '/something(/.*)')
           resource.provider.create
@@ -83,6 +85,7 @@ describe semanage_provider do
         let(:provider) do
           semanage_provider.new(name: '/something(/.*)_a', file_type: 'a', seltype: 'some_type_t', ensure: :present, pathspec: '/something(/.*)')
         end
+
         it 'runs semanage fcontext -d ' do
           described_class.expects(:semanage).with('fcontext', '-d', '-t', 'some_type_t', '-f', 'a', '/something(/.*)')
           provider.destroy
@@ -104,6 +107,7 @@ describe semanage_provider do
                      seluser: 'myuser_u'
                    ) }
         end
+
         before do
           # prefetch should find the provider parsed from this:
           Selinux.expects(:selinux_file_context_local_path).returns('spec_dummy')
@@ -117,6 +121,7 @@ describe semanage_provider do
         end
         context 'has the correct attributes' do
           let(:p) { resources['/foobar_a'].provider }
+
           it { expect(p.name).to eq('/foobar_a') }
           it { expect(p.file_type).to eq('a') }
           it { expect(p.seltype).to eq('bin_t') }

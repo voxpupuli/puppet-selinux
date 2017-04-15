@@ -26,6 +26,7 @@ describe semanage_provider do
     tlp_t
     EOS
   end
+
   on_supported_os.each do |_os, _facts|
     let(:resource) do
       permissive.new(seltype: 'test_t',
@@ -34,6 +35,7 @@ describe semanage_provider do
     let(:provider) do
       resource.provider = described_class.new
     end
+
     context 'semanage list' do
       context 'without custom types' do
         before do
@@ -90,6 +92,7 @@ describe semanage_provider do
       let(:custom) do
         permissive.new(seltype: 'test_t')
       end
+
       it 'forces built-ins to be present' do
         described_class.expects(:semanage).with('permissive', '--list').returns(semanage_output_custom)
         semanage_provider.prefetch('test_t' => custom, 'tlp_t' => built_in)
