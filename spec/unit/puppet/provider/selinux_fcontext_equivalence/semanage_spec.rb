@@ -11,9 +11,9 @@ semanage_provider = Puppet::Type.type(:selinux_fcontext_equivalence).provider(:s
 fc_equiv = Puppet::Type.type(:selinux_fcontext_equivalence)
 
 fcontext_equivs = <<-EOS
-  /foobar /var/lib/whatever
-  /opt/my/other/app /var/lib/whatever
-  /opt/foo /usr/share/wordpress
+/foobar /var/lib/whatever
+/opt/my/other/app /var/lib/whatever
+/opt/foo /usr/share/wordpress
 EOS
 
 describe semanage_provider do
