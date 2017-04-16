@@ -5,29 +5,29 @@ port = Puppet::Type.type(:selinux_port)
 
 # 23 lines:
 ports_helper_output = <<-EOS
-policy system_u:object_r:ipp_port_t:s0 8614 8610 tcp
-policy system_u:object_r:ipp_port_t:s0 8614 8610 udp
-policy system_u:object_r:pki_ca_port_t:s0 9447 9443 tcp
-policy system_u:object_r:gluster_port_t:s0 38469 38465 tcp
-policy system_u:object_r:http_cache_port_t:s0 10010 10001 tcp
-policy system_u:object_r:traceroute_port_t:s0 64010 64000 udp
-policy system_u:object_r:vnc_port_t:s0 5999 5985 tcp
-policy system_u:object_r:cyphesis_port_t:s0 6799 6780 tcp
-policy system_u:object_r:xserver_port_t:s0 6020 6000 tcp
-policy system_u:object_r:gluster_port_t:s0 24027 24007 tcp
-policy system_u:object_r:mysqld_port_t:s0 63164 63132 tcp
-policy system_u:object_r:virt_migration_port_t:s0 49216 49152 tcp
-policy system_u:object_r:vnc_port_t:s0 5983 5900 tcp
-policy system_u:object_r:unreserved_port_t:s0 65535 61001 tcp
-policy system_u:object_r:unreserved_port_t:s0 65535 61001 udp
-policy system_u:object_r:ephemeral_port_t:s0 61000 32768 tcp
-policy system_u:object_r:ephemeral_port_t:s0 61000 32768 udp
-policy system_u:object_r:unreserved_port_t:s0 32767 1024 tcp
-policy system_u:object_r:unreserved_port_t:s0 32767 1024 udp
-local system_u:object_r:zope_port_t:s0 12345 12345 tcp
-local system_u:object_r:zope_port_t:s0 12345 12345 udp
-local system_u:object_r:zookeeper_client_port_t:s0 15132 15123 udp
-local system_u:object_r:zookeeper_client_port_t:s0 15132 15123 tcp
+  policy system_u:object_r:ipp_port_t:s0 8614 8610 tcp
+  policy system_u:object_r:ipp_port_t:s0 8614 8610 udp
+  policy system_u:object_r:pki_ca_port_t:s0 9447 9443 tcp
+  policy system_u:object_r:gluster_port_t:s0 38469 38465 tcp
+  policy system_u:object_r:http_cache_port_t:s0 10010 10001 tcp
+  policy system_u:object_r:traceroute_port_t:s0 64010 64000 udp
+  policy system_u:object_r:vnc_port_t:s0 5999 5985 tcp
+  policy system_u:object_r:cyphesis_port_t:s0 6799 6780 tcp
+  policy system_u:object_r:xserver_port_t:s0 6020 6000 tcp
+  policy system_u:object_r:gluster_port_t:s0 24027 24007 tcp
+  policy system_u:object_r:mysqld_port_t:s0 63164 63132 tcp
+  policy system_u:object_r:virt_migration_port_t:s0 49216 49152 tcp
+  policy system_u:object_r:vnc_port_t:s0 5983 5900 tcp
+  policy system_u:object_r:unreserved_port_t:s0 65535 61001 tcp
+  policy system_u:object_r:unreserved_port_t:s0 65535 61001 udp
+  policy system_u:object_r:ephemeral_port_t:s0 61000 32768 tcp
+  policy system_u:object_r:ephemeral_port_t:s0 61000 32768 udp
+  policy system_u:object_r:unreserved_port_t:s0 32767 1024 tcp
+  policy system_u:object_r:unreserved_port_t:s0 32767 1024 udp
+  local system_u:object_r:zope_port_t:s0 12345 12345 tcp
+  local system_u:object_r:zope_port_t:s0 12345 12345 udp
+  local system_u:object_r:zookeeper_client_port_t:s0 15132 15123 udp
+  local system_u:object_r:zookeeper_client_port_t:s0 15132 15123 tcp
 EOS
 
 # END 23 instances
