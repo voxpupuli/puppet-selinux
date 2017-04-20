@@ -35,6 +35,9 @@ define selinux::module(
   Optional[String] $source_te = undef,
   Optional[String] $source_fc = undef,
   Optional[String] $source_if = undef,
+  Optional[String] $content_te = undef,
+  Optional[String] $content_fc = undef,
+  Optional[String] $content_if = undef,
   Enum['absent', 'present'] $ensure = 'present',
   Optional[Enum['simple', 'refpolicy']] $builder = undef,
 ) {
@@ -44,7 +47,7 @@ define selinux::module(
     require ::selinux::refpolicy_package
   }
 
-  if ($builder == 'simple' and $source_if != undef) {
+  if ($builder == 'simple' and ($source_if != undef or $content_if != undef)) {
     fail("The simple builder does not support the 'source_if' parameter")
   }
 
@@ -60,28 +63,29 @@ define selinux::module(
   Anchor['selinux::module pre']
   -> Selinux::Module[$title]
   -> Anchor['selinux::module post']
-  $has_source = (pick($source_te, $source_fc, $source_if, false) != false)
+  $has_source = (pick($source_te, $source_fc, $source_if, $content_te, $content_fc, $content_if, false) != false)
 
   if $has_source and $ensure == 'present' {
     file {"${module_file}.te":
-      ensure => 'file',
-      source => $source_te,
-      notify => Exec["clean-module-${title}"],
-    }
-
-    $content_fc = $source_fc ? { undef => '', default => undef }
-    file {"${module_file}.fc":
       ensure  => 'file',
-      source  => $source_fc,
-      content => $content_fc,
+      source  => $source_te,
+      content => $content_te,
       notify  => Exec["clean-module-${title}"],
     }
 
-    $content_if = $source_if ? { undef => '', default => undef }
+    $content_fc_real = pick_default($content_fc, $source_fc ? { undef => '', default => undef })
+    file {"${module_file}.fc":
+      ensure  => 'file',
+      source  => $source_fc,
+      content => $content_fc_real,
+      notify  => Exec["clean-module-${title}"],
+    }
+
+    $content_if_real = pick_default($content_if, $source_if ? { undef => '', default => undef })
     file {"${module_file}.if":
       ensure  => 'file',
       source  => $source_if,
-      content => $content_if,
+      content => $content_if_real,
       notify  => Exec["clean-module-${title}"],
     }
     # ensure it doesn't get purged if it exists
