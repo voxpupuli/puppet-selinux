@@ -73,7 +73,7 @@ define selinux::module(
       notify  => Exec["clean-module-${title}"],
     }
 
-    $content_fc_real = pick_default($content_fc, $source_fc ? { undef => '', default => undef })
+    $content_fc_real = $content_fc ? { undef => $source_fc ? { undef => '', default => undef }, default => $content_fc }
     file {"${module_file}.fc":
       ensure  => 'file',
       source  => $source_fc,
@@ -81,7 +81,7 @@ define selinux::module(
       notify  => Exec["clean-module-${title}"],
     }
 
-    $content_if_real = pick_default($content_if, $source_if ? { undef => '', default => undef })
+    $content_if_real = $content_if ? { undef => $source_if ? { undef => '', default => undef }, default => $content_if }
     file {"${module_file}.if":
       ensure  => 'file',
       source  => $source_if,
