@@ -22,13 +22,32 @@
 #     source_te => 'puppet:///modules/profile/selinux/mymodule.te',
 #     source_fc => 'puppet:///modules/profile/selinux/mymodule.fc',
 #     source_if => 'puppet:///modules/profile/selinux/mymodule.if',
-#     builder   => 'simple'
+#     builder   => 'refpolicy'
+#   }
+#
+# @example compile and load a module from inline content
+#   $content = @("END")
+#     policy_module(zabbix_fix, 0.1)
+#     require {
+#       type zabbix_t;
+#       type unreserved_port_t;
+#       class tcp_socket name_connect;
+#     }
+#     allow zabbix_t unreserved_port_t:tcp_socket name_connect;
+#     | END
+#   selinux::module{ 'zabbix_fix':
+#     ensure     => 'present',
+#     content_te => $content,
+#     builder    => 'simple'
 #   }
 #
 # @param ensure present or absent
 # @param source_te the source file (either a puppet URI or local file) of the SELinux .te file
 # @param source_fc the source file (either a puppet URI or local file) of the SELinux .fc file
 # @param source_if the source file (either a puppet URI or local file) of the SELinux .if file
+# @param content_te content of the SELinux .te file
+# @param content_fc content of the SELinux .fc file
+# @param content_if content of the SELinux .if file
 # @param builder either 'simple' or 'refpolicy'. The simple builder attempts to use checkmodule
 #   to build the module, whereas 'refpolicy' uses the refpolicy framework, but requires 'make'
 define selinux::module(
