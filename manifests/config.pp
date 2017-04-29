@@ -129,7 +129,9 @@ class selinux::config (
     force   => true,
   }
 
-  # created by refpolicy builder and our simple builder
-  # ensure it does not get purged
-  file {"${module_build_dir}/tmp": selinux_ignore_defaults => true }
+  # needed by refpolicy builder and our simple builder
+  file {"${module_build_dir}/tmp":
+    ensure                  => 'directory',
+    selinux_ignore_defaults => true,
+  }
 }
