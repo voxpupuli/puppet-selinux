@@ -13,7 +13,7 @@ class selinux::params {
 
   $refpolicy_package_name = 'selinux-policy-devel'
 
-  $module_build_root = "${::selinux_agent_vardir}/puppet-selinux"
+  $module_build_root = "${facts['puppet_vardir']}/puppet-selinux"
 
   if $::operatingsystemmajrelease {
     $os_maj_release = $::operatingsystemmajrelease
