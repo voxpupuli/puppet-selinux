@@ -34,7 +34,7 @@ class selinux::params {
             '21','22','23' : {
               $package_name = 'policycoreutils-devel'
             }
-            '24', '25' : {
+            '24','25','26' : {
               $package_name = 'policycoreutils-python-utils'
             }
             default: {
