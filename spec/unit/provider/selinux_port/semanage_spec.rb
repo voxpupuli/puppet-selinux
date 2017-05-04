@@ -107,6 +107,7 @@ describe semanage_provider do
           res.provider = semanage_provider.new
           res
         end
+
         it 'runs semanage port -a for a port range' do
           described_class.expects(:semanage).with('port', '-a', '-t', 'zookeeper_client_port_t', '-p', :tcp, '15123-15132')
           resource.provider.create
@@ -130,6 +131,7 @@ describe semanage_provider do
           res.provider = semanage_provider.new(ex)
           res
         end
+
         it 'runs semanage port -d for a port range' do
           described_class.expects(:semanage).with('port', '-d', '-p', :tcp, '15123-15132')
           res_port_range.provider.destroy
@@ -152,6 +154,7 @@ describe semanage_provider do
             'tcp_15123-15132' => port.new(resource_example)
           }
         end
+
         before do
           # prefetch:
           semanage_provider.expects(:python).returns(ports_helper_output)
@@ -159,6 +162,7 @@ describe semanage_provider do
         end
         context 'prefetch finds the provider for tcp_15123-15132 (resource example)' do
           let(:p) { resources['tcp_15123-15132'].provider }
+
           it { expect(p.name).to eq('tcp_15123-15132') }
           it { expect(p.protocol).to eq(:tcp) }
           it { expect(p.seltype).to eq('zookeeper_client_port_t') }

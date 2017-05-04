@@ -15,6 +15,7 @@ describe 'selinux' do
       context 'config' do
         context 'invalid mode' do
           let(:params) { { mode: 'invalid' } }
+
           it { expect { is_expected.to create_class('selinux') }.to raise_error(Puppet::Error, %r{Enum}) }
         end
 
@@ -46,6 +47,7 @@ describe 'selinux' do
 
         context 'permissive' do
           let(:params) { { mode: 'permissive' } }
+
           it { is_expected.to contain_file('/var/lib/puppet/puppet-selinux') }
           it { is_expected.to contain_file_line('set-selinux-config-to-permissive').with(line: 'SELINUX=permissive') }
           it { is_expected.to contain_exec('change-selinux-status-to-permissive').with(command: 'setenforce 0') }
@@ -54,6 +56,7 @@ describe 'selinux' do
 
         context 'disabled' do
           let(:params) { { mode: 'disabled' } }
+
           it { is_expected.to contain_file('/var/lib/puppet/puppet-selinux') }
           it { is_expected.to contain_file_line('set-selinux-config-to-disabled').with(line: 'SELINUX=disabled') }
           it { is_expected.to contain_exec('change-selinux-status-to-disabled').with(command: 'setenforce 0') }
@@ -71,6 +74,7 @@ describe 'selinux' do
             hash
           end
           let(:params) { { mode: 'permissive' } }
+
           it { is_expected.to contain_file('/.autorelabel').with(ensure: 'file') }
         end
 
@@ -85,6 +89,7 @@ describe 'selinux' do
             hash
           end
           let(:params) { { mode: 'enforcing' } }
+
           it { is_expected.to contain_file('/.autorelabel').with(ensure: 'file') }
         end
       end

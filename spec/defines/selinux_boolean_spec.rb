@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe 'selinux::boolean' do
   let(:title) { 'mybool' }
+
   on_supported_os.each do |os, facts|
     context "on #{os}" do
       let(:facts) do
@@ -18,6 +19,7 @@ describe 'selinux::boolean' do
               ensure: value
             }
           end
+
           it do
             is_expected.to contain_selboolean('mybool').with(
               'value'      => 'on',
@@ -34,6 +36,7 @@ describe 'selinux::boolean' do
               ensure: value
             }
           end
+
           it do
             is_expected.to contain_selboolean('mybool').with(
               'value'      => 'off',
