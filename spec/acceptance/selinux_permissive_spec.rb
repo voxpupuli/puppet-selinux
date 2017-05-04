@@ -19,7 +19,7 @@ describe 'selinux::permissive define' do
     end
   end
   context 'purge with ensure present for passwd_t, when kernel_t is permissive' do
-    before :all do  # rubocop:disable RSpec/BeforeAfterAll
+    before :all do # rubocop:disable RSpec/BeforeAfterAll
       shell('semanage permissive -a kernel_t')
     end
     let(:result) do
