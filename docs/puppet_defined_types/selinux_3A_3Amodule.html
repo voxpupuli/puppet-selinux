@@ -6,7 +6,7 @@
 <title>
   Defined Type: selinux::module
   
-    &mdash; Documentation by YARD 0.9.8
+    &mdash; Documentation by YARD 0.9.9
   
 </title>
 
@@ -68,6 +68,7 @@
     </dd>
   </dl>
 </div>
+
 <h2>Overview</h2>
 <div class="docstring">
   <div class="discussion">
@@ -108,7 +109,26 @@ selinux::module{ &#39;mymodule&#39;:
   source_te =&gt; &#39;puppet:///modules/profile/selinux/mymodule.te&#39;,
   source_fc =&gt; &#39;puppet:///modules/profile/selinux/mymodule.fc&#39;,
   source_if =&gt; &#39;puppet:///modules/profile/selinux/mymodule.if&#39;,
-  builder   =&gt; &#39;simple&#39;
+  builder   =&gt; &#39;refpolicy&#39;
+}</code></pre>
+    
+      
+        <p class="example_title"><div class='inline'><p>compile and load a module from inline content</p>
+</div></p>
+      
+      <pre class="example code"><code>$content = @(&quot;END&quot;)
+  policy_module(zabbix_fix, 0.1)
+  require {
+    type zabbix_t;
+    type unreserved_port_t;
+    class tcp_socket name_connect;
+  }
+  allow zabbix_t unreserved_port_t:tcp_socket name_connect;
+  | END
+selinux::module{ &#39;zabbix_fix&#39;:
+  ensure     =&gt; &#39;present&#39;,
+  content_te =&gt; $content,
+  builder    =&gt; &#39;simple&#39;
 }</code></pre>
     
   </div>
@@ -185,6 +205,57 @@ selinux::module{ &#39;mymodule&#39;:
   
     <li>
       
+        <span class='name'>content_te</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>content of the SELinux .te file</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>content_fc</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>content of the SELinux .fc file</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>content_if</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>content of the SELinux .if file</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
         <span class='name'>builder</span>
       
       
@@ -211,25 +282,6 @@ to build the module, whereas &#39;refpolicy&#39; uses the refpolicy framework, b
         <pre class="lines">
 
 
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
 53
 54
 55
@@ -304,15 +356,41 @@ to build the module, whereas &#39;refpolicy&#39; uses the refpolicy framework, b
 124
 125
 126
-127</pre>
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/module.pp', line 34</span>
+        <pre class="code"><span class="info file"># File 'manifests/module.pp', line 53</span>
 
 define selinux::module(
   Optional[String] $source_te = undef,
   Optional[String] $source_fc = undef,
   Optional[String] $source_if = undef,
+  Optional[String] $content_te = undef,
+  Optional[String] $content_fc = undef,
+  Optional[String] $content_if = undef,
   Enum[&#39;absent&#39;, &#39;present&#39;] $ensure = &#39;present&#39;,
   Optional[Enum[&#39;simple&#39;, &#39;refpolicy&#39;]] $builder = undef,
 ) {
@@ -322,7 +400,7 @@ define selinux::module(
     require ::selinux::refpolicy_package
   }
 
-  if ($builder == &#39;simple&#39; and $source_if != undef) {
+  if ($builder == &#39;simple&#39; and ($source_if != undef or $content_if != undef)) {
     fail(&quot;The simple builder does not support the &#39;source_if&#39; parameter&quot;)
   }
 
@@ -338,28 +416,29 @@ define selinux::module(
   Anchor[&#39;selinux::module pre&#39;]
   -&gt; Selinux::Module[$title]
   -&gt; Anchor[&#39;selinux::module post&#39;]
-  $has_source = (pick($source_te, $source_fc, $source_if, false) != false)
+  $has_source = (pick($source_te, $source_fc, $source_if, $content_te, $content_fc, $content_if, false) != false)
 
   if $has_source and $ensure == &#39;present&#39; {
     file {&quot;${module_file}.te&quot;:
-      ensure =&gt; &#39;file&#39;,
-      source =&gt; $source_te,
-      notify =&gt; Exec[&quot;clean-module-${title}&quot;],
-    }
-
-    $content_fc = $source_fc ? { undef =&gt; &#39;&#39;, default =&gt; undef }
-    file {&quot;${module_file}.fc&quot;:
       ensure  =&gt; &#39;file&#39;,
-      source  =&gt; $source_fc,
-      content =&gt; $content_fc,
+      source  =&gt; $source_te,
+      content =&gt; $content_te,
       notify  =&gt; Exec[&quot;clean-module-${title}&quot;],
     }
 
-    $content_if = $source_if ? { undef =&gt; &#39;&#39;, default =&gt; undef }
+    $content_fc_real = $content_fc ? { undef =&gt; $source_fc ? { undef =&gt; &#39;&#39;, default =&gt; undef }, default =&gt; $content_fc }
+    file {&quot;${module_file}.fc&quot;:
+      ensure  =&gt; &#39;file&#39;,
+      source  =&gt; $source_fc,
+      content =&gt; $content_fc_real,
+      notify  =&gt; Exec[&quot;clean-module-${title}&quot;],
+    }
+
+    $content_if_real = $content_if ? { undef =&gt; $source_if ? { undef =&gt; &#39;&#39;, default =&gt; undef }, default =&gt; $content_if }
     file {&quot;${module_file}.if&quot;:
       ensure  =&gt; &#39;file&#39;,
       source  =&gt; $source_if,
-      content =&gt; $content_if,
+      content =&gt; $content_if_real,
       notify  =&gt; Exec[&quot;clean-module-${title}&quot;],
     }
     # ensure it doesn&#39;t get purged if it exists
@@ -410,9 +489,9 @@ define selinux::module(
 </div>
 
       <div id="footer">
-  Generated on Sat Apr  1 21:16:40 2017 by
+  Generated on Fri May  5 19:31:43 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.8 (ruby-2.3.3).
+  0.9.9 (ruby-2.3.3).
 </div>
 
     </div>
