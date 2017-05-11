@@ -6,7 +6,7 @@
 <title>
   Puppet Class: selinux::config
   
-    &mdash; Documentation by YARD 0.9.8
+    &mdash; Documentation by YARD 0.9.9
   
 </title>
 
@@ -70,6 +70,7 @@
     </dd>
   </dl>
 </div>
+
 <h2>Overview</h2>
 <div class="docstring">
   <div class="discussion">
@@ -297,7 +298,9 @@
 132
 133
 134
-135</pre>
+135
+136
+137</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/config.pp', line 30</span>
@@ -404,9 +407,11 @@ class selinux::config (
     force   =&gt; true,
   }
 
-  # created by refpolicy builder and our simple builder
-  # ensure it does not get purged
-  file {&quot;${module_build_dir}/tmp&quot;: selinux_ignore_defaults =&gt; true }
+  # needed by refpolicy builder and our simple builder
+  file {&quot;${module_build_dir}/tmp&quot;:
+    ensure                  =&gt; &#39;directory&#39;,
+    selinux_ignore_defaults =&gt; true,
+  }
 }</pre>
       </td>
     </tr>
@@ -415,9 +420,9 @@ class selinux::config (
 </div>
 
       <div id="footer">
-  Generated on Sat Apr  1 21:16:40 2017 by
+  Generated on Fri May  5 19:31:42 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.8 (ruby-2.3.3).
+  0.9.9 (ruby-2.3.3).
 </div>
 
     </div>

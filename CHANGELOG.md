@@ -4,7 +4,28 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not impact the functionality of the module.
 
-## [v1.0.0](https://github.com/voxpupuli/puppet-selinux/tree/v1.0.0) (2017-04-01)
+## [v1.1.0](https://github.com/voxpupuli/puppet-selinux/tree/v1.1.0) (2017-05-08)
+[Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v1.0.0...v1.1.0)
+
+**Implemented enhancements:**
+
+- Make use of the stdlib puppet\_vardir fact instead of a custom one [\#217](https://github.com/voxpupuli/puppet-selinux/pull/217) ([oranenj](https://github.com/oranenj))
+- Allow specifying module content inline [\#214](https://github.com/voxpupuli/puppet-selinux/pull/214) ([lightoze](https://github.com/lightoze))
+
+**Fixed bugs:**
+
+- config.pp creates tmp as file but selinux\_build\_module\_simple.sh wants to create a dir [\#215](https://github.com/voxpupuli/puppet-selinux/issues/215)
+
+**Closed issues:**
+
+- Expected parameter 'refpolicy\_makefile' of 'Class\[Selinux\]' to have type Stdlib::Absolutepath [\#212](https://github.com/voxpupuli/puppet-selinux/issues/212)
+
+**Merged pull requests:**
+
+- Fedora 26 uses the same package\_name as Fedora 25 [\#218](https://github.com/voxpupuli/puppet-selinux/pull/218) ([logic](https://github.com/logic))
+- Ensure the module build tmp/ directory is actually a directory [\#216](https://github.com/voxpupuli/puppet-selinux/pull/216) ([oranenj](https://github.com/oranenj))
+
+## [v1.0.0](https://github.com/voxpupuli/puppet-selinux/tree/v1.0.0) (2017-04-02)
 [Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v0.8.0...v1.0.0)
 
 **Implemented enhancements:**
@@ -50,6 +71,7 @@ These should not impact the functionality of the module.
 
 **Merged pull requests:**
 
+- Prepare 1.0.0 [\#211](https://github.com/voxpupuli/puppet-selinux/pull/211) ([oranenj](https://github.com/oranenj))
 - Fix resource reference issue when removing fcontexts [\#209](https://github.com/voxpupuli/puppet-selinux/pull/209) ([oranenj](https://github.com/oranenj))
 - BREAKING: Remove restorecond management support [\#206](https://github.com/voxpupuli/puppet-selinux/pull/206) ([oranenj](https://github.com/oranenj))
 - Doc fixes [\#204](https://github.com/voxpupuli/puppet-selinux/pull/204) ([oranenj](https://github.com/oranenj))
