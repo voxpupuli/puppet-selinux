@@ -7,7 +7,7 @@ describe 'selinux::permissive define' do
       apply_manifest(manifest, catch_failures: true)
     end
 
-    after :all do # rubocop:disable RSpec/BeforeAfterAll
+    after :all do
       # cleanup
       shell('semanage permissive -d passwd_t', acceptable_exit_codes: [0, 1])
     end
@@ -19,7 +19,7 @@ describe 'selinux::permissive define' do
     end
   end
   context 'purge with ensure present for passwd_t, when kernel_t is permissive' do
-    before :all do # rubocop:disable RSpec/BeforeAfterAll
+    before :all do
       shell('semanage permissive -a kernel_t')
     end
     let(:result) do
@@ -30,7 +30,7 @@ describe 'selinux::permissive define' do
       apply_manifest(manifest, catch_failures: true)
     end
 
-    after :all do # rubocop:disable RSpec/BeforeAfterAll
+    after :all do
       # clean up
       shell('semanage permissive -d passwd_t', acceptable_exit_codes: [0, 1])
       shell('semanage permissive -d kernel_t', acceptable_exit_codes: [0, 1])
@@ -46,7 +46,7 @@ describe 'selinux::permissive define' do
     end
   end
   context 'ensure absent for kernel_t only, when passwd_t is also permissive' do
-    before :all do # rubocop:disable RSpec/BeforeAfterAll
+    before :all do
       shell('semanage permissive -a kernel_t')
       shell('semanage permissive -a passwd_t')
     end
@@ -55,7 +55,7 @@ describe 'selinux::permissive define' do
       apply_manifest(manifest, catch_failures: true)
     end
 
-    after :all do # rubocop:disable RSpec/BeforeAfterAll
+    after :all do
       # clean up
       shell('semanage permissive -d passwd_t', acceptable_exit_codes: [0, 1])
       shell('semanage permissive -d kernel_t', acceptable_exit_codes: [0, 1])
