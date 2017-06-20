@@ -69,12 +69,24 @@ class selinux::config (
         group   => 'root',
         content => "# created by puppet for disabled to ${mode} switch\n",
       }
+    } else {
+      file { '/.autorelabel':
+        ensure => absent,
+      }
     }
 
-    exec { "change-selinux-status-to-${mode}":
-      command => "setenforce ${sestatus}",
-      unless  => "getenforce | grep -Eqi '${mode}|disabled'",
-      path    => '/bin:/sbin:/usr/bin:/usr/sbin',
+    if $mode == 'disabled' {
+      exec { "change-selinux-status-to-${mode}":
+        command => "setenforce ${sestatus}",
+        unless  => "getenforce | grep -Eqi 'permissive'",
+        path    => '/bin:/sbin:/usr/bin:/usr/sbin',
+      }
+    } else {
+      exec { "change-selinux-status-to-${mode}":
+        command => "setenforce ${sestatus}",
+        unless  => "getenforce | grep -Eqi '${mode}|disabled'",
+        path    => '/bin:/sbin:/usr/bin:/usr/sbin',
+      }
     }
   }
 
