@@ -78,7 +78,7 @@ class selinux::config (
     if $mode == 'disabled' {
       exec { "change-selinux-status-to-${mode}":
         command => "setenforce ${sestatus}",
-        unless  => "getenforce | grep -Eqi 'permissive'",
+        unless  => "getenforce | grep -Eqi 'permissive|disabled'",
         path    => '/bin:/sbin:/usr/bin:/usr/sbin',
       }
     } else {
