@@ -4,7 +4,14 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not impact the functionality of the module.
 
-## [v1.1.0](https://github.com/voxpupuli/puppet-selinux/tree/v1.1.0) (2017-05-08)
+## [v1.2.0](https://github.com/voxpupuli/puppet-selinux/tree/v1.2.0) (2017-07-02)
+[Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v1.1.0...v1.2.0)
+
+**Implemented enhancements:**
+
+- Declare Puppet 5 compatability [\#226](https://github.com/voxpupuli/puppet-selinux/pull/226) ([vinzent](https://github.com/vinzent))
+
+## [v1.1.0](https://github.com/voxpupuli/puppet-selinux/tree/v1.1.0) (2017-05-11)
 [Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v1.0.0...v1.1.0)
 
 **Implemented enhancements:**
@@ -22,6 +29,7 @@ These should not impact the functionality of the module.
 
 **Merged pull requests:**
 
+- Release 1.1.0 [\#219](https://github.com/voxpupuli/puppet-selinux/pull/219) ([oranenj](https://github.com/oranenj))
 - Fedora 26 uses the same package\_name as Fedora 25 [\#218](https://github.com/voxpupuli/puppet-selinux/pull/218) ([logic](https://github.com/logic))
 - Ensure the module build tmp/ directory is actually a directory [\#216](https://github.com/voxpupuli/puppet-selinux/pull/216) ([oranenj](https://github.com/oranenj))
 
