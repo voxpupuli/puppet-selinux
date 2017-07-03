@@ -34,10 +34,7 @@ describe 'selinux::exec_restorecon' do
         let(:title) { '/opt/$HOME/some weird dir/' }
 
         context 'with defaults' do
-          # started to fail with rspec-puppet 2.6.0, worked fine with rspec-puppet 2.5.0
-          # https://github.com/voxpupuli/puppet-selinux/issues/225
-          # https://github.com/rodjek/rspec-puppet/issues/536
-          xit { is_expected.to contain_exec('selinux::exec_restorecon /opt/$HOME/some weird dir/').with(command: "restorecon -R '/opt/$HOME/some weird dir/'", refreshonly: true) }
+          it { is_expected.to contain_exec('selinux::exec_restorecon /opt/$HOME/some weird dir/').with(command: "restorecon -R '/opt/$HOME/some weird dir/'", refreshonly: true) }
         end
       end
       context 'with path /weird/\'pa th\'/"quotes"' do
