@@ -1,12 +1,13 @@
 # selinux::exec_restorecon
-# 
+#
 # A convenience wrapper around a restorecon exec
 #
 # Will execute after all other SELinux changes have been applied, but before
 # Anchor['selinux::end']
-# 
+#
 # @param path The path to run restorecon on. Defaults to resource title.
 # @param recurse Whether restorecon should recurse. Defaults to true
+# @param force Whether restorecon should use force.  Defaults to false.
 # @param refreshonly see the Exec resource
 # @param unless see the Exec resource
 # @param onlyif see the Exec resource
@@ -15,14 +16,24 @@ define selinux::exec_restorecon(
   Stdlib::Absolutepath $path        = $title,
   Boolean              $refreshonly = true,
   Boolean              $recurse     = true,
+  Boolean              $force       = false,
   Optional[String]     $unless      = undef,
   Optional[String]     $onlyif      = undef,
 ) {
+
   include ::selinux
-  $command = $recurse ? {
-    true  => 'restorecon -R',
-    false => 'restorecon',
+
+  $opt_recurse = $recurse ? {
+    true  => '-R',
+    false => '',
   }
+
+  $opt_force = $force ? {
+    true  => '-F',
+    false => '',
+  }
+
+  $command = "restorecon $opt_force $opt_recurse"
 
   exec {"selinux::exec_restorecon ${path}":
     path        => '/sbin:/usr/sbin',
