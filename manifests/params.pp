@@ -39,6 +39,10 @@ class selinux::params {
             }
           }
         }
+        'Amazon': {
+          $sx_fs_mount = '/selinux'
+          $package_name = 'policycoreutils'
+        }
         default: {
           case $os_maj_release {
             '7': {
