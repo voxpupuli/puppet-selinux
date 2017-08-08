@@ -24,16 +24,16 @@ define selinux::exec_restorecon(
   include ::selinux
 
   $opt_recurse = $recurse ? {
-    true  => '-R',
+    true  => ' -R',
     false => '',
   }
 
   $opt_force = $force ? {
-    true  => '-F',
+    true  => ' -F',
     false => '',
   }
 
-  $command = "restorecon $opt_force $opt_recurse"
+  $command = "restorecon${opt_force}${opt_recurse}"
 
   exec {"selinux::exec_restorecon ${path}":
     path        => '/sbin:/usr/sbin',
