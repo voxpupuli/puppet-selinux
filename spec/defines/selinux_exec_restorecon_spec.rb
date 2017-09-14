@@ -14,6 +14,16 @@ describe 'selinux::exec_restorecon' do
 
           it { is_expected.to contain_exec('selinux::exec_restorecon /opt/mycustompath').with(command: 'restorecon /opt/mycustompath') }
         end
+        context 'with force' do
+          let(:params) { { force: true } }
+
+          it { is_expected.to contain_exec('selinux::exec_restorecon /opt/mycustompath').with(command: 'restorecon -F -R /opt/mycustompath') }
+        end
+        context 'with force, without recursion' do
+          let(:params) { { force: true, recurse: false } }
+
+          it { is_expected.to contain_exec('selinux::exec_restorecon /opt/mycustompath').with(command: 'restorecon -F /opt/mycustompath') }
+        end
         context 'ordering' do
           it { is_expected.to contain_exec('selinux::exec_restorecon /opt/mycustompath').that_comes_before('Anchor[selinux::end]') }
           it { is_expected.to contain_anchor('selinux::module post').that_comes_before('Exec[selinux::exec_restorecon /opt/mycustompath]') }
