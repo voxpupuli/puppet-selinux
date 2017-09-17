@@ -4,9 +4,8 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
-## [Unreleased](https://github.com/voxpupuli/puppet-selinux/tree/HEAD)
-
-[Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v1.2.0...HEAD)
+## [v1.3.0](https://github.com/voxpupuli/puppet-selinux/tree/v1.3.0) (2017-09-17)
+[Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v1.2.0...v1.3.0)
 
 **Implemented enhancements:**
 
@@ -19,6 +18,7 @@ These should not affect the functionality of the module.
 
 **Merged pull requests:**
 
+- release 1.3.0 [\#236](https://github.com/voxpupuli/puppet-selinux/pull/236) ([bastelfreak](https://github.com/bastelfreak))
 - Test disabling of SELinux [\#233](https://github.com/voxpupuli/puppet-selinux/pull/233) ([vinzent](https://github.com/vinzent))
 - Add Amazon Linux support [\#231](https://github.com/voxpupuli/puppet-selinux/pull/231) ([clinty](https://github.com/clinty))
 - Re-enable restorecon spec test [\#228](https://github.com/voxpupuli/puppet-selinux/pull/228) ([vinzent](https://github.com/vinzent))
