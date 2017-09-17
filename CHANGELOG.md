@@ -1,8 +1,27 @@
-# Change log
+# Changelog
 
 All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
-These should not impact the functionality of the module.
+These should not affect the functionality of the module.
+
+## [Unreleased](https://github.com/voxpupuli/puppet-selinux/tree/HEAD)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v1.2.0...HEAD)
+
+**Implemented enhancements:**
+
+- Implement use of force option for restorecon [\#229](https://github.com/voxpupuli/puppet-selinux/pull/229) ([slconley](https://github.com/slconley))
+
+**Closed issues:**
+
+- Amazon Linux support [\#230](https://github.com/voxpupuli/puppet-selinux/issues/230)
+- Tests fail:  Could not parse for environment rp\_env: Illegal variable name [\#225](https://github.com/voxpupuli/puppet-selinux/issues/225)
+
+**Merged pull requests:**
+
+- Test disabling of SELinux [\#233](https://github.com/voxpupuli/puppet-selinux/pull/233) ([vinzent](https://github.com/vinzent))
+- Add Amazon Linux support [\#231](https://github.com/voxpupuli/puppet-selinux/pull/231) ([clinty](https://github.com/clinty))
+- Re-enable restorecon spec test [\#228](https://github.com/voxpupuli/puppet-selinux/pull/228) ([vinzent](https://github.com/vinzent))
 
 ## [v1.2.0](https://github.com/voxpupuli/puppet-selinux/tree/v1.2.0) (2017-07-02)
 [Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v1.1.0...v1.2.0)
@@ -10,6 +29,10 @@ These should not impact the functionality of the module.
 **Implemented enhancements:**
 
 - Declare Puppet 5 compatability [\#226](https://github.com/voxpupuli/puppet-selinux/pull/226) ([vinzent](https://github.com/vinzent))
+
+**Merged pull requests:**
+
+- Release 1.2.0 [\#227](https://github.com/voxpupuli/puppet-selinux/pull/227) ([vinzent](https://github.com/vinzent))
 
 ## [v1.1.0](https://github.com/voxpupuli/puppet-selinux/tree/v1.1.0) (2017-05-11)
 [Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v1.0.0...v1.1.0)
@@ -22,10 +45,6 @@ These should not impact the functionality of the module.
 **Fixed bugs:**
 
 - config.pp creates tmp as file but selinux\_build\_module\_simple.sh wants to create a dir [\#215](https://github.com/voxpupuli/puppet-selinux/issues/215)
-
-**Closed issues:**
-
-- Expected parameter 'refpolicy\_makefile' of 'Class\[Selinux\]' to have type Stdlib::Absolutepath [\#212](https://github.com/voxpupuli/puppet-selinux/issues/212)
 
 **Merged pull requests:**
 
@@ -64,10 +83,8 @@ These should not impact the functionality of the module.
 
 **Closed issues:**
 
-- Support for Amazon Linux 5, 6, and 2016 [\#200](https://github.com/voxpupuli/puppet-selinux/issues/200)
 - Remove CentOS 5 support [\#190](https://github.com/voxpupuli/puppet-selinux/issues/190)
 - Release 1.0.0 [\#184](https://github.com/voxpupuli/puppet-selinux/issues/184)
-- Add deprecation notices before 2.0.0 release [\#179](https://github.com/voxpupuli/puppet-selinux/issues/179)
 - order of file contexts [\#121](https://github.com/voxpupuli/puppet-selinux/issues/121)
 - selinux::module fails when module contains more than .te file [\#118](https://github.com/voxpupuli/puppet-selinux/issues/118)
 - Looking for Maintainer [\#106](https://github.com/voxpupuli/puppet-selinux/issues/106)
