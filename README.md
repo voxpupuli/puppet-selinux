@@ -150,7 +150,9 @@ selinux::boolean { 'puppetagent_manage_all_files': }
 ```
 BEAKER_debug=yes BEAKER_set="centos-6-x64" PUPPET_INSTALL_TYPE="agent" bundle exec rake beaker &&
 BEAKER_debug=yes BEAKER_set="centos-7-x64" PUPPET_INSTALL_TYPE="agent" bundle exec rake beaker &&
-BEAKER_debug=yes BEAKER_set="fedora-25-x64" PUPPET_INSTALL_TYPE="agent" bundle exec rake beaker
+BEAKER_debug=yes BEAKER_set="fedora-25-x64" PUPPET_INSTALL_TYPE="agent" bundle exec rake beaker &&
+BEAKER_debug=yes BEAKER_set="fedora-26-x64" PUPPET_INSTALL_TYPE="agent" bundle exec rake beaker &&
+BEAKER_debug=yes BEAKER_set="fedora-27-x64" PUPPET_INSTALL_TYPE="agent" bundle exec rake beaker
 ```
 
 ### Facter facts
