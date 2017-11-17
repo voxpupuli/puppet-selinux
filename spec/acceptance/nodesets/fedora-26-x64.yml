@@ -1,0 +1,21 @@
+---
+# This file is managed via modulesync
+# https://github.com/voxpupuli/modulesync
+# https://github.com/voxpupuli/modulesync_config
+#
+# platform is fedora 24 because there is no
+# puppet-agent for fedora 25 by 2016-12-30
+HOSTS:
+  fedora-26-x64:
+    roles:
+      - master
+    platform: fedora-25-x86_64
+    # by url doesn't work - path will get too long
+    # https://apps.fedoraproject.org/autocloud/compose ->
+    # https://kojipkgs.fedoraproject.org/compose/rawhide/Fedora-Rawhide-20170522.n.0/compose/CloudImages/x86_64/images/
+    box: /tmp/Fedora-Cloud-Base-Vagrant-Rawhide-20170522.n.0.x86_64.vagrant-virtualbox.box
+    hypervisor: vagrant
+CONFIG:
+  type: aio
+...
+# vim: syntax=yaml
