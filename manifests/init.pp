@@ -44,11 +44,12 @@ class selinux (
   Enum['refpolicy', 'simple'] $default_builder                = 'simple',
 
   ### START Hiera Lookups ###
-  $boolean        = undef,
-  $fcontext       = undef,
-  $module         = undef,
-  $permissive     = undef,
-  $port           = undef,
+  Optional[Hash] $boolean         = lookup('selinux::boolean',         { 'default_value' => undef, 'merge' => 'hash' }),
+  Optional[Hash] $fcontext        = lookup('selinux::fcontext',        { 'default_value' => undef, 'merge' => 'hash' }),
+  Optional[Hash] $module          = lookup('selinux::module',          { 'default_value' => undef, 'merge' => 'hash' }),
+  Optional[Hash] $permissive      = lookup('selinux::permissive',      { 'default_value' => undef, 'merge' => 'hash' }),
+  Optional[Hash] $port            = lookup('selinux::port',            { 'default_value' => undef, 'merge' => 'hash' }),
+  Optional[Hash] $exec_restorecon = lookup('selinux::exec_restorecon', { 'default_value' => undef, 'merge' => 'hash' }),
   ### END Hiera Lookups ###
 
 ) inherits selinux::params {
@@ -61,19 +62,22 @@ class selinux (
   class { '::selinux::config': }
 
   if $boolean {
-    create_resources ( 'selinux::boolean', hiera_hash('selinux::boolean', $boolean) )
+    create_resources ( 'selinux::boolean', $boolean )
   }
   if $fcontext {
-    create_resources ( 'selinux::fcontext', hiera_hash('selinux::fcontext', $fcontext) )
+    create_resources ( 'selinux::fcontext', $fcontext )
   }
   if $module {
-    create_resources ( 'selinux::module', hiera_hash('selinux::module', $module) )
+    create_resources ( 'selinux::module', $module )
   }
   if $permissive {
-    create_resources ( 'selinux::permissive', hiera_hash('selinux::permissive', $permissive) )
+    create_resources ( 'selinux::permissive', $permissive )
   }
   if $port {
-    create_resources ( 'selinux::port', hiera_hash('selinux::port', $port) )
+    create_resources ( 'selinux::port', $port )
+  }
+  if $exec_restorecon {
+    create_resources ( 'selinux::exec_restorecon', $exec_restorecon )
   }
 
   # Ordering
