@@ -32,6 +32,7 @@
 # @param module Hash of selinux::module resource parameters
 # @param permissive Hash of selinux::module resource parameters
 # @param port Hash of selinux::port resource parameters
+# @param exec_restorecon Hash of selinux::exec_restorecon resource parameters
 #
 class selinux (
   Optional[Enum['enforcing', 'permissive', 'disabled']] $mode = $::selinux::params::mode,
