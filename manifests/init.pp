@@ -44,12 +44,12 @@ class selinux (
   Enum['refpolicy', 'simple'] $default_builder                = 'simple',
 
   ### START Hiera Lookups ###
-  Optional[Hash] $boolean         = lookup('selinux::boolean',         { 'default_value' => undef, 'merge' => 'hash' }),
-  Optional[Hash] $fcontext        = lookup('selinux::fcontext',        { 'default_value' => undef, 'merge' => 'hash' }),
-  Optional[Hash] $module          = lookup('selinux::module',          { 'default_value' => undef, 'merge' => 'hash' }),
-  Optional[Hash] $permissive      = lookup('selinux::permissive',      { 'default_value' => undef, 'merge' => 'hash' }),
-  Optional[Hash] $port            = lookup('selinux::port',            { 'default_value' => undef, 'merge' => 'hash' }),
-  Optional[Hash] $exec_restorecon = lookup('selinux::exec_restorecon', { 'default_value' => undef, 'merge' => 'hash' }),
+  Optional[Hash] $boolean         = undef,
+  Optional[Hash] $fcontext        = undef,
+  Optional[Hash] $module          = undef,
+  Optional[Hash] $permissive      = undef,
+  Optional[Hash] $port            = undef,
+  Optional[Hash] $exec_restorecon = undef,
   ### END Hiera Lookups ###
 
 ) inherits selinux::params {
