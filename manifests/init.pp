@@ -32,6 +32,7 @@
 # @param module Hash of selinux::module resource parameters
 # @param permissive Hash of selinux::module resource parameters
 # @param port Hash of selinux::port resource parameters
+# @param exec_restorecon Hash of selinux::exec_restorecon resource parameters
 #
 class selinux (
   Optional[Enum['enforcing', 'permissive', 'disabled']] $mode = $::selinux::params::mode,
@@ -44,11 +45,12 @@ class selinux (
   Enum['refpolicy', 'simple'] $default_builder                = 'simple',
 
   ### START Hiera Lookups ###
-  $boolean        = undef,
-  $fcontext       = undef,
-  $module         = undef,
-  $permissive     = undef,
-  $port           = undef,
+  Optional[Hash] $boolean         = undef,
+  Optional[Hash] $fcontext        = undef,
+  Optional[Hash] $module          = undef,
+  Optional[Hash] $permissive      = undef,
+  Optional[Hash] $port            = undef,
+  Optional[Hash] $exec_restorecon = undef,
   ### END Hiera Lookups ###
 
 ) inherits selinux::params {
@@ -61,19 +63,22 @@ class selinux (
   class { '::selinux::config': }
 
   if $boolean {
-    create_resources ( 'selinux::boolean', hiera_hash('selinux::boolean', $boolean) )
+    create_resources ( 'selinux::boolean', $boolean )
   }
   if $fcontext {
-    create_resources ( 'selinux::fcontext', hiera_hash('selinux::fcontext', $fcontext) )
+    create_resources ( 'selinux::fcontext', $fcontext )
   }
   if $module {
-    create_resources ( 'selinux::module', hiera_hash('selinux::module', $module) )
+    create_resources ( 'selinux::module', $module )
   }
   if $permissive {
-    create_resources ( 'selinux::permissive', hiera_hash('selinux::permissive', $permissive) )
+    create_resources ( 'selinux::permissive', $permissive )
   }
   if $port {
-    create_resources ( 'selinux::port', hiera_hash('selinux::port', $port) )
+    create_resources ( 'selinux::port', $port )
+  }
+  if $exec_restorecon {
+    create_resources ( 'selinux::exec_restorecon', $exec_restorecon )
   }
 
   # Ordering
