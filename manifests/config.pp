@@ -80,10 +80,13 @@ class selinux::config (
       }
     }
 
-    exec { "change-selinux-status-to-${_real_mode}":
-      command => "setenforce ${sestatus}",
-      unless  => "getenforce | grep -Eqi '${_real_mode}|disabled'",
-      path    => '/bin:/sbin:/usr/bin:/usr/sbin',
+    # setenforce only works when SELinux itself is enabled
+    if $_real_mode in ['enforcing','permissive'] {
+      exec { "change-selinux-status-to-${_real_mode}":
+        command => "setenforce ${sestatus}",
+        unless  => "getenforce | grep -Eqi '${_real_mode}|disabled'",
+        path    => '/bin:/sbin:/usr/bin:/usr/sbin',
+      }
     }
   }
 

@@ -59,7 +59,6 @@ describe 'selinux' do
 
           it { is_expected.to contain_file('/var/lib/puppet/puppet-selinux') }
           it { is_expected.to contain_file_line('set-selinux-config-to-disabled').with(line: 'SELINUX=disabled') }
-          it { is_expected.to contain_exec('change-selinux-status-to-disabled').with(command: 'setenforce 0') }
           it { is_expected.not_to contain_file('/.autorelabel') }
         end
 
