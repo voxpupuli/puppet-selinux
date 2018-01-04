@@ -6,7 +6,7 @@
 <title>
   Puppet Class: selinux
   
-    &mdash; Documentation by YARD 0.9.10
+    &mdash; Documentation by YARD 0.9.12
   
 </title>
 
@@ -255,7 +255,7 @@ Default value: simple</p>
         <span class='name'>boolean</span>
       
       
-        <span class='type'>(<tt>Any</tt>)</span>
+        <span class='type'>(<tt>Optional[Hash]</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>undef</tt>)</em>
@@ -272,7 +272,7 @@ Default value: simple</p>
         <span class='name'>fcontext</span>
       
       
-        <span class='type'>(<tt>Any</tt>)</span>
+        <span class='type'>(<tt>Optional[Hash]</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>undef</tt>)</em>
@@ -289,7 +289,7 @@ Default value: simple</p>
         <span class='name'>module</span>
       
       
-        <span class='type'>(<tt>Any</tt>)</span>
+        <span class='type'>(<tt>Optional[Hash]</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>undef</tt>)</em>
@@ -306,7 +306,7 @@ Default value: simple</p>
         <span class='name'>permissive</span>
       
       
-        <span class='type'>(<tt>Any</tt>)</span>
+        <span class='type'>(<tt>Optional[Hash]</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>undef</tt>)</em>
@@ -323,7 +323,7 @@ Default value: simple</p>
         <span class='name'>port</span>
       
       
-        <span class='type'>(<tt>Any</tt>)</span>
+        <span class='type'>(<tt>Optional[Hash]</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>undef</tt>)</em>
@@ -331,6 +331,23 @@ Default value: simple</p>
       
         &mdash;
         <div class='inline'><p>Hash of selinux::port resource parameters</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>exec_restorecon</span>
+      
+      
+        <span class='type'>(<tt>Optional[Hash]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>Hash of selinux::exec_restorecon resource parameters</p>
 </div>
       
     </li>
@@ -345,7 +362,6 @@ Default value: simple</p>
         <pre class="lines">
 
 
-36
 37
 38
 39
@@ -395,10 +411,15 @@ Default value: simple</p>
 83
 84
 85
-86</pre>
+86
+87
+88
+89
+90
+91</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/init.pp', line 36</span>
+        <pre class="code"><span class="info file"># File 'manifests/init.pp', line 37</span>
 
 class selinux (
   Optional[Enum[&#39;enforcing&#39;, &#39;permissive&#39;, &#39;disabled&#39;]] $mode = $::selinux::params::mode,
@@ -411,11 +432,12 @@ class selinux (
   Enum[&#39;refpolicy&#39;, &#39;simple&#39;] $default_builder                = &#39;simple&#39;,
 
   ### START Hiera Lookups ###
-  $boolean        = undef,
-  $fcontext       = undef,
-  $module         = undef,
-  $permissive     = undef,
-  $port           = undef,
+  Optional[Hash] $boolean         = undef,
+  Optional[Hash] $fcontext        = undef,
+  Optional[Hash] $module          = undef,
+  Optional[Hash] $permissive      = undef,
+  Optional[Hash] $port            = undef,
+  Optional[Hash] $exec_restorecon = undef,
   ### END Hiera Lookups ###
 
 ) inherits selinux::params {
@@ -428,19 +450,22 @@ class selinux (
   class { &#39;::selinux::config&#39;: }
 
   if $boolean {
-    create_resources ( &#39;selinux::boolean&#39;, hiera_hash(&#39;selinux::boolean&#39;, $boolean) )
+    create_resources ( &#39;selinux::boolean&#39;, $boolean )
   }
   if $fcontext {
-    create_resources ( &#39;selinux::fcontext&#39;, hiera_hash(&#39;selinux::fcontext&#39;, $fcontext) )
+    create_resources ( &#39;selinux::fcontext&#39;, $fcontext )
   }
   if $module {
-    create_resources ( &#39;selinux::module&#39;, hiera_hash(&#39;selinux::module&#39;, $module) )
+    create_resources ( &#39;selinux::module&#39;, $module )
   }
   if $permissive {
-    create_resources ( &#39;selinux::permissive&#39;, hiera_hash(&#39;selinux::permissive&#39;, $permissive) )
+    create_resources ( &#39;selinux::permissive&#39;, $permissive )
   }
   if $port {
-    create_resources ( &#39;selinux::port&#39;, hiera_hash(&#39;selinux::port&#39;, $port) )
+    create_resources ( &#39;selinux::port&#39;, $port )
+  }
+  if $exec_restorecon {
+    create_resources ( &#39;selinux::exec_restorecon&#39;, $exec_restorecon )
   }
 
   # Ordering
