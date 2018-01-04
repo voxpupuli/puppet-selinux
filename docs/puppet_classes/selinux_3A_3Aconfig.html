@@ -6,7 +6,7 @@
 <title>
   Puppet Class: selinux::config
   
-    &mdash; Documentation by YARD 0.9.10
+    &mdash; Documentation by YARD 0.9.12
   
 </title>
 
@@ -300,7 +300,10 @@
 134
 135
 136
-137</pre>
+137
+138
+139
+140</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/config.pp', line 30</span>
@@ -358,10 +361,13 @@ class selinux::config (
       }
     }
 
-    exec { &quot;change-selinux-status-to-${_real_mode}&quot;:
-      command =&gt; &quot;setenforce ${sestatus}&quot;,
-      unless  =&gt; &quot;getenforce | grep -Eqi &#39;${_real_mode}|disabled&#39;&quot;,
-      path    =&gt; &#39;/bin:/sbin:/usr/bin:/usr/sbin&#39;,
+    # setenforce only works when SELinux itself is enabled
+    if $_real_mode in [&#39;enforcing&#39;,&#39;permissive&#39;] {
+      exec { &quot;change-selinux-status-to-${_real_mode}&quot;:
+        command =&gt; &quot;setenforce ${sestatus}&quot;,
+        unless  =&gt; &quot;getenforce | grep -Eqi &#39;${_real_mode}|disabled&#39;&quot;,
+        path    =&gt; &#39;/bin:/sbin:/usr/bin:/usr/sbin&#39;,
+      }
     }
   }
 
