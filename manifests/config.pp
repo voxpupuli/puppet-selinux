@@ -55,13 +55,13 @@ class selinux::config (
 
     case $_real_mode {
       'permissive', 'disabled': {
-        $sestatus = '0'
+        $sestatus = 'permissive'
         if $_real_mode == 'disabled' and defined('$::selinux_current_mode') and $::selinux_current_mode == 'permissive' {
           notice('A reboot is required to fully disable SELinux. SELinux will operate in Permissive mode until a reboot')
         }
       }
       'enforcing': {
-        $sestatus = '1'
+        $sestatus = 'enforcing'
       }
       default : {
         fail('You must specify a mode (enforced, permissive, or disabled) for selinux operation')
@@ -80,13 +80,10 @@ class selinux::config (
       }
     }
 
-    # setenforce only works when SELinux itself is enabled
-    if $_real_mode in ['enforcing','permissive'] {
-      exec { "change-selinux-status-to-${_real_mode}":
-        command => "setenforce ${sestatus}",
-        unless  => "getenforce | grep -Eqi '${_real_mode}|disabled'",
-        path    => '/bin:/sbin:/usr/bin:/usr/sbin',
-      }
+    exec { "change-selinux-status-to-${_real_mode}":
+      command => "setenforce ${sestatus}",
+      unless  => "getenforce | grep -Eqi '${sestatus}|disabled'",
+      path    => '/bin:/sbin:/usr/bin:/usr/sbin',
     }
   }
 

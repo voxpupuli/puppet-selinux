@@ -41,7 +41,8 @@ describe 'selinux' do
 
           it { is_expected.to contain_file('/var/lib/puppet/puppet-selinux') }
           it { is_expected.to contain_file_line('set-selinux-config-to-enforcing').with(line: 'SELINUX=enforcing') }
-          it { is_expected.to contain_exec('change-selinux-status-to-enforcing').with(command: 'setenforce 1') }
+          it { is_expected.to contain_exec('change-selinux-status-to-enforcing').with(command: 'setenforce enforcing') }
+          it { is_expected.to contain_exec('change-selinux-status-to-enforcing').with(unless: "getenforce | grep -Eqi 'enforcing|disabled'") }
           it { is_expected.not_to contain_file('/.autorelabel') }
         end
 
@@ -50,7 +51,8 @@ describe 'selinux' do
 
           it { is_expected.to contain_file('/var/lib/puppet/puppet-selinux') }
           it { is_expected.to contain_file_line('set-selinux-config-to-permissive').with(line: 'SELINUX=permissive') }
-          it { is_expected.to contain_exec('change-selinux-status-to-permissive').with(command: 'setenforce 0') }
+          it { is_expected.to contain_exec('change-selinux-status-to-permissive').with(command: 'setenforce permissive') }
+          it { is_expected.to contain_exec('change-selinux-status-to-permissive').with(unless: "getenforce | grep -Eqi 'permissive|disabled'") }
           it { is_expected.not_to contain_file('/.autorelabel') }
         end
 
