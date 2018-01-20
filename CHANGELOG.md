@@ -4,12 +4,32 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v1.5.2](https://github.com/voxpupuli/puppet-selinux/tree/v1.5.2) (2018-01-20)
+[Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v1.5.1...v1.5.2)
+
+**Fixed bugs:**
+
+- Update and check runtime SELinux status correcty [\#249](https://github.com/voxpupuli/puppet-selinux/pull/249) ([weaselshit](https://github.com/weaselshit))
+
+**Closed issues:**
+
+- Skip exec "change-selinux-status-to-disabled" when current mode is enforcing or permissive [\#245](https://github.com/voxpupuli/puppet-selinux/issues/245)
+- Module uses deprecated hiera\_hash\(\) function  [\#238](https://github.com/voxpupuli/puppet-selinux/issues/238)
+
+**Merged pull requests:**
+
+- Extend enforcing to disabled tests [\#250](https://github.com/voxpupuli/puppet-selinux/pull/250) ([vinzent](https://github.com/vinzent))
+
 ## [v1.5.1](https://github.com/voxpupuli/puppet-selinux/tree/v1.5.1) (2018-01-04)
 [Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v1.5.0...v1.5.1)
 
 **Fixed bugs:**
 
 - Fixing change-selinux-status-to-disabled exec [\#246](https://github.com/voxpupuli/puppet-selinux/pull/246) ([bjvrielink](https://github.com/bjvrielink))
+
+**Merged pull requests:**
+
+- Release 1.5.1 [\#248](https://github.com/voxpupuli/puppet-selinux/pull/248) ([bastelfreak](https://github.com/bastelfreak))
 
 ## [v1.5.0](https://github.com/voxpupuli/puppet-selinux/tree/v1.5.0) (2017-12-15)
 [Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v1.4.0...v1.5.0)
