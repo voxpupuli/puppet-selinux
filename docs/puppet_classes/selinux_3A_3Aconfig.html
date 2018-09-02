@@ -6,7 +6,7 @@
 <title>
   Puppet Class: selinux::config
   
-    &mdash; Documentation by YARD 0.9.12
+    &mdash; Documentation by YARD 0.9.16
   
 </title>
 
@@ -94,6 +94,8 @@
 
   </div>
 </div>
+
+
 <div class="tags">
   <p class="tag_title">Parameters:</p>
 <ul class="param">
@@ -300,10 +302,7 @@
 134
 135
 136
-137
-138
-139
-140</pre>
+137</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/config.pp', line 30</span>
@@ -320,7 +319,7 @@ class selinux::config (
     fail(&quot;Use of private class ${name} by ${caller_module_name}&quot;)
   }
 
-  if ($mode == &#39;enforcing&#39; and !$::selinux) {
+  if ($mode == &#39;enforcing&#39; and !$facts[&#39;selinux&#39;]) {
     notice(&#39;SELinux is disabled. Forcing configuration to permissive to avoid problems. To disable this warning, explicitly set selinux::mode to permissive or disabled.&#39;)
     $_real_mode = &#39;permissive&#39;
   } else {
@@ -336,13 +335,13 @@ class selinux::config (
 
     case $_real_mode {
       &#39;permissive&#39;, &#39;disabled&#39;: {
-        $sestatus = &#39;0&#39;
-        if $_real_mode == &#39;disabled&#39; and defined(&#39;$::selinux_current_mode&#39;) and $::selinux_current_mode == &#39;permissive&#39; {
+        $sestatus = &#39;permissive&#39;
+        if $_real_mode == &#39;disabled&#39; and $facts[&#39;selinux_current_mode&#39;] == &#39;permissive&#39; {
           notice(&#39;A reboot is required to fully disable SELinux. SELinux will operate in Permissive mode until a reboot&#39;)
         }
       }
       &#39;enforcing&#39;: {
-        $sestatus = &#39;1&#39;
+        $sestatus = &#39;enforcing&#39;
       }
       default : {
         fail(&#39;You must specify a mode (enforced, permissive, or disabled) for selinux operation&#39;)
@@ -352,7 +351,7 @@ class selinux::config (
     # a complete relabeling is required when switching from disabled to
     # permissive or enforcing. Ensure the autorelabel trigger file is created.
     if $_real_mode in [&#39;enforcing&#39;,&#39;permissive&#39;] and
-      !$::selinux {
+      !$facts[&#39;selinux&#39;] {
       file { &#39;/.autorelabel&#39;:
         ensure  =&gt; &#39;file&#39;,
         owner   =&gt; &#39;root&#39;,
@@ -361,13 +360,10 @@ class selinux::config (
       }
     }
 
-    # setenforce only works when SELinux itself is enabled
-    if $_real_mode in [&#39;enforcing&#39;,&#39;permissive&#39;] {
-      exec { &quot;change-selinux-status-to-${_real_mode}&quot;:
-        command =&gt; &quot;setenforce ${sestatus}&quot;,
-        unless  =&gt; &quot;getenforce | grep -Eqi &#39;${_real_mode}|disabled&#39;&quot;,
-        path    =&gt; &#39;/bin:/sbin:/usr/bin:/usr/sbin&#39;,
-      }
+    exec { &quot;change-selinux-status-to-${_real_mode}&quot;:
+      command =&gt; &quot;setenforce ${sestatus}&quot;,
+      unless  =&gt; &quot;getenforce | grep -Eqi &#39;${sestatus}|disabled&#39;&quot;,
+      path    =&gt; &#39;/bin:/sbin:/usr/bin:/usr/sbin&#39;,
     }
   }
 
