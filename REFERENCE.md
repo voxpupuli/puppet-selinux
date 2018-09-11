@@ -609,6 +609,14 @@ present or absent
 
 Default value: 'present'
 
+##### `source_pp`
+
+Data type: `Optional[String]`
+
+the source file (either a puppet URI or local file) of a pre-compiled SELinux policy package. Mutually excludsive with using source files.
+
+Default value: `undef`
+
 ##### `source_te`
 
 Data type: `Optional[String]`
