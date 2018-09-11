@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v1.6.0](https://github.com/voxpupuli/puppet-selinux/tree/v1.6.0) (2018-09-11)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v1.5.3...v1.6.0)
+
+**Implemented enhancements:**
+
+- Add support for installing pre-compiled policy packages [\#253](https://github.com/voxpupuli/puppet-selinux/pull/253) ([oranenj](https://github.com/oranenj))
+
+**Closed issues:**
+
+- New release [\#265](https://github.com/voxpupuli/puppet-selinux/issues/265)
+
+**Merged pull requests:**
+
+- add initial REFERENCE.md [\#268](https://github.com/voxpupuli/puppet-selinux/pull/268) ([bastelfreak](https://github.com/bastelfreak))
+
 ## [v1.5.3](https://github.com/voxpupuli/puppet-selinux/tree/v1.5.3) (2018-08-31)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v1.5.2...v1.5.3)
