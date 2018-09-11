@@ -110,7 +110,6 @@ This will include the module and manage the SELinux mode (possible values are
 are `targeted`, `minimum`, and `mls`). Note that disabling SELinux requires a reboot
 to fully take effect. It will run in `permissive` mode until then.
 
-
 ### Deploy a custom module using the refpolicy framework
 
 ```puppet
@@ -122,6 +121,19 @@ selinux::module { 'resnet-puppet':
   builder   => 'refpolicy'
 }
 ```
+
+### Using pre-compiled policy packages
+
+```puppet
+selinux::module { 'resnet-puppet':
+  ensure    => 'present',
+  source_pp => 'puppet:///modules/site_puppet/site-puppet.pp',
+}
+```
+
+Note that pre-compiled policy packages may not work reliably
+across all RHEL / CentOS releases. It's up to you as the user
+to test that your packages load properly.
 
 ### Set a boolean value
 
