@@ -12,10 +12,10 @@ matrix:
   include:
   - rvm: 2.1.9
     bundler_args: --without system_tests development release
-    env: PUPPET_VERSION="~> 4.0" CHECK=test PARALLEL_TEST_PROCESSORS=12
+    env: PUPPET_VERSION="~> 4.0" CHECK=test PARALLEL_TEST_PROCESSORS=12 FIXTURES_YML=.fixtures-puppet5.yml
   - rvm: 2.4.4
     bundler_args: --without system_tests development release
-    env: PUPPET_VERSION="~> 5.0" CHECK=test
+    env: PUPPET_VERSION="~> 5.0" CHECK=test FIXTURES_YML=.fixtures-puppet5.yml
   - rvm: 2.5.1
     bundler_args: --without system_tests development release
     env: PUPPET_VERSION="~> 6.0" CHECK=test_with_coveralls
@@ -24,7 +24,7 @@ matrix:
     env: PUPPET_VERSION="~> 6.0" CHECK=rubocop
   - rvm: 2.5.1
     bundler_args: --without system_tests development release
-    env: PUPPET_VERSION="~> 5.0" CHECK=build DEPLOY_TO_FORGE=yes
+    env: PUPPET_VERSION="~> 5.0" CHECK=build DEPLOY_TO_FORGE=yes FIXTURES_YML=.fixtures-puppet5.yml
 branches:
   only:
   - master
