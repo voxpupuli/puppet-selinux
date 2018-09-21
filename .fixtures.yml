@@ -2,6 +2,7 @@ fixtures:
   repositories:
     concat: https://github.com/puppetlabs/puppetlabs-concat.git
     stdlib: https://github.com/puppetlabs/puppetlabs-stdlib.git
+    selinux_core: https://github.com/puppetlabs/puppetlabs-selinux_core.git
   symlinks:
     selinux: "#{source_dir}"
 
