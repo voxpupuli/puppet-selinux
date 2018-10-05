@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v1.6.1](https://github.com/voxpupuli/puppet-selinux/tree/v1.6.1) (2018-10-05)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v1.6.0...v1.6.1)
+
+**Merged pull requests:**
+
+- modulesync 2.1.0 & add puppet 6 support [\#271](https://github.com/voxpupuli/puppet-selinux/pull/271) ([bastelfreak](https://github.com/bastelfreak))
+
 ## [v1.6.0](https://github.com/voxpupuli/puppet-selinux/tree/v1.6.0) (2018-09-11)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v1.5.3...v1.6.0)
