@@ -177,7 +177,7 @@ The most important facts:
 | Fact                                      | Fact (old)                | Mode: disabled | Mode: permissive                        | Mode:  enforcing                        |
 |-------------------------------------------|---------------------------|----------------|-----------------------------------------|-----------------------------------------|
 | `$facts['os']['selinux']['enabled']`      | `$::selinux`              | false          | true                                    | true                                    |
-| `$facts['os']['selinux'['config_mode']`   | `$::selinux_config_mode`  | undef          | Value of SELINUX in /etc/selinux/config | Value of SELINUX in /etc/selinux/config |
+| `$facts['os']['selinux']['config_mode']`   | `$::selinux_config_mode`  | undef          | Value of SELINUX in /etc/selinux/config | Value of SELINUX in /etc/selinux/config |
 | `$facts['os']['selinux']['current_mode']` | `$::selinux_current_mode` | undef          | Value of `getenforce` downcased         | Value of `getenforce` downcased         |
 
 ## Authors
