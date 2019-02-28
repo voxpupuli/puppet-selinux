@@ -112,6 +112,7 @@ describe 'selinux::module' do
         end
 
         it { is_expected.to contain_file(workdir) }
+        it { is_expected.to contain_class('selinux::build').that_comes_before('Selinux::Module[mymodule]') }
         it { is_expected.to contain_file("#{workdir}/mymodule.te").that_notifies('Exec[clean-module-mymodule]') }
         it { is_expected.to contain_file("#{workdir}/mymodule.fc").with(source: nil, content: '') }
         it { is_expected.to contain_file("#{workdir}/mymodule.if").with(source: nil, content: '') }
