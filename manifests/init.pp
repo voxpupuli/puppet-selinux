@@ -7,16 +7,9 @@
 #   }
 #
 # @param mode sets the operating state for SELinux.
-#   Default value: undef
-#   Allowed values: (enforcing|permissive|disabled|undef)
 # @param type sets the selinux type
-#   Default value: undef
-#   Allowed values: (targeted|minimum|mls|undef)
 # @param refpolicy_makefile the path to the system's SELinux makefile for the refpolicy framework
-#   Default value: /usr/share/selinux/devel/Makefile
-#   Allowed value: absolute path
 # @param manage_package manage the package for selinux tools and refpolicy
-#   Default value: true
 # @param package_name sets the name for the selinux tools package
 #   Default value: OS dependent (see params.pp)
 # @param refpolicy_package_name sets the name for the refpolicy development package, required for the
@@ -24,7 +17,6 @@
 #   Default value: OS dependent (see params.pp)
 # @param module_build_root directory where modules are built. Defaults to `$vardir/puppet-selinux`
 # @param default_builder which builder to use by default with selinux::module
-#   Default value: simple
 # @param boolean Hash of selinux::boolean resource parameters
 # @param fcontext Hash of selinux::fcontext resource parameters
 # @param module Hash of selinux::module resource parameters
@@ -33,12 +25,12 @@
 # @param exec_restorecon Hash of selinux::exec_restorecon resource parameters
 #
 class selinux (
-  Optional[Enum['enforcing', 'permissive', 'disabled']] $mode = $::selinux::params::mode,
-  Optional[Enum['targeted', 'minimum', 'mls']] $type          = $::selinux::params::type,
-  Stdlib::Absolutepath $refpolicy_makefile                    = $::selinux::params::refpolicy_makefile,
-  Boolean $manage_package                                     = $::selinux::params::manage_package,
+  Optional[Enum['enforcing', 'permissive', 'disabled']] $mode = undef,
+  Optional[Enum['targeted', 'minimum', 'mls']] $type          = undef,
+  Stdlib::Absolutepath $refpolicy_makefile                    = '/usr/share/selinux/devel/Makefile',
+  Boolean $manage_package                                     = true,
   String $package_name                                        = $::selinux::params::package_name,
-  String $refpolicy_package_name                              = $::selinux::params::refpolicy_package_name,
+  String $refpolicy_package_name                              = 'selinux-policy-devel',
   Stdlib::Absolutepath $module_build_root                     = $::selinux::params::module_build_root,
   Enum['refpolicy', 'simple'] $default_builder                = 'simple',
 
