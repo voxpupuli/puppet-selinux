@@ -1,8 +1,11 @@
 require 'spec_helper'
 
 describe 'selinux::exec_restorecon' do
-  on_supported_os.each do |os, _facts|
+  on_supported_os.each do |os, facts|
     context "on #{os}" do
+        let :facts do
+          facts
+        end
       context 'with resource titled /opt/mycustompath' do
         let(:title) { '/opt/mycustompath' }
 
@@ -42,7 +45,6 @@ describe 'selinux::exec_restorecon' do
       end
       context 'with resource titled /opt/$HOME/some weird dir/' do
         let(:title) { '/opt/$HOME/some weird dir/' }
-
         context 'with defaults' do
           it { is_expected.to contain_exec('selinux::exec_restorecon /opt/$HOME/some weird dir/').with(command: "restorecon -R '/opt/$HOME/some weird dir/'", refreshonly: true) }
         end
@@ -50,7 +52,6 @@ describe 'selinux::exec_restorecon' do
       context 'with path /weird/\'pa th\'/"quotes"' do
         let(:title) { 'just_for_testing' }
         let(:params) { { path: %q(/weird/'pa th'/"quotes") } }
-
         context 'with defaults' do
           it { is_expected.to contain_exec(%q(selinux::exec_restorecon /weird/'pa th'/"quotes")).with(command: %q(restorecon -R "/weird/'pa th'/\"quotes\""), refreshonly: true) }
         end
