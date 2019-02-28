@@ -64,7 +64,9 @@ define selinux::module(
 ) {
   include ::selinux
 
-  if $builder == 'refpolicy' {
+  $_builder = pick($builder, $::selinux::default_builder, 'none')
+
+  if $_builder == 'refpolicy' {
     require ::selinux::refpolicy_package
   }
 
@@ -75,7 +77,7 @@ define selinux::module(
   $module_dir = $::selinux::config::module_build_dir
   $module_file = "${module_dir}/${title}"
 
-  $build_command = pick($builder, $::selinux::default_builder, 'none') ? {
+  $build_command = $_builder ? {
       'simple'    => shellquote("${::selinux::module_build_root}/bin/selinux_build_module_simple.sh", $title, $module_dir),
       'refpolicy' => shellquote('make', '-f', $::selinux::refpolicy_makefile, "${title}.pp"),
       'none'      => undef
