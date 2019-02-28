@@ -1,13 +1,6 @@
-# Class: selinux::config
-#
-# THIS IS A PRIVATE CLASS
-# =======================
-#
-# This class is designed to configure the system to use SELinux on the system.
+# Configure the system to use SELinux on the system.
 #
 # It is included in the main class ::selinux
-#
-#
 #
 # Config for module building
 # --------------------------
@@ -27,6 +20,8 @@
 # @param package_name See main class
 # @param module_build_root See main class
 #
+# @api private
+#
 class selinux::config (
   $mode                                   = $::selinux::mode,
   $type                                   = $::selinux::type,
@@ -35,9 +30,7 @@ class selinux::config (
   Stdlib::Absolutepath $module_build_root = $::selinux::module_build_root
 ) {
 
-  if $caller_module_name != $module_name {
-    fail("Use of private class ${name} by ${caller_module_name}")
-  }
+  assert_private()
 
   if ($mode == 'enforcing' and !$facts['selinux']) {
     notice('SELinux is disabled. Forcing configuration to permissive to avoid problems. To disable this warning, explicitly set selinux::mode to permissive or disabled.')

@@ -1,9 +1,6 @@
-# selinux::params
-#
-# THIS IS A PRIVATE CLASS
-# =======================
-#
 # This class provides default parameters for the selinux class
+#
+# @api private
 #
 class selinux::params {
   $refpolicy_makefile = '/usr/share/selinux/devel/Makefile'

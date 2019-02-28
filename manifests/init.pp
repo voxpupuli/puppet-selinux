@@ -1,6 +1,4 @@
-# Class: selinux
-#
-# This class manages SELinux on RHEL based systems.
+# Manage SELinux on RHEL based systems.
 #
 # @example Enable enforcing mode with targeted policy
 #   class { 'selinux':

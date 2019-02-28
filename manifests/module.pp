@@ -1,12 +1,12 @@
-# Defined type: selinux::module
-#
 # This class will either install or uninstall a SELinux module from a running system.
 # This module allows an admin to keep .te files in text form in a repository, while
 # allowing the system to compile and manage SELinux modules.
 #
 # Concepts incorporated from:
 # http://stuckinadoloop.wordpress.com/2011/06/15/puppet-managed-deployment-of-selinux-modules/
-# 
+#
+# @summary Manage a SELinux module on a running system
+#
 # @example compile and load the apache module - does not require make or the policy
 #   devel package
 #   selinux::module{ 'apache':
