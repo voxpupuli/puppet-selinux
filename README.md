@@ -23,7 +23,7 @@ This class manages SELinux on RHEL based systems.
 
 ## Requirements
 
-* Puppet 4 or later
+* Puppet 5 or later
 
 ## Module Description
 
