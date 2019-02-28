@@ -11,7 +11,8 @@ _Public Classes_
 
 _Private Classes_
 
-* `selinux::config`: Configure the system to use SELinux on the system.  It is included in the main class ::selinux  Config for module building ------------------
+* `selinux::build`: Configure the system for module building
+* `selinux::config`: Configure the system to use SELinux on the system.  It is included in the main class ::selinux
 * `selinux::package`: Manages additional packages required to support some of the functions.
 * `selinux::params`: This class provides default parameters for the selinux class
 * `selinux::refpolicy_package`: Manages additional packages required to support some of the functions.
