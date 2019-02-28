@@ -432,7 +432,10 @@ to build the module, whereas &#39;refpolicy&#39; uses the refpolicy framework, b
 181
 182
 183
-184</pre>
+184
+185
+186
+187</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/module.pp', line 54</span>
@@ -449,8 +452,11 @@ define selinux::module(
   Optional[Enum[&#39;simple&#39;, &#39;refpolicy&#39;]] $builder = undef,
 ) {
   include ::selinux
+  require ::selinux::build
 
-  if $builder == &#39;refpolicy&#39; {
+  $_builder = pick($builder, $::selinux::default_builder, &#39;none&#39;)
+
+  if $_builder == &#39;refpolicy&#39; {
     require ::selinux::refpolicy_package
   }
 
@@ -458,11 +464,11 @@ define selinux::module(
     fail(&quot;The simple builder does not support the &#39;source_if&#39; parameter&quot;)
   }
 
-  $module_dir = $::selinux::config::module_build_dir
+  $module_dir = $::selinux::build::module_build_dir
   $module_file = &quot;${module_dir}/${title}&quot;
 
-  $build_command = pick($builder, $::selinux::default_builder, &#39;none&#39;) ? {
-      &#39;simple&#39;    =&gt; shellquote(&quot;${::selinux::module_build_root}/bin/selinux_build_module_simple.sh&quot;, $title, $module_dir),
+  $build_command = $_builder ? {
+      &#39;simple&#39;    =&gt; shellquote($::selinux::build::module_build_simple, $title, $module_dir),
       &#39;refpolicy&#39; =&gt; shellquote(&#39;make&#39;, &#39;-f&#39;, $::selinux::refpolicy_makefile, &quot;${title}.pp&quot;),
       &#39;none&#39;      =&gt; undef
   }
