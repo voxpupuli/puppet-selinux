@@ -25,7 +25,7 @@ define selinux::port (
   Enum['present', 'absent']          $ensure = 'present',
 ) {
 
-  include ::selinux
+  include selinux
 
   if $ensure == 'present' {
     Anchor['selinux::module post']

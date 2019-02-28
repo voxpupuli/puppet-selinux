@@ -62,25 +62,25 @@ define selinux::module(
   Enum['absent', 'present'] $ensure = 'present',
   Optional[Enum['simple', 'refpolicy']] $builder = undef,
 ) {
-  include ::selinux
-  require ::selinux::build
+  include selinux
+  require selinux::build
 
-  $_builder = pick($builder, $::selinux::default_builder, 'none')
+  $_builder = pick($builder, $selinux::default_builder, 'none')
 
   if $_builder == 'refpolicy' {
-    require ::selinux::refpolicy_package
+    require selinux::refpolicy_package
   }
 
   if ($builder == 'simple' and ($source_if != undef or $content_if != undef)) {
     fail("The simple builder does not support the 'source_if' parameter")
   }
 
-  $module_dir = $::selinux::build::module_build_dir
+  $module_dir = $selinux::build::module_build_dir
   $module_file = "${module_dir}/${title}"
 
   $build_command = $_builder ? {
-      'simple'    => shellquote($::selinux::build::module_build_simple, $title, $module_dir),
-      'refpolicy' => shellquote('make', '-f', $::selinux::refpolicy_makefile, "${title}.pp"),
+      'simple'    => shellquote($selinux::build::module_build_simple, $title, $module_dir),
+      'refpolicy' => shellquote('make', '-f', $selinux::refpolicy_makefile, "${title}.pp"),
       'none'      => undef
   }
 

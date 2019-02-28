@@ -18,7 +18,7 @@ define selinux::boolean (
   Boolean $persistent = true,
 ) {
 
-  include ::selinux
+  include selinux
 
   Anchor['selinux::module post']
   -> Selinux::Boolean[$title]
