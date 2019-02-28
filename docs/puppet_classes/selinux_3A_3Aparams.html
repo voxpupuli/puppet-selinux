@@ -119,124 +119,24 @@
 22
 23
 24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-58
-59
-60
-61
-62
-63
-64
-65
-66
-67
-68
-69
-70
-71
-72
-73
-74
-75</pre>
+25</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/params.pp', line 5</span>
 
 class selinux::params {
-  $refpolicy_makefile = &#39;/usr/share/selinux/devel/Makefile&#39;
-  $mode           = undef
-  $type           = undef
-  $manage_package = true
-
-  $refpolicy_package_name = &#39;selinux-policy-devel&#39;
-
   $module_build_root = &quot;${facts[&#39;puppet_vardir&#39;]}/puppet-selinux&quot;
 
-  if $::operatingsystemmajrelease {
-    $os_maj_release = $::operatingsystemmajrelease
-  } else {
-    $os_versions    = split($::operatingsystemrelease, &#39;[.]&#39;)
-    $os_maj_release = $os_versions[0]
-  }
-
-  case $::osfamily {
+  case $facts[&#39;osfamily&#39;] {
     &#39;RedHat&#39;: {
-      case $::operatingsystem {
-        &#39;Fedora&#39;: {
-          $sx_fs_mount = &#39;/sys/fs/selinux&#39;
-          case $os_maj_release {
-            &#39;19&#39;,&#39;20&#39; : {
-              $package_name = &#39;policycoreutils-python&#39;
-            }
-            &#39;21&#39;,&#39;22&#39;,&#39;23&#39; : {
-              $package_name = &#39;policycoreutils-devel&#39;
-            }
-            default: {
-              $package_name = &#39;policycoreutils-python-utils&#39;
-            }
-          }
-        }
-        &#39;Amazon&#39;: {
-          $sx_fs_mount = &#39;/selinux&#39;
-          $package_name = &#39;policycoreutils&#39;
-        }
-        default: {
-          case $os_maj_release {
-            &#39;7&#39;: {
-              $sx_fs_mount = &#39;/sys/fs/selinux&#39;
-              $package_name = &#39;policycoreutils-python&#39;
-            }
-            &#39;6&#39;: {
-              $sx_fs_mount = &#39;/selinux&#39;
-              $package_name = &#39;policycoreutils-python&#39;
-            }
-            &#39;5&#39;: {
-              $sx_fs_mount = &#39;/selinux&#39;
-              $package_name = &#39;policycoreutils&#39;
-            }
-            &#39;&#39;: {
-              # Fallback to lsbmajdistrelease, if puppet version is &lt; 3.0
-              if($::lsbmajdistrelease == &#39;5&#39;) {
-                $sx_fs_mount = &#39;/selinux&#39;
-                $package_name = &#39;policycoreutils&#39;
-              }
-            }
-            default: {
-              fail(&quot;${::operatingsystem}-${::os_maj_release} is not supported&quot;)
-            }
-          }
+      if $facts[&#39;operatingsystem&#39;] == &#39;Amazon&#39; {
+        $package_name = &#39;policycoreutils&#39;
+      } else {
+        $package_name = $facts[&#39;operatingsystemmajrelease&#39;] ? {
+          &#39;5&#39;     =&gt; &#39;policycoreutils&#39;,
+          &#39;6&#39;     =&gt; &#39;policycoreutils-python&#39;,
+          &#39;7&#39;     =&gt; &#39;policycoreutils-python&#39;,
+          default =&gt; &#39;policycoreutils-python-utils&#39;,
         }
       }
     }

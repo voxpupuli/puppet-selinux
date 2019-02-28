@@ -59,39 +59,32 @@ The following parameters are available in the `selinux` class.
 Data type: `Optional[Enum['enforcing', 'permissive', 'disabled']]`
 
 sets the operating state for SELinux.
-Default value: undef
-Allowed values: (enforcing|permissive|disabled|undef)
 
-Default value: $::selinux::params::mode
+Default value: `undef`
 
 ##### `type`
 
 Data type: `Optional[Enum['targeted', 'minimum', 'mls']]`
 
 sets the selinux type
-Default value: undef
-Allowed values: (targeted|minimum|mls|undef)
 
-Default value: $::selinux::params::type
+Default value: `undef`
 
 ##### `refpolicy_makefile`
 
 Data type: `Stdlib::Absolutepath`
 
 the path to the system's SELinux makefile for the refpolicy framework
-Default value: /usr/share/selinux/devel/Makefile
-Allowed value: absolute path
 
-Default value: $::selinux::params::refpolicy_makefile
+Default value: '/usr/share/selinux/devel/Makefile'
 
 ##### `manage_package`
 
 Data type: `Boolean`
 
 manage the package for selinux tools and refpolicy
-Default value: true
 
-Default value: $::selinux::params::manage_package
+Default value: `true`
 
 ##### `package_name`
 
@@ -110,7 +103,7 @@ sets the name for the refpolicy development package, required for the
 refpolicy module builder
 Default value: OS dependent (see params.pp)
 
-Default value: $::selinux::params::refpolicy_package_name
+Default value: 'selinux-policy-devel'
 
 ##### `module_build_root`
 
@@ -125,7 +118,6 @@ Default value: $::selinux::params::module_build_root
 Data type: `Enum['refpolicy', 'simple']`
 
 which builder to use by default with selinux::module
-Default value: simple
 
 Default value: 'simple'
 

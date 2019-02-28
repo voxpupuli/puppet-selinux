@@ -111,13 +111,11 @@
         <span class='type'>(<tt>Optional[Enum['enforcing', 'permissive', 'disabled']]</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>$::selinux::params::mode</tt>)</em>
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
       
       
         &mdash;
-        <div class='inline'><p>sets the operating state for SELinux.
-Default value: undef
-Allowed values: (enforcing|permissive|disabled|undef)</p>
+        <div class='inline'><p>sets the operating state for SELinux.</p>
 </div>
       
     </li>
@@ -130,13 +128,11 @@ Allowed values: (enforcing|permissive|disabled|undef)</p>
         <span class='type'>(<tt>Optional[Enum['targeted', 'minimum', 'mls']]</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>$::selinux::params::type</tt>)</em>
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
       
       
         &mdash;
-        <div class='inline'><p>sets the selinux type
-Default value: undef
-Allowed values: (targeted|minimum|mls|undef)</p>
+        <div class='inline'><p>sets the selinux type</p>
 </div>
       
     </li>
@@ -149,13 +145,11 @@ Allowed values: (targeted|minimum|mls|undef)</p>
         <span class='type'>(<tt>Stdlib::Absolutepath</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>$::selinux::params::refpolicy_makefile</tt>)</em>
+        <em class="default">(defaults to: <tt>&#39;/usr/share/selinux/devel/Makefile&#39;</tt>)</em>
       
       
         &mdash;
-        <div class='inline'><p>the path to the system&#39;s SELinux makefile for the refpolicy framework
-Default value: /usr/share/selinux/devel/Makefile
-Allowed value: absolute path</p>
+        <div class='inline'><p>the path to the system&#39;s SELinux makefile for the refpolicy framework</p>
 </div>
       
     </li>
@@ -168,12 +162,11 @@ Allowed value: absolute path</p>
         <span class='type'>(<tt>Boolean</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>$::selinux::params::manage_package</tt>)</em>
+        <em class="default">(defaults to: <tt>true</tt>)</em>
       
       
         &mdash;
-        <div class='inline'><p>manage the package for selinux tools and refpolicy
-Default value: true</p>
+        <div class='inline'><p>manage the package for selinux tools and refpolicy</p>
 </div>
       
     </li>
@@ -204,7 +197,7 @@ Default value: OS dependent (see params.pp)</p>
         <span class='type'>(<tt>String</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>$::selinux::params::refpolicy_package_name</tt>)</em>
+        <em class="default">(defaults to: <tt>&#39;selinux-policy-devel&#39;</tt>)</em>
       
       
         &mdash;
@@ -244,8 +237,7 @@ Default value: OS dependent (see params.pp)</p>
       
       
         &mdash;
-        <div class='inline'><p>which builder to use by default with selinux::module
-Default value: simple</p>
+        <div class='inline'><p>which builder to use by default with selinux::module</p>
 </div>
       
     </li>
@@ -362,6 +354,14 @@ Default value: simple</p>
         <pre class="lines">
 
 
+27
+28
+29
+30
+31
+32
+33
+34
 35
 36
 37
@@ -408,26 +408,18 @@ Default value: simple</p>
 78
 79
 80
-81
-82
-83
-84
-85
-86
-87
-88
-89</pre>
+81</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/init.pp', line 35</span>
+        <pre class="code"><span class="info file"># File 'manifests/init.pp', line 27</span>
 
 class selinux (
-  Optional[Enum[&#39;enforcing&#39;, &#39;permissive&#39;, &#39;disabled&#39;]] $mode = $::selinux::params::mode,
-  Optional[Enum[&#39;targeted&#39;, &#39;minimum&#39;, &#39;mls&#39;]] $type          = $::selinux::params::type,
-  Stdlib::Absolutepath $refpolicy_makefile                    = $::selinux::params::refpolicy_makefile,
-  Boolean $manage_package                                     = $::selinux::params::manage_package,
+  Optional[Enum[&#39;enforcing&#39;, &#39;permissive&#39;, &#39;disabled&#39;]] $mode = undef,
+  Optional[Enum[&#39;targeted&#39;, &#39;minimum&#39;, &#39;mls&#39;]] $type          = undef,
+  Stdlib::Absolutepath $refpolicy_makefile                    = &#39;/usr/share/selinux/devel/Makefile&#39;,
+  Boolean $manage_package                                     = true,
   String $package_name                                        = $::selinux::params::package_name,
-  String $refpolicy_package_name                              = $::selinux::params::refpolicy_package_name,
+  String $refpolicy_package_name                              = &#39;selinux-policy-devel&#39;,
   Stdlib::Absolutepath $module_build_root                     = $::selinux::params::module_build_root,
   Enum[&#39;refpolicy&#39;, &#39;simple&#39;] $default_builder                = &#39;simple&#39;,
 
