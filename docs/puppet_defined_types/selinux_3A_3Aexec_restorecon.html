@@ -6,7 +6,7 @@
 <title>
   Defined Type: selinux::exec_restorecon
   
-    &mdash; Documentation by YARD 0.9.12
+    &mdash; Documentation by YARD 0.9.18
   
 </title>
 
@@ -69,18 +69,19 @@
   </dl>
 </div>
 
+  <h2>Summary</h2>
+  A convenience wrapper around a restorecon exec
+
 <h2>Overview</h2>
 <div class="docstring">
   <div class="discussion">
-    <p>selinux::exec_restorecon</p>
-
-<p>A convenience wrapper around a restorecon exec</p>
-
-<p>Will execute after all other SELinux changes have been applied, but before
+    <p>Will execute after all other SELinux changes have been applied, but before
 Anchor[&#39;selinux::end&#39;]</p>
 
   </div>
 </div>
+
+
 <div class="tags">
   <p class="tag_title">Parameters:</p>
 <ul class="param">
@@ -197,6 +198,8 @@ Anchor[&#39;selinux::end&#39;]</p>
         <pre class="lines">
 
 
+13
+14
 15
 16
 17
@@ -228,12 +231,10 @@ Anchor[&#39;selinux::end&#39;]</p>
 43
 44
 45
-46
-47
-48</pre>
+46</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/exec_restorecon.pp', line 15</span>
+        <pre class="code"><span class="info file"># File 'manifests/exec_restorecon.pp', line 13</span>
 
 define selinux::exec_restorecon(
   Stdlib::Absolutepath $path        = $title,

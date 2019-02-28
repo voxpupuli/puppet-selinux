@@ -6,7 +6,7 @@
 <title>
   File: README
   
-    &mdash; Documentation by YARD 0.9.12
+    &mdash; Documentation by YARD 0.9.18
   
 </title>
 
@@ -69,13 +69,13 @@
 <h4>Table of Contents</h4>
 
 <ol>
-<li><a href="#overview">Overview</a></li>
-<li><a href="#module-description">Module Description - What the module does and why it is useful</a></li>
-<li><a href="#usage">Usage - Configuration options and additional functionality</a></li>
-<li><a href="#reference">Reference - An under-the-hood peek at what the module is doing and how</a></li>
-<li><a href="#defined-types">Defined Types</a></li>
-<li><a href="#development">Development - Guide for contributing to the module</a></li>
-<li><a href="#authors">Authors</a></li>
+<li><a href="#label-Overview">Overview</a></li>
+<li><a href="#label-Module+description">Module Description - What the module does and why it is useful</a></li>
+<li><a href="#label-Usage">Usage - Configuration options and additional functionality</a></li>
+<li><a href="#label-Reference">Reference - An under-the-hood peek at what the module is doing and how</a></li>
+<li><a href="#label-Defined+types">Defined Types</a></li>
+<li><a href="#label-Development">Development - Guide for contributing to the module</a></li>
+<li><a href="#label-Authors">Authors</a></li>
 </ol>
 
 <h2>Overview</h2>
@@ -192,6 +192,18 @@ to fully take effect. It will run in <code>permissive</code> mode until then.</p
 }
 </code></pre>
 
+<h3>Using pre-compiled policy packages</h3>
+
+<pre class="code puppet"><code class="puppet">selinux::module { &#39;resnet-puppet&#39;:
+  ensure    =&gt; &#39;present&#39;,
+  source_pp =&gt; &#39;puppet:///modules/site_puppet/site-puppet.pp&#39;,
+}
+</code></pre>
+
+<p>Note that pre-compiled policy packages may not work reliably
+across all RHEL / CentOS releases. It&#39;s up to you as the user
+to test that your packages load properly.</p>
+
 <h3>Set a boolean value</h3>
 
 <pre class="code puppet"><code class="puppet">selinux::boolean { &#39;puppetagent_manage_all_files&#39;: }
@@ -253,7 +265,7 @@ the config_mode to be set, but only the boolean <code>enabled</code> is set.</p>
 <td>true</td>
 </tr>
 <tr>
-<td><code>$facts[&#39;os&#39;][&#39;selinux&#39;[&#39;config_mode&#39;]</code></td>
+<td><code>$facts[&#39;os&#39;][&#39;selinux&#39;][&#39;config_mode&#39;]</code></td>
 <td><code>$::selinux_config_mode</code></td>
 <td>undef</td>
 <td>Value of SELINUX in /etc/selinux/config</td>

@@ -6,7 +6,7 @@
 <title>
   Puppet Class: selinux
   
-    &mdash; Documentation by YARD 0.9.12
+    &mdash; Documentation by YARD 0.9.18
   
 </title>
 
@@ -79,12 +79,12 @@
 <h2>Overview</h2>
 <div class="docstring">
   <div class="discussion">
-    <p>Class: selinux</p>
-
-<p>This class manages SELinux on RHEL based systems.</p>
+    <p>Manage SELinux on RHEL based systems.</p>
 
   </div>
 </div>
+
+
 <div class="tags">
   
   <div class="examples">
@@ -362,6 +362,8 @@ Default value: simple</p>
         <pre class="lines">
 
 
+35
+36
 37
 38
 39
@@ -414,12 +416,10 @@ Default value: simple</p>
 86
 87
 88
-89
-90
-91</pre>
+89</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/init.pp', line 37</span>
+        <pre class="code"><span class="info file"># File 'manifests/init.pp', line 35</span>
 
 class selinux (
   Optional[Enum[&#39;enforcing&#39;, &#39;permissive&#39;, &#39;disabled&#39;]] $mode = $::selinux::params::mode,

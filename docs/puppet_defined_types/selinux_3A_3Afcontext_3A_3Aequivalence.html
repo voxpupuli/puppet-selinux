@@ -6,7 +6,7 @@
 <title>
   Defined Type: selinux::fcontext::equivalence
   
-    &mdash; Documentation by YARD 0.9.12
+    &mdash; Documentation by YARD 0.9.18
   
 </title>
 
@@ -72,12 +72,12 @@
 <h2>Overview</h2>
 <div class="docstring">
   <div class="discussion">
-    <p>selinux::fcontext::equivalence</p>
-
-<p>This define can be used to manage SELinux fcontext equivalences</p>
+    <p>Manage SELinux fcontext equivalences</p>
 
   </div>
 </div>
+
+
 <div class="tags">
   
   <div class="examples">
@@ -155,6 +155,8 @@
         <pre class="lines">
 
 
+13
+14
 15
 16
 17
@@ -175,12 +177,10 @@
 32
 33
 34
-35
-36
-37</pre>
+35</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/fcontext/equivalence.pp', line 15</span>
+        <pre class="code"><span class="info file"># File 'manifests/fcontext/equivalence.pp', line 13</span>
 
 define selinux::fcontext::equivalence(
   String $target,

@@ -6,7 +6,7 @@
 <title>
   Defined Type: selinux::fcontext
   
-    &mdash; Documentation by YARD 0.9.12
+    &mdash; Documentation by YARD 0.9.18
   
 </title>
 
@@ -72,13 +72,12 @@
 <h2>Overview</h2>
 <div class="docstring">
   <div class="discussion">
-    <p>selinux::fcontext</p>
-
-<p>This define can be used to manage custom SELinux fcontexts. For fcontext
-equivalences, see selinux::fcontext::equivalence</p>
+    <p>For fcontext equivalences, see selinux::fcontext::equivalence</p>
 
   </div>
 </div>
+
+
 <div class="tags">
   
   <div class="examples">
@@ -210,6 +209,13 @@ like &quot;/var/log/mysql(/.*)?&quot;. Defaults to title</p>
 </ul>
 
 
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><span class='object_link'><a href="selinux_3A_3Afcontext_3A_3Aequivalence.html" title="puppet_defined_types::selinux::fcontext::equivalence (puppet_defined_type)">fcontext::equivalence</a></span></li>
+    
+  </ul>
+
 </div><div class="method_details_list">
   <table class="source_code">
     <tr>
@@ -217,7 +223,6 @@ like &quot;/var/log/mysql(/.*)?&quot;. Defaults to title</p>
         <pre class="lines">
 
 
-33
 34
 35
 36
@@ -248,10 +253,11 @@ like &quot;/var/log/mysql(/.*)?&quot;. Defaults to title</p>
 61
 62
 63
-64</pre>
+64
+65</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/fcontext.pp', line 33</span>
+        <pre class="code"><span class="info file"># File 'manifests/fcontext.pp', line 34</span>
 
 define selinux::fcontext(
   String $pathspec                  = $title,

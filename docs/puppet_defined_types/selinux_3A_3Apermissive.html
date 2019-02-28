@@ -6,7 +6,7 @@
 <title>
   Defined Type: selinux::permissive
   
-    &mdash; Documentation by YARD 0.9.12
+    &mdash; Documentation by YARD 0.9.18
   
 </title>
 
@@ -72,12 +72,12 @@
 <h2>Overview</h2>
 <div class="docstring">
   <div class="discussion">
-    <p>selinux::permissive</p>
-
-<p>This define will set an SELinux type to permissive</p>
+    <p>Set SELinux type to permissive</p>
 
   </div>
 </div>
+
+
 <div class="tags">
   
   <div class="examples">
@@ -139,6 +139,8 @@
         <pre class="lines">
 
 
+11
+12
 13
 14
 15
@@ -156,12 +158,10 @@
 27
 28
 29
-30
-31
-32</pre>
+30</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/permissive.pp', line 13</span>
+        <pre class="code"><span class="info file"># File 'manifests/permissive.pp', line 11</span>
 
 define selinux::permissive (
   String $seltype = $title,

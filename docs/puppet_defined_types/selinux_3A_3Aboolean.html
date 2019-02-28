@@ -6,7 +6,7 @@
 <title>
   Defined Type: selinux::boolean
   
-    &mdash; Documentation by YARD 0.9.12
+    &mdash; Documentation by YARD 0.9.18
   
 </title>
 
@@ -72,12 +72,12 @@
 <h2>Overview</h2>
 <div class="docstring">
   <div class="discussion">
-    <p>selinux::boolean</p>
-
-<p>This class will set the state of an SELinux boolean.</p>
+    <p>Manage the state of an SELinux boolean.</p>
 
   </div>
 </div>
+
+
 <div class="tags">
   
   <div class="examples">
@@ -147,6 +147,8 @@
         <pre class="lines">
 
 
+16
+17
 18
 19
 20
@@ -172,12 +174,10 @@
 40
 41
 42
-43
-44
-45</pre>
+43</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/boolean.pp', line 18</span>
+        <pre class="code"><span class="info file"># File 'manifests/boolean.pp', line 16</span>
 
 define selinux::boolean (
   Variant[Boolean, Enum[&#39;on&#39;, &#39;off&#39;, &#39;present&#39;, &#39;absent&#39;]] $ensure = &#39;on&#39;,
