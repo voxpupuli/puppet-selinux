@@ -13,7 +13,7 @@ define selinux::permissive (
   Enum['present', 'absent'] $ensure = 'present',
 ) {
 
-  include ::selinux
+  include selinux
   if $ensure == 'present' {
     Anchor['selinux::module post']
     -> Selinux::Permissive[$title]

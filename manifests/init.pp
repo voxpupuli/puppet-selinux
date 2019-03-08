@@ -45,12 +45,12 @@ class selinux (
 
 ) inherits selinux::params {
 
-  class { '::selinux::package':
+  class { 'selinux::package':
     manage_package => $manage_package,
     package_name   => $package_name,
   }
 
-  class { '::selinux::config': }
+  class { 'selinux::config': }
 
   if $boolean {
     create_resources ( 'selinux::boolean', $boolean )

@@ -39,7 +39,7 @@ define selinux::fcontext(
   Optional[String] $filetype        = 'a',
 ) {
 
-  include ::selinux
+  include selinux
   if $ensure == 'present' {
   Anchor['selinux::module post']
   -> Selinux::Fcontext[$title]

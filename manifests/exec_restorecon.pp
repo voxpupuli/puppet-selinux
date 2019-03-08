@@ -19,7 +19,7 @@ define selinux::exec_restorecon(
   Optional[String]     $onlyif      = undef,
 ) {
 
-  include ::selinux
+  include selinux
 
   $opt_recurse = $recurse ? {
     true  => ' -R',
