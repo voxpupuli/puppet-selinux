@@ -4,6 +4,28 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v2.0.0](https://github.com/voxpupuli/puppet-selinux/tree/v2.0.0) (2019-05-15)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v1.6.1...v2.0.0)
+
+**Breaking changes:**
+
+- modulesync 2.5.1 and drop Puppet 4 [\#282](https://github.com/voxpupuli/puppet-selinux/pull/282) ([bastelfreak](https://github.com/bastelfreak))
+
+**Implemented enhancements:**
+
+- Allow `puppetlabs/stdlib` 6.x [\#284](https://github.com/voxpupuli/puppet-selinux/pull/284) ([alexjfisher](https://github.com/alexjfisher))
+- Builder improvements and acceptance tests [\#281](https://github.com/voxpupuli/puppet-selinux/pull/281) ([ekohl](https://github.com/ekohl))
+- Simplify parameter handling [\#280](https://github.com/voxpupuli/puppet-selinux/pull/280) ([ekohl](https://github.com/ekohl))
+
+**Fixed bugs:**
+
+- fix syntax of config\_mode fact example [\#275](https://github.com/voxpupuli/puppet-selinux/pull/275) ([evgeni](https://github.com/evgeni))
+
+**Merged pull requests:**
+
+- Update puppet strings and use assert\_private [\#279](https://github.com/voxpupuli/puppet-selinux/pull/279) ([ekohl](https://github.com/ekohl))
+
 ## [v1.6.1](https://github.com/voxpupuli/puppet-selinux/tree/v1.6.1) (2018-10-05)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v1.6.0...v1.6.1)
