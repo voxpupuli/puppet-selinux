@@ -5,6 +5,8 @@ Gemfile:
   optional:
     ':system_tests':
       - gem: beaker-vagrant
+spec/spec_helper.rb:
+  mock_with: ':mocha'
 spec/acceptance/nodesets/archlinux-2-x64.yml:
   delete: true
 spec/acceptance/nodesets/ec2/sles-12sp2-x64.yml:
