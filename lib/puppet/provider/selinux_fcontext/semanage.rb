@@ -71,12 +71,19 @@ Puppet::Type.type(:selinux_fcontext).provide(:semanage) do
     # should never conflict with system policy
     # Old semanage fails with --locallist, use -C
     local_fcs = Selinux.selinux_file_context_local_path
-    if File.exist? local_fcs
-      parse_fcontext_lines(File.readlines(local_fcs))
-    else
-      # no file, no local contexts
-      []
+    fcs = Selinux.selinux_file_context_path
+
+    fcontext_lines = []
+
+    if File.exist? fcs
+      fcontext_lines = parse_fcontext_lines(File.readlines(fcs))
     end
+
+    if File.exist? local_fcs
+      fcontext_lines += parse_fcontext_lines(File.readlines(local_fcs))
+    end
+
+    fcontext_lines
   end
 
   def self.prefetch(resources)
