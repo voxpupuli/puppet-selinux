@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v3.0.0](https://github.com/voxpupuli/puppet-selinux/tree/v3.0.0) (2019-06-17)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v2.0.0...v3.0.0)
+
+**Breaking changes:**
+
+- Python 3 semanage is named python3-libsemanage; Drop Fedora 26/27 support [\#287](https://github.com/voxpupuli/puppet-selinux/pull/287) ([ehelms](https://github.com/ehelms))
+
+**Fixed bugs:**
+
+- Load system policy contexts [\#290](https://github.com/voxpupuli/puppet-selinux/pull/290) ([ekohl](https://github.com/ekohl))
+
+**Closed issues:**
+
+- Fcontext fails on re-run on newer platforms [\#288](https://github.com/voxpupuli/puppet-selinux/issues/288)
+
 ## [v2.0.0](https://github.com/voxpupuli/puppet-selinux/tree/v2.0.0) (2019-05-15)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v1.6.1...v2.0.0)
