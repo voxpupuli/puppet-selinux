@@ -6,7 +6,7 @@ describe 'selinux::port' do
   on_supported_os.each do |os, facts|
     context "on #{os}" do
       let(:facts) do
-        facts
+        facts.merge(selinux: true)
       end
 
       context 'ordering' do

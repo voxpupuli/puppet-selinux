@@ -67,9 +67,6 @@ running system.
   does) the order is important. If you add /my/folder before /my/folder/subfolder
   only /my/folder will match (limitation of SELinux). There is no such limitation
   to file-contexts defined in SELinux modules. (GH-121)
-* While SELinux is disabled the defined types `selinux::boolean`,
-  `selinux::fcontext`, `selinux::port` will produce puppet agent runtime errors
-  because the used tools fail.
 * If you try to remove a built-in permissive type, the operation will appear to succeed
   but will actually have no effect, making your puppet runs non-idempotent.
 * The `selinux_port` provider may misbehave if the title does not correspond to

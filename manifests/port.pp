@@ -56,11 +56,14 @@ define selinux::port (
     fail("Malformed port range: ${port_range}")
   }
 
-  selinux_port {"${protocol}_${range[0]}-${range[1]}":
-    ensure    => $ensure,
-    low_port  => $range[0],
-    high_port => $range[1],
-    seltype   => $seltype,
-    protocol  => $protocol,
+  # Do nothing unless SELinux is enabled
+  if $facts['selinux'] {
+    selinux_port {"${protocol}_${range[0]}-${range[1]}":
+      ensure    => $ensure,
+      low_port  => $range[0],
+      high_port => $range[1],
+      seltype   => $seltype,
+      protocol  => $protocol,
+    }
   }
 }

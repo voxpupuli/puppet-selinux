@@ -36,8 +36,11 @@ define selinux::boolean (
     default              => undef,
   }
 
-  selboolean { $name:
-    value      => $value,
-    persistent => $persistent,
+  # Do nothing unless SELinux is enabled
+  if $facts['selinux'] {
+    selboolean { $name:
+      value      => $value,
+      persistent => $persistent,
+    }
   }
 }
