@@ -29,9 +29,9 @@ class selinux (
   Optional[Enum['targeted', 'minimum', 'mls']] $type          = undef,
   Stdlib::Absolutepath $refpolicy_makefile                    = '/usr/share/selinux/devel/Makefile',
   Boolean $manage_package                                     = true,
-  String $package_name                                        = $::selinux::params::package_name,
+  String $package_name                                        = $selinux::params::package_name,
   String $refpolicy_package_name                              = 'selinux-policy-devel',
-  Stdlib::Absolutepath $module_build_root                     = $::selinux::params::module_build_root,
+  Stdlib::Absolutepath $module_build_root                     = $selinux::params::module_build_root,
   Enum['refpolicy', 'simple'] $default_builder                = 'simple',
 
   ### START Hiera Lookups ###

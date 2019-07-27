@@ -6,8 +6,8 @@
 # @api private
 #
 class selinux::refpolicy_package (
-  $manage_package = $::selinux::manage_package,
-  $package_name   = $::selinux::refpolicy_package_name,
+  $manage_package = $selinux::manage_package,
+  $package_name   = $selinux::refpolicy_package_name,
 ) inherits ::selinux {
   assert_private()
   if $manage_package {

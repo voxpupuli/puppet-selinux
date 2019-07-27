@@ -17,7 +17,7 @@
 # @api private
 #
 class selinux::build(
-  Stdlib::Absolutepath $module_build_root = $::selinux::module_build_root,
+  Stdlib::Absolutepath $module_build_root = $selinux::module_build_root,
 ) {
   file {$module_build_root:
     ensure => 'directory',
