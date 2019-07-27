@@ -10,10 +10,10 @@
 # @api private
 #
 class selinux::config (
-  $mode           = $::selinux::mode,
-  $type           = $::selinux::type,
-  $manage_package = $::selinux::manage_package,
-  $package_name   = $::selinux::package_name,
+  $mode           = $selinux::mode,
+  $type           = $selinux::type,
+  $manage_package = $selinux::manage_package,
+  $package_name   = $selinux::package_name,
 ) {
 
   assert_private()

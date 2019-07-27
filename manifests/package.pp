@@ -6,8 +6,8 @@
 # @param package_name See main class
 #
 class selinux::package (
-  $manage_package = $::selinux::manage_package,
-  $package_name   = $::selinux::package_name,
+  $manage_package = $selinux::manage_package,
+  $package_name   = $selinux::package_name,
 ){
   assert_private()
   if $manage_package {
