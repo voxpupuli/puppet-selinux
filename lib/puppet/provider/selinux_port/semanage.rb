@@ -5,8 +5,7 @@ Puppet::Type.type(:selinux_port).provide(:semanage) do
   # SELinux must be enabled. Is there a way to get a better error message?
   confine selinux: true
 
-  # custom fact, needed for fedora 24+
-  python_command = Facter.value(:selinux_semanage_is_python3) ? 'python3' : 'python'
+  python_command = Facter.value(:selinux_python_command)
   # current file path is lib/puppet/provider/selinux_port/semanage.rb
   # semanage_ports.py is lib/puppet_x/voxpupuli/selinux/semanage_ports.py
   PORTS_HELPER = File.expand_path('../../../../puppet_x/voxpupuli/selinux/semanage_ports.py', __FILE__)
