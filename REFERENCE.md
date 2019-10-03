@@ -94,7 +94,7 @@ Data type: `String`
 sets the name for the selinux tools package
 Default value: OS dependent (see params.pp)
 
-Default value: $::selinux::params::package_name
+Default value: $selinux::params::package_name
 
 ##### `refpolicy_package_name`
 
@@ -112,7 +112,7 @@ Data type: `Stdlib::Absolutepath`
 
 directory where modules are built. Defaults to `$vardir/puppet-selinux`
 
-Default value: $::selinux::params::module_build_root
+Default value: $selinux::params::module_build_root
 
 ##### `default_builder`
 
