@@ -80,8 +80,7 @@ running system.
 
 ## Usage
 
-Generated puppet strings documentation with examples is available from
-https://voxpupuli.org/puppet-selinux/
+Generated puppet strings documentation with examples is available in the [REFERENCE.md](./REFERENCE.md)
 
 It's also included in the docs/ folder as simple html pages.
 
