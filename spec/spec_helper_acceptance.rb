@@ -3,6 +3,19 @@ require 'beaker-puppet'
 require 'beaker/puppet_install_helper'
 require 'beaker/module_install_helper'
 
+def policy_package_for(hosts)
+  case hosts[0]['platform']
+  when %r{^debian}
+    'selinux-policy-default'
+  else
+    'selinux-policy-targeted'
+  end
+end
+
+def have_selinux_ruby_library(hosts)
+  hosts[0]['platform'] !~ %r{^debian}
+end
+
 run_puppet_install_helper unless ENV['BEAKER_provision'] == 'no'
 
 RSpec.configure do |c|
@@ -24,6 +37,10 @@ RSpec.configure do |c|
       on host, 'cat /etc/default/grub'
       on host, 'grub2-mkconfig -o /boot/grub2/grub.cfg'
     end
+  end
+
+  unless have_selinux_ruby_library(hosts)
+    c.filter_run_excluding requires_selinux_ruby_library: true
   end
 end
 

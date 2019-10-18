@@ -3,7 +3,7 @@
 set -e -u -x
 
 for layout in \
-  centos{6,7}'-64a{hypervisor=vagrant}' \
+  {debian10,centos{6,7}}'-64a{hypervisor=vagrant}' \
   'fedora28-64a{hypervisor=vagrant,box=generic/fedora28}' \
   'fedora29-64a{hypervisor=vagrant,box=fedora/29-cloud-base}' \
   'fedora30-64a{hypervisor=vagrant,box=fedora/30-cloud-base}'

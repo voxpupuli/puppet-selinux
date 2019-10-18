@@ -6,9 +6,40 @@ describe 'selinux class - mode switching' do
   test_file_path = '/var/test'
   test_file_type = 'var_t'
 
-  before(:all) do
-    shell('sed -i "s/SELINUX=.*/SELINUX=enforcing/" /etc/selinux/config')
-    shell('setenforce Enforcing && test "$(getenforce)" = "Enforcing"')
+  # On Debian, SELinux is disabled by default. This first step brings it up to
+  # par with EL and exercises the Debian-specific code.
+  context 'when switching from unknown mode to permissive' do
+    let(:pp) do
+      <<-EOS
+        class { 'selinux': mode => 'permissive' }
+      EOS
+    end
+
+    context 'before reboot' do
+      it_behaves_like 'a idempotent resource'
+
+      describe package(policy_package_for(hosts)) do
+        it { is_expected.to be_installed }
+      end
+
+      describe file('/etc/selinux/config') do
+        its(:content) { is_expected.to match(%r{^SELINUX=permissive$}) }
+      end
+    end
+
+    context 'after reboot' do
+      before(:all) do
+        hosts.each(&:reboot) if shell('getenforce').stdout.strip == 'Disabled'
+      end
+
+      it 'applies without changes' do
+        apply_manifest(pp, catch_changes: true)
+      end
+
+      describe command('getenforce') do
+        its(:stdout) { is_expected.to match(%r{^Permissive$}) }
+      end
+    end
   end
 
   context 'when switching from enforcing to disabled' do
@@ -19,11 +50,12 @@ describe 'selinux class - mode switching' do
     end
 
     context 'before reboot' do
-      it_behaves_like 'a idempotent resource'
-
-      describe package('selinux-policy-targeted') do
-        it { is_expected.to be_installed }
+      before(:all) do
+        shell('sed -i "s/SELINUX=.*/SELINUX=enforcing/" /etc/selinux/config')
+        shell('setenforce Enforcing && test "$(getenforce)" = "Enforcing"')
       end
+
+      it_behaves_like 'a idempotent resource'
 
       describe file('/etc/selinux/config') do
         its(:content) { is_expected.to match(%r{^SELINUX=disabled$}) }

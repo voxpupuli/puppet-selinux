@@ -19,7 +19,7 @@
 
 ## Overview
 
-This class manages SELinux on RHEL based systems.
+This class manages SELinux.
 
 ## Requirements
 
@@ -77,6 +77,8 @@ running system.
   when purging resources
 * Defining port ranges that overlap with existing ranges is currently not detected, and will
   cause semanage to error when the resource is applied.
+* On Debian systems, the defined types fcontext, permissive, and port do not
+  work because of [PA-2985](https://tickets.puppetlabs.com/browse/PA-2985).
 
 ## Usage
 

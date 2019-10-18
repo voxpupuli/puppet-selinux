@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'selinux::permissive define' do
+describe 'selinux::permissive define', requires_selinux_ruby_library: true do
   before(:all) do
     ensure_permissive_mode_on(hosts)
   end

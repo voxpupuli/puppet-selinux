@@ -15,6 +15,7 @@ describe 'selinux' do
         end
 
         it { is_expected.to contain_package('policycoreutils-python').with(ensure: 'present') }
+        it { is_expected.not_to contain_package('auditd') }
       end
     end
 
@@ -60,6 +61,22 @@ describe 'selinux' do
       end
 
       it { is_expected.to contain_package('policycoreutils').with(ensure: 'present') }
+    end
+
+    context 'On Debian 10' do
+      let(:facts) do
+        {
+          osfamily: 'Debian',
+          operatingsystem: 'Debian',
+          operatingsystemmajrelease: '10',
+          selinux_current_mode: 'enforcing',
+          os: { release: { major: '10' }, name: 'Debian', family: 'Debian' }
+        }
+      end
+
+      %w[policycoreutils-python-utils selinux-basics selinux-policy-default auditd].each do |package|
+        it { is_expected.to contain_package(package).with(ensure: 'present') }
+      end
     end
 
     context 'do not manage package' do

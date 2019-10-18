@@ -54,6 +54,29 @@ class { 'selinux':
 
 The following parameters are available in the `selinux` class.
 
+##### `package_name`
+
+Data type: `Variant[String[1], Array[String[1]]]`
+
+sets the name(s) for the selinux tools package
+Default value: OS dependent (see data/).
+
+##### `manage_auditd_package`
+
+Data type: `Boolean`
+
+install auditd to log SELinux violations,
+for OSes that do not have auditd installed by default.
+Default value: OS dependent (see data/)
+
+##### `refpolicy_package_name`
+
+Data type: `String`
+
+sets the name for the refpolicy development package, required for the
+refpolicy module builder
+Default value: OS dependent (see data/)
+
 ##### `mode`
 
 Data type: `Optional[Enum['enforcing', 'permissive', 'disabled']]`
@@ -86,22 +109,13 @@ manage the package for selinux tools and refpolicy
 
 Default value: `true`
 
-##### `package_name`
+##### `auditd_package_name`
 
-Data type: `String`
+Data type: `String[1]`
 
-sets the name for the selinux tools package
-Default value: OS dependent (see data/)
+used when `manage_auditd_package` is true
 
-##### `refpolicy_package_name`
-
-Data type: `String`
-
-sets the name for the refpolicy development package, required for the
-refpolicy module builder
-Default value: OS dependent (see data/)
-
-Default value: 'selinux-policy-devel'
+Default value: 'auditd'
 
 ##### `module_build_root`
 
