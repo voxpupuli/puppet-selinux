@@ -18,6 +18,20 @@ describe 'selinux' do
       end
     end
 
+    context 'On RedHat 8' do
+      let(:facts) do
+        {
+          osfamily: 'RedHat',
+          operatingsystem: 'RedHat',
+          operatingsystemmajrelease: '8',
+          selinux_current_mode: 'enforcing',
+          os: { release: { major: '8' }, name: 'RedHat', family: 'RedHat' }
+        }
+      end
+
+      it { is_expected.to contain_package('policycoreutils-python-utils').with(ensure: 'present') }
+    end
+
     %w[24 25].each do |majrelease|
       context "On Fedora #{majrelease}" do
         let(:facts) do
@@ -32,6 +46,20 @@ describe 'selinux' do
 
         it { is_expected.to contain_package('policycoreutils-python-utils').with(ensure: 'present') }
       end
+    end
+
+    context 'On the Amazon EL OS variant' do
+      let(:facts) do
+        {
+          osfamily: 'RedHat',
+          operatingsystem: 'Amazon',
+          operatingsystemmajrelease: '2017',
+          selinux_current_mode: 'enforcing',
+          os: { release: { major: '2017' }, name: 'Amazon', family: 'RedHat' }
+        }
+      end
+
+      it { is_expected.to contain_package('policycoreutils').with(ensure: 'present') }
     end
 
     context 'do not manage package' do

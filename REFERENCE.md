@@ -14,7 +14,6 @@ _Private Classes_
 * `selinux::build`: Configure the system for module building
 * `selinux::config`: Configure the system to use SELinux on the system.
 * `selinux::package`: Manages additional packages required to support some of the functions.
-* `selinux::params`: This class provides default parameters for the selinux class
 * `selinux::refpolicy_package`: Manages additional packages required to support some of the functions.
 
 **Defined types**
@@ -92,9 +91,7 @@ Default value: `true`
 Data type: `String`
 
 sets the name for the selinux tools package
-Default value: OS dependent (see params.pp)
-
-Default value: $selinux::params::package_name
+Default value: OS dependent (see data/)
 
 ##### `refpolicy_package_name`
 
@@ -102,7 +99,7 @@ Data type: `String`
 
 sets the name for the refpolicy development package, required for the
 refpolicy module builder
-Default value: OS dependent (see params.pp)
+Default value: OS dependent (see data/)
 
 Default value: 'selinux-policy-devel'
 
@@ -112,7 +109,7 @@ Data type: `Stdlib::Absolutepath`
 
 directory where modules are built. Defaults to `$vardir/puppet-selinux`
 
-Default value: $selinux::params::module_build_root
+Default value: "${facts['puppet_vardir']}/puppet-selinux"
 
 ##### `default_builder`
 
