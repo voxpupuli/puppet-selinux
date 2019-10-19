@@ -1,4 +1,4 @@
-# Manage SELinux fcontext equivalences
+# @summary Manage SELinux fcontext equivalences
 #
 # @param path   the path to define and equivalence for. Default: Resource title
 # @param target the path that this resource will be equivalent to.

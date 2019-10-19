@@ -1,4 +1,4 @@
-# Manages additional packages required to support some of the functions.
+# @summary Manages additional packages required to support some of the functions.
 #
 # @api private
 #
