@@ -1,6 +1,6 @@
-# Configure the system to use SELinux on the system.
+# @summary Configure the system to use SELinux on the system.
 #
-# It is included in the main class ::selinux
+# It is included in the main class `selinux`
 #
 # @param mode See main class
 # @param type See main class

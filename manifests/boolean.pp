@@ -1,13 +1,13 @@
-# Manage the state of an SELinux boolean.
+# @summary Manage the state of an SELinux boolean.
 #
 # @example Enable `named_write_master_zones`  boolean
 #   selinux::boolean{ 'named_write_master_zones':
-#      ensure     => 'on',
+#      ensure => 'on',
 #   }
 #
 # @example Ensure `named_write_master_zones` boolean is disabled
 #   selinux::boolean{ 'named_write_master_zones':
-#      ensure     => 'off',
+#      ensure => 'off',
 #   }
 #
 # @param ensure Set to on or off

@@ -12,7 +12,7 @@ _Public Classes_
 _Private Classes_
 
 * `selinux::build`: Configure the system for module building
-* `selinux::config`: Configure the system to use SELinux on the system.  It is included in the main class ::selinux
+* `selinux::config`: Configure the system to use SELinux on the system.
 * `selinux::package`: Manages additional packages required to support some of the functions.
 * `selinux::params`: This class provides default parameters for the selinux class
 * `selinux::refpolicy_package`: Manages additional packages required to support some of the functions.
@@ -94,7 +94,7 @@ Data type: `String`
 sets the name for the selinux tools package
 Default value: OS dependent (see params.pp)
 
-Default value: $::selinux::params::package_name
+Default value: $selinux::params::package_name
 
 ##### `refpolicy_package_name`
 
@@ -112,7 +112,7 @@ Data type: `Stdlib::Absolutepath`
 
 directory where modules are built. Defaults to `$vardir/puppet-selinux`
 
-Default value: $::selinux::params::module_build_root
+Default value: $selinux::params::module_build_root
 
 ##### `default_builder`
 
@@ -182,7 +182,7 @@ Manage the state of an SELinux boolean.
 
 ```puppet
 selinux::boolean{ 'named_write_master_zones':
-   ensure     => 'on',
+   ensure => 'on',
 }
 ```
 
@@ -190,7 +190,7 @@ selinux::boolean{ 'named_write_master_zones':
 
 ```puppet
 selinux::boolean{ 'named_write_master_zones':
-   ensure     => 'off',
+   ensure => 'off',
 }
 ```
 
@@ -284,8 +284,8 @@ selinux::fcontext::equivalence
 
 ```puppet
 selinux::fcontext{'set-mysql-log-context':
-  seltype => "mysqld_log_t",
-  pathspec => "/u01/log/mysql(/.*)?",
+  seltype  => 'mysqld_log_t',
+  pathspec => '/u01/log/mysql(/.*)?',
 }
 ```
 
