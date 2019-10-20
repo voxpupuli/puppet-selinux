@@ -55,7 +55,10 @@ class selinux::config (
         ensure  => 'file',
         owner   => 'root',
         group   => 'root',
-        content => "# created by puppet for disabled to ${_real_mode} switch\n",
+        # The contents of the file are interpreted on most OSes (at least EL7
+        # and Debian 10) as extra options for fixfiles. Anything else causes an
+        # argument error and a failure to relabel.
+        content => '',
       }
     }
 

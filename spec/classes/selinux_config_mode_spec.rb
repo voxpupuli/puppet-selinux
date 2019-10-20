@@ -84,7 +84,7 @@ describe 'selinux' do
           end
           let(:params) { { mode: 'enforcing' } }
 
-          it { is_expected.to contain_file('/.autorelabel').with(ensure: 'file') }
+          it { is_expected.to contain_file('/.autorelabel').with(ensure: 'file', content: '') }
         end
       end
     end

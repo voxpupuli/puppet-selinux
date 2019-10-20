@@ -13,6 +13,17 @@ RSpec.configure do |c|
   c.before :suite do
     install_module
     install_module_dependencies
+
+    # Relabelling fails because systemd tries to connect the script's STDIN to
+    # a serial port that doesn't exist (in Vagrant, at least). Work around like
+    # in https://bugs.centos.org/view.php?id=13213
+    hosts.each do |host|
+      next unless host['platform'] =~ %r{^el-7}
+
+      on host, 'sed -i -e "s/console=tty0 console=ttyS0,115200/console=tty0/" /etc/default/grub'
+      on host, 'cat /etc/default/grub'
+      on host, 'grub2-mkconfig -o /boot/grub2/grub.cfg'
+    end
   end
 end
 
