@@ -25,3 +25,19 @@ shared_examples 'a idempotent resource' do
     apply_manifest(pp, catch_changes: true)
   end
 end
+
+def ensure_permissive_mode_on(hosts)
+  hosts.each do |host|
+    host.execute('getenforce') do |result|
+      mode = result.stdout.strip
+      if mode != 'Permissive'
+        host.execute('sed -i "s/SELINUX=.*/SELINUX=permissive/" /etc/selinux/config')
+        if mode == 'Disabled'
+          host.reboot
+        else
+          host.execute('setenforce Permissive && test "$(getenforce)" = "Permissive"')
+        end
+      end
+    end
+  end
+end
