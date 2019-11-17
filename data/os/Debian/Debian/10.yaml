@@ -1,0 +1,6 @@
+---
+selinux::package_name:
+  - policycoreutils-python-utils
+  - selinux-basics
+  - selinux-policy-default
+selinux::refpolicy_package_name: selinux-policy-dev

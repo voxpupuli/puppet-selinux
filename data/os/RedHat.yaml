@@ -1,0 +1,3 @@
+---
+selinux::package_name: policycoreutils-python-utils
+selinux::manage_auditd_package: false

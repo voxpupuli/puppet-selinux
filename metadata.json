@@ -2,7 +2,7 @@
   "name": "puppet-selinux",
   "version": "3.0.1-rc0",
   "author": "Vox Pupuli",
-  "summary": "This class manages SELinux on RHEL based systems",
+  "summary": "This class manages SELinux",
   "license": "Apache-2.0",
   "source": "https://github.com/voxpupuli/puppet-selinux",
   "project_page": "https://github.com/voxpupuli/puppet-selinux",
@@ -30,6 +30,12 @@
         "28",
         "29",
         "30"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "10"
       ]
     }
   ],

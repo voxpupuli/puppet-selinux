@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -e -u -x
+
+for layout in \
+  {debian10,centos{6,7}}'-64a{hypervisor=vagrant}' \
+  'fedora28-64a{hypervisor=vagrant,box=generic/fedora28}' \
+  'fedora29-64a{hypervisor=vagrant,box=fedora/29-cloud-base}' \
+  'fedora30-64a{hypervisor=vagrant,box=fedora/30-cloud-base}'
+do
+  BEAKER_debug=yes BEAKER_setfile="$layout" \
+    BEAKER_PUPPET_COLLECTION=puppet6 PUPPET_INSTALL_TYPE="agent" \
+    bundle exec rake beaker
+done

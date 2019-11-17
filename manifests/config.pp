@@ -4,16 +4,12 @@
 #
 # @param mode See main class
 # @param type See main class
-# @param manage_package See main class
-# @param package_name See main class
 #
 # @api private
 #
 class selinux::config (
-  $mode           = $selinux::mode,
-  $type           = $selinux::type,
-  $manage_package = $selinux::manage_package,
-  $package_name   = $selinux::package_name,
+  $mode,
+  $type,
 ) {
 
   assert_private()
@@ -26,6 +22,17 @@ class selinux::config (
   }
 
   if $_real_mode {
+    if $facts['os']['family'] == 'Debian' and !$facts['selinux'] {
+      # Debian-based OSes also need to change the kernel boot parameters in the
+      # appropriate version of GRUB.
+      # See: https://wiki.debian.org/SELinux/Setup.
+      exec { 'activate-selinux':
+        command  => '/usr/sbin/selinux-activate',
+        unless   => shell_join(['/usr/bin/grep', '-q', '^GRUB_CMDLINE_LINUX=.*security=selinux', '/etc/default/grub']),
+        provider => 'shell',
+      }
+    }
+
     file_line { "set-selinux-config-to-${_real_mode}":
       path  => '/etc/selinux/config',
       line  => "SELINUX=${_real_mode}",
@@ -55,7 +62,10 @@ class selinux::config (
         ensure  => 'file',
         owner   => 'root',
         group   => 'root',
-        content => "# created by puppet for disabled to ${_real_mode} switch\n",
+        # The contents of the file are interpreted on most OSes (at least EL7
+        # and Debian 10) as extra options for fixfiles. Anything else causes an
+        # argument error and a failure to relabel.
+        content => '',
       }
     }
 
