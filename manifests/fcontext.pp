@@ -54,12 +54,15 @@ define selinux::fcontext(
     fail('"filetype" must be one of: a,f,d,c,b,s,l,p - see "man semanage-fcontext"')
   }
 
-  # make sure the title is correct or the provider will misbehave
-  selinux_fcontext {"${pathspec}_${filetype}":
-    ensure    => $ensure,
-    pathspec  => $pathspec,
-    seltype   => $seltype,
-    file_type => $filetype,
-    seluser   => $seluser,
+  # Do nothing unless SELinux is enabled
+  if $facts['selinux'] {
+    # make sure the title is correct or the provider will misbehave
+    selinux_fcontext {"${pathspec}_${filetype}":
+      ensure    => $ensure,
+      pathspec  => $pathspec,
+      seltype   => $seltype,
+      file_type => $filetype,
+      seluser   => $seluser,
+    }
   }
 }
