@@ -4,6 +4,36 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v3.1.0](https://github.com/voxpupuli/puppet-selinux/tree/v3.1.0) (2019-12-09)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v3.0.0...v3.1.0)
+
+**Implemented enhancements:**
+
+- RHEL8 [\#293](https://github.com/voxpupuli/puppet-selinux/issues/293)
+- add partial support for Debian 10, and supporting changes [\#310](https://github.com/voxpupuli/puppet-selinux/pull/310) ([tequeter](https://github.com/tequeter))
+- Avoid puppet errors when SELinux is disabled [\#295](https://github.com/voxpupuli/puppet-selinux/pull/295) ([blackknight36](https://github.com/blackknight36))
+
+**Fixed bugs:**
+
+- "Could not find a suitable provider for selinux\_port" on Fedora 28 [\#254](https://github.com/voxpupuli/puppet-selinux/issues/254)
+- Fix selinux\_port on RHEL 8/CentOS 8 [\#298](https://github.com/voxpupuli/puppet-selinux/pull/298) ([oranenj](https://github.com/oranenj))
+
+**Closed issues:**
+
+- No autorelabel when enabling SELinux [\#309](https://github.com/voxpupuli/puppet-selinux/issues/309)
+- Just a heads-up - change in RHEL 7.7 [\#299](https://github.com/voxpupuli/puppet-selinux/issues/299)
+- Puppet errors on nodes with SELinux disabled [\#286](https://github.com/voxpupuli/puppet-selinux/issues/286)
+
+**Merged pull requests:**
+
+- update example to match current version [\#307](https://github.com/voxpupuli/puppet-selinux/pull/307) ([ubellavance](https://github.com/ubellavance))
+- Regenerate REFERENCE.md [\#306](https://github.com/voxpupuli/puppet-selinux/pull/306) ([bastelfreak](https://github.com/bastelfreak))
+- Clean up acceptance spec helper [\#305](https://github.com/voxpupuli/puppet-selinux/pull/305) ([ekohl](https://github.com/ekohl))
+- Change double quotes to single quotes in example in comments [\#304](https://github.com/voxpupuli/puppet-selinux/pull/304) ([ubellavance](https://github.com/ubellavance))
+- fix reference documentation link [\#302](https://github.com/voxpupuli/puppet-selinux/pull/302) ([igalic](https://github.com/igalic))
+- Add EL8 and Fedora 30 to the supported OS list [\#294](https://github.com/voxpupuli/puppet-selinux/pull/294) ([blackknight36](https://github.com/blackknight36))
+
 ## [v3.0.0](https://github.com/voxpupuli/puppet-selinux/tree/v3.0.0) (2019-06-17)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v2.0.0...v3.0.0)
@@ -414,7 +444,7 @@ These should not affect the functionality of the module.
 
 - Pivot to internal types [\#73](https://github.com/voxpupuli/puppet-selinux/pull/73) ([jyaworski](https://github.com/jyaworski))
 - Allow custom package name and management [\#72](https://github.com/voxpupuli/puppet-selinux/pull/72) ([jyaworski](https://github.com/jyaworski))
-- Switch default behavior to not manage selinux [\#67](https://github.com/voxpupuli/puppet-selinux/pull/67) ([thrnio](https://github.com/thrnio))
+- Switch default behavior to not manage selinux [\#67](https://github.com/voxpupuli/puppet-selinux/pull/67) ([purplexa](https://github.com/purplexa))
 - Whitespace lint fixes [\#63](https://github.com/voxpupuli/puppet-selinux/pull/63) ([mld](https://github.com/mld))
 - Implements SELinux type checking and ensuring. [\#62](https://github.com/voxpupuli/puppet-selinux/pull/62) ([ElvenSpellmaker](https://github.com/ElvenSpellmaker))
 - added hiera support [\#49](https://github.com/voxpupuli/puppet-selinux/pull/49) ([dacron](https://github.com/dacron))
