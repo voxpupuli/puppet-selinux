@@ -14,7 +14,7 @@ class selinux::config (
 
   assert_private()
 
-  if ($mode == 'enforcing' and !$facts['selinux']) {
+  if ($mode == 'enforcing' and !$facts['os']['selinux']) {
     notice('SELinux is disabled. Forcing configuration to permissive to avoid problems. To disable this warning, explicitly set selinux::mode to permissive or disabled.')
     $_real_mode = 'permissive'
   } else {
@@ -42,7 +42,7 @@ class selinux::config (
     case $_real_mode {
       'permissive', 'disabled': {
         $sestatus = 'permissive'
-        if $_real_mode == 'disabled' and $facts['selinux_current_mode'] == 'permissive' {
+        if $_real_mode == 'disabled' and $facts['os']['selinux']['current_mode'] == 'permissive' {
           notice('A reboot is required to fully disable SELinux. SELinux will operate in Permissive mode until a reboot')
         }
       }
@@ -57,7 +57,7 @@ class selinux::config (
     # a complete relabeling is required when switching from disabled to
     # permissive or enforcing. Ensure the autorelabel trigger file is created.
     if $_real_mode in ['enforcing','permissive'] and
-      !$facts['selinux'] {
+      !$facts['os']['selinux'] {
       file { '/.autorelabel':
         ensure  => 'file',
         owner   => 'root',
