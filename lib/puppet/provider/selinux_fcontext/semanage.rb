@@ -9,10 +9,11 @@ Puppet::Type.type(:selinux_fcontext).provide(:semanage) do
 
   mk_resource_methods
 
-  osfamily  = Facter.value('osfamily')
-  osversion = Facter.value('operatingsystemmajrelease')
+  osfamily        = Facter.value('osfamily')
+  osversion       = Facter.value('operatingsystemmajrelease')
+  operatingsystem = Facter.value('operatingsystem')
   @old_semanage = false
-  if (osfamily == 'RedHat') && (Puppet::Util::Package.versioncmp(osversion, '6') <= 0)
+  if (osfamily == 'RedHat') && (Puppet::Util::Package.versioncmp(osversion, '6') <= 0) && (operatingsystem != 'Amazon')
     @old_semanage = true
   end
 
