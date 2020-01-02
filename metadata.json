@@ -37,6 +37,12 @@
       "operatingsystemrelease": [
         "10"
       ]
+    },
+    {
+      "operatingsystem": "Amazon",
+      "operatingsystemrelease": [
+        "2"
+      ]
     }
   ],
   "dependencies": [
