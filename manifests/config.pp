@@ -22,7 +22,7 @@ class selinux::config (
   }
 
   if $_real_mode {
-    if $facts['os']['family'] == 'Debian' and !$facts['selinux'] {
+    if $facts['os']['family'] == 'Debian' and !$facts['os']['selinux'] {
       # Debian-based OSes also need to change the kernel boot parameters in the
       # appropriate version of GRUB.
       # See: https://wiki.debian.org/SELinux/Setup.
