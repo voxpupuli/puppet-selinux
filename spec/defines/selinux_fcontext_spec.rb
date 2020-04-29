@@ -43,7 +43,7 @@ describe 'selinux::fcontext' do
           }
         end
 
-        it { expect { is_expected.to compile }.to raise_error(%r{"filetype" must be one of: a,f,d,c,b,s,l,p - see "man semanage-fcontext"}) }
+        it { is_expected.to compile.and_raise_error(%r{"filetype" must be one of: a,f,d,c,b,s,l,p - see "man semanage-fcontext"}) }
       end
       context 'invalid multiple filetype' do
         let(:params) do
@@ -54,7 +54,7 @@ describe 'selinux::fcontext' do
           }
         end
 
-        it { expect { is_expected.to compile }.to raise_error(%r{"filetype" must be one of: a,f,d,c,b,s,l,p - see "man semanage-fcontext"}) }
+        it { is_expected.to compile.and_raise_error(%r{"filetype" must be one of: a,f,d,c,b,s,l,p - see "man semanage-fcontext"}) }
       end
       context 'set filemode and context' do
         let(:params) do

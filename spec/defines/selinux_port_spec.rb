@@ -56,7 +56,7 @@ describe 'selinux::port' do
           }
         end
 
-        it { expect { is_expected.to compile }.to raise_error(%r{error during compilation}) }
+        it { is_expected.to compile.and_raise_error(%r{parameter 'protocol' expects a match}) }
       end
 
       context 'both port and port_range' do
@@ -69,7 +69,7 @@ describe 'selinux::port' do
           }
         end
 
-        it { expect { is_expected.to compile }.to raise_error(%r{error during compilation}) }
+        it { is_expected.to compile.and_raise_error(%r{You can't define both 'port' and 'port_range'}) }
       end
 
       context 'no protocol' do
@@ -80,7 +80,7 @@ describe 'selinux::port' do
           }
         end
 
-        it { expect { is_expected.to compile }.to raise_error(%r{error during compilation}) }
+        it { is_expected.to compile.and_raise_error(%r{expects a value for parameter 'protocol'}) }
       end
     end
   end

@@ -16,7 +16,7 @@ describe 'selinux' do
         context 'and requesting invalid mode' do
           let(:params) { { mode: 'invalid' } }
 
-          it { expect { is_expected.to create_class('selinux') }.to raise_error(Puppet::Error, %r{Enum}) }
+          it { is_expected.to compile.and_raise_error(%r{Enum}) }
         end
 
         context 'and no mode set' do
