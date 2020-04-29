@@ -3,10 +3,10 @@ require 'spec_helper'
 describe 'selinux::boolean' do
   let(:title) { 'mybool' }
 
-  on_supported_os.each do |os, facts|
+  on_supported_os.each do |os, os_facts|
     context "on #{os}" do
       let(:facts) do
-        facts
+        os_facts
       end
 
       it { is_expected.to contain_selinux__boolean('mybool').that_requires('Anchor[selinux::module post]') }
@@ -14,7 +14,7 @@ describe 'selinux::boolean' do
 
       context 'SELinux enabled' do
         let(:facts) do
-          facts.merge(selinux: true)
+          override_facts(super(), os: { selinux: { enabled: true } })
         end
 
         ['on', true, 'present'].each do |value|
@@ -54,7 +54,7 @@ describe 'selinux::boolean' do
 
       context 'SELinux disabled' do
         let(:facts) do
-          facts.merge(selinux: false)
+          override_facts(super(), os: { selinux: { enabled: false } })
         end
 
         ['on', true, 'present'].each do |value|

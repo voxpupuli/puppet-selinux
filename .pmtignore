@@ -19,3 +19,4 @@ Puppetfile.lock
 .*.sw?
 .yardoc/
 Dockerfile
+.puppet-lint.rc
