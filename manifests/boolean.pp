@@ -37,7 +37,7 @@ define selinux::boolean (
   }
 
   # Do nothing unless SELinux is enabled
-  if $facts['selinux'] {
+  if $facts['os']['selinux']['enabled'] {
     selboolean { $name:
       value      => $value,
       persistent => $persistent,

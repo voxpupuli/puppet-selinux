@@ -55,7 +55,7 @@ define selinux::fcontext(
   }
 
   # Do nothing unless SELinux is enabled
-  if $facts['selinux'] {
+  if $facts['os']['selinux']['enabled'] {
     # make sure the title is correct or the provider will misbehave
     selinux_fcontext {"${pathspec}_${filetype}":
       ensure    => $ensure,
