@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v3.2.0](https://github.com/voxpupuli/puppet-selinux/tree/v3.2.0) (2020-04-30)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v3.1.0...v3.2.0)
+
+**Implemented enhancements:**
+
+- Amazon Linux v2 should use the new fcontext filetype format [\#314](https://github.com/voxpupuli/puppet-selinux/pull/314) ([yitsushi](https://github.com/yitsushi))
+
+**Closed issues:**
+
+- Facter 4 compatibilty [\#318](https://github.com/voxpupuli/puppet-selinux/issues/318)
+- Error: Could not prefetch selinux\_fcontext provider 'semanage': uninitialized constant Selinux [\#311](https://github.com/voxpupuli/puppet-selinux/issues/311)
+
+**Merged pull requests:**
+
+- Fix several markdown lint issues [\#319](https://github.com/voxpupuli/puppet-selinux/pull/319) ([dhoppe](https://github.com/dhoppe))
+- Update example [\#315](https://github.com/voxpupuli/puppet-selinux/pull/315) ([ghoneycutt](https://github.com/ghoneycutt))
+
 ## [v3.1.0](https://github.com/voxpupuli/puppet-selinux/tree/v3.1.0) (2019-12-09)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v3.0.0...v3.1.0)
@@ -24,6 +42,7 @@ These should not affect the functionality of the module.
 - No autorelabel when enabling SELinux [\#309](https://github.com/voxpupuli/puppet-selinux/issues/309)
 - Just a heads-up - change in RHEL 7.7 [\#299](https://github.com/voxpupuli/puppet-selinux/issues/299)
 - Puppet errors on nodes with SELinux disabled [\#286](https://github.com/voxpupuli/puppet-selinux/issues/286)
+- Missing CentOS 8 support [\#301](https://github.com/voxpupuli/puppet-selinux/issues/301)
 
 **Merged pull requests:**
 
