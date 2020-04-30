@@ -1,22 +1,23 @@
 require 'spec_helper'
 
 describe 'selinux' do
-  on_supported_os.each do |os, facts|
+  on_supported_os.each do |os, os_facts|
     context "on #{os}" do
       context 'when in enforcing mode' do
         let(:facts) do
-          facts.merge(
-            selinux: true,
-            selinux_config_mode: 'enforcing',
-            selinux_config_policy: 'targeted',
-            selinux_current_mode: 'enforcing'
-          )
+          override_facts(os_facts, os: { selinux: {
+                           'enabled' => true,
+                           'enforced' => true,
+                           'config_mode' => 'enforcing',
+                           'config_policy' => 'targeted',
+                           'current_mode' => 'enforcing'
+                         } })
         end
 
         context 'and requesting invalid mode' do
           let(:params) { { mode: 'invalid' } }
 
-          it { expect { is_expected.to create_class('selinux') }.to raise_error(Puppet::Error, %r{Enum}) }
+          it { is_expected.to compile.and_raise_error(%r{Enum}) }
         end
 
         context 'and no mode set' do
@@ -63,16 +64,17 @@ describe 'selinux' do
 
       context 'when in disabled mode' do
         let(:facts) do
-          facts.
-            merge(selinux: false).
-            reject { |key, _| key =~ %r{^selinux_} }
+          # Get a deep copy and then fully override the selinux facts
+          result = override_facts(os_facts)
+          result[:os]['selinux'] = { 'enabled' => false }
+          result
         end
 
         %w[permissive enforcing].each do |target_mode|
           context "and requesting #{target_mode} mode" do
             let(:params) { { mode: target_mode } }
 
-            if facts[:osfamily] == 'Debian'
+            if os_facts[:osfamily] == 'Debian'
               it { is_expected.to contain_exec('activate-selinux') }
             else
               it { is_expected.not_to contain_exec('activate-selinux') }

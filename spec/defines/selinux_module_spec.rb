@@ -149,7 +149,7 @@ describe 'selinux::module' do
         end
 
         it do
-          is_expected.to raise_error(Puppet::Error, %r{simple builder does not support})
+          is_expected.to compile.and_raise_error(%r{simple builder does not support})
         end
       end
 
@@ -177,7 +177,7 @@ describe 'selinux::module' do
         end
 
         it do
-          is_expected.to raise_error(Puppet::Error, %r{mutually exclusive})
+          is_expected.to compile.and_raise_error(%r{mutually exclusive})
         end
       end
 
