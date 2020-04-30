@@ -11,7 +11,8 @@
 # Sample Usage:
 #
 
-selinux::module { 'apache-selinux':
-  ensure => 'present',
-  source => 'puppet:///modules/apache/selinux/apache.te',
+selinux::module { 'apache':
+  ensure    => 'present',
+  source_te => 'puppet:///modules/selinux/apache.te',
+  builder   => 'simple',
 }
