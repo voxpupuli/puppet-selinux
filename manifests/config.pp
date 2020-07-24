@@ -11,7 +11,6 @@ class selinux::config (
   $mode,
   $type,
 ) {
-
   assert_private()
 
   if ($mode == 'enforcing' and !$facts['os']['selinux']['enabled']) {
@@ -56,8 +55,7 @@ class selinux::config (
 
     # a complete relabeling is required when switching from disabled to
     # permissive or enforcing. Ensure the autorelabel trigger file is created.
-    if $_real_mode in ['enforcing','permissive'] and
-      !$facts['os']['selinux']['enabled'] {
+    if $_real_mode in ['enforcing','permissive'] and !$facts['os']['selinux']['enabled'] {
       file { '/.autorelabel':
         ensure  => 'file',
         owner   => 'root',

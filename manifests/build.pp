@@ -16,17 +16,17 @@
 #
 # @api private
 #
-class selinux::build(
+class selinux::build (
   Stdlib::Absolutepath $module_build_root = $selinux::module_build_root,
 ) {
-  file {$module_build_root:
+  file { $module_build_root:
     ensure => 'directory',
     owner  => 'root',
     group  => 'root',
     mode   => '0755',
   }
 
-  file {"${module_build_root}/bin":
+  file { "${module_build_root}/bin":
     ensure => 'directory',
     owner  => 'root',
     group  => 'root',
@@ -36,7 +36,7 @@ class selinux::build(
   $module_build_simple = "${module_build_root}/bin/selinux_build_module_simple.sh"
 
   # put helper in place:
-  file {$module_build_simple:
+  file { $module_build_simple:
     ensure => 'file',
     owner  => 'root',
     group  => 'root',
@@ -46,7 +46,7 @@ class selinux::build(
 
   $module_build_dir = "${module_build_root}/modules"
 
-  file {$module_build_dir:
+  file { $module_build_dir:
     ensure  => 'directory',
     owner   => 'root',
     group   => 'root',
@@ -56,7 +56,7 @@ class selinux::build(
   }
 
   # needed by refpolicy builder and our simple builder
-  file {"${module_build_dir}/tmp":
+  file { "${module_build_dir}/tmp":
     ensure                  => 'directory',
     selinux_ignore_defaults => true,
   }

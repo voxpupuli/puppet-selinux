@@ -17,7 +17,6 @@ define selinux::boolean (
   Variant[Boolean, Enum['on', 'off', 'present', 'absent']] $ensure = 'on',
   Boolean $persistent = true,
 ) {
-
   include selinux
 
   Anchor['selinux::module post']
