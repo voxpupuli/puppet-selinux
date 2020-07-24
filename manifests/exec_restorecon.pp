@@ -10,7 +10,7 @@
 # @param unless see the Exec resource
 # @param onlyif see the Exec resource
 #
-define selinux::exec_restorecon(
+define selinux::exec_restorecon (
   Stdlib::Absolutepath $path        = $title,
   Boolean              $refreshonly = true,
   Boolean              $recurse     = true,
@@ -18,7 +18,6 @@ define selinux::exec_restorecon(
   Optional[String]     $unless      = undef,
   Optional[String]     $onlyif      = undef,
 ) {
-
   include selinux
 
   $opt_recurse = $recurse ? {
@@ -33,7 +32,7 @@ define selinux::exec_restorecon(
 
   $command = "restorecon${opt_force}${opt_recurse}"
 
-  exec {"selinux::exec_restorecon ${path}":
+  exec { "selinux::exec_restorecon ${path}":
     path        => '/sbin:/usr/sbin',
     command     => sprintf('%s %s', $command, shellquote($path)),
     refreshonly => $refreshonly,
