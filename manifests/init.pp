@@ -47,7 +47,6 @@ class selinux (
   Optional[Hash] $port            = undef,
   Optional[Hash] $exec_restorecon = undef,
 ) {
-
   class { 'selinux::package':
     manage_package        => $manage_package,
     package_names         => Array.new($package_name, true),

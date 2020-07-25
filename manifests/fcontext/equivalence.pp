@@ -10,12 +10,11 @@
 #     target => '/usr/share/wordpress',
 #   }
 #
-define selinux::fcontext::equivalence(
+define selinux::fcontext::equivalence (
   String $target,
   String $path = $title,
   Enum['present', 'absent'] $ensure = 'present'
 ) {
-
   include selinux
 
   if $ensure == 'present' {
@@ -33,4 +32,3 @@ define selinux::fcontext::equivalence(
     target => $target,
   }
 }
-

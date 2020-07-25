@@ -12,7 +12,7 @@ class selinux::package (
   Array[String[1]] $package_names,
   Boolean $manage_auditd_package,
   String[1] $auditd_package_name,
-){
+) {
   assert_private()
   if $manage_package {
     ensure_packages ($package_names)
