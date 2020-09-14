@@ -42,7 +42,8 @@
 #   }
 #
 # @param ensure present or absent
-# @param source_pp the source file (either a puppet URI or local file) of a pre-compiled SELinux policy package. Mutually excludsive with using source files.
+# @param source_pp the source file (either a puppet URI or local file) of a pre-compiled SELinux policy package.
+#   Mutually excludsive with using source files.
 # @param source_te the source file (either a puppet URI or local file) of the SELinux .te file
 # @param source_fc the source file (either a puppet URI or local file) of the SELinux .fc file
 # @param source_if the source file (either a puppet URI or local file) of the SELinux .if file
