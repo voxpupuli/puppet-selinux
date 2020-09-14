@@ -14,7 +14,9 @@ class selinux::config (
   assert_private()
 
   if ($mode == 'enforcing' and !$facts['os']['selinux']['enabled']) {
+    # lint:ignore:140chars
     notice('SELinux is disabled. Forcing configuration to permissive to avoid problems. To disable this warning, explicitly set selinux::mode to permissive or disabled.')
+    # lint:endignore
     $_real_mode = 'permissive'
   } else {
     $_real_mode = $mode
