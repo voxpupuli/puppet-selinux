@@ -1,2 +1,3 @@
 ---
 selinux::manage_auditd_package: true
+selinux::manage_setroubleshoot_packages: false

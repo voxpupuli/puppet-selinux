@@ -19,6 +19,8 @@
 # @param refpolicy_makefile the path to the system's SELinux makefile for the refpolicy framework
 # @param manage_package manage the package for selinux tools and refpolicy
 # @param auditd_package_name used when `manage_auditd_package` is true
+# @param manage_setroubleshoot_packages manage the setroubleshoot packages
+# @param setroubleshoot_package_names the names of the setroubleshoot packages
 # @param module_build_root directory where modules are built. Defaults to `$vardir/puppet-selinux`
 # @param default_builder which builder to use by default with selinux::module
 # @param boolean Hash of selinux::boolean resource parameters
@@ -32,6 +34,8 @@ class selinux (
   Variant[String[1], Array[String[1]]] $package_name,
   Boolean $manage_auditd_package,
   String $refpolicy_package_name,
+  Boolean $manage_setroubleshoot_packages,
+  Array[String] $setroubleshoot_package_names                 = [],
   Optional[Enum['enforcing', 'permissive', 'disabled']] $mode = undef,
   Optional[Enum['targeted', 'minimum', 'mls']] $type          = undef,
   Stdlib::Absolutepath $refpolicy_makefile                    = '/usr/share/selinux/devel/Makefile',
@@ -48,10 +52,12 @@ class selinux (
   Optional[Hash] $exec_restorecon = undef,
 ) {
   class { 'selinux::package':
-    manage_package        => $manage_package,
-    package_names         => Array.new($package_name, true),
-    manage_auditd_package => $manage_auditd_package,
-    auditd_package_name   => $auditd_package_name,
+    manage_package                 => $manage_package,
+    package_names                  => Array.new($package_name, true),
+    manage_auditd_package          => $manage_auditd_package,
+    auditd_package_name            => $auditd_package_name,
+    manage_setroubleshoot_packages => $manage_setroubleshoot_packages,
+    setroubleshoot_package_names   => $setroubleshoot_package_names,
   }
 
   class { 'selinux::config':
