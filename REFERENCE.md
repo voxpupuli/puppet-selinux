@@ -28,6 +28,7 @@ _Private Classes_
 
 **Resource types**
 
+* [`selinux_clear_context_cache`](#selinux_clear_context_cache): A simple metaresource type that invalidates the SELinux default file context cache when refreshed
 * [`selinux_fcontext`](#selinux_fcontext): Manage SELinux fcontext definitions. You should use selinux::fcontext instead of this directly.
 * [`selinux_fcontext_equivalence`](#selinux_fcontext_equivalence): Manage SELinux fcontext equivalence definitions. You should use selinux::fcontext instead of this directly.
 * [`selinux_permissive`](#selinux_permissive): Manage SELinux permissive types.
@@ -628,6 +629,30 @@ A port-range tuple, eg. [9090, 9095].
 Default value: `undef`
 
 ## Resource types
+
+### selinux_clear_context_cache
+
+A simple metaresource type that invalidates the SELinux default file context cache when refreshed
+
+#### Examples
+
+##### Using the type
+
+```puppet
+package {'foo': ensure => installed }
+~> selinux_clear_context_cache {'clear the selinux cache after installing foo':}
+-> Class['foo::config']
+```
+
+#### Parameters
+
+The following parameters are available in the `selinux_clear_context_cache` type.
+
+##### `name`
+
+namevar
+
+Arbitary name of the resource instance.  Only used for uniqueness.
 
 ### selinux_fcontext
 
