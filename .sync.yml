@@ -20,3 +20,7 @@ spec/acceptance/nodesets/ec2/rhel-73-x64.yml:
   delete: true
 spec/acceptance/nodesets/ec2/amazonlinux-2016091.yml:
   delete: true
+Gemfile:
+  optional:
+    ':test':
+      - gem: puppet-lint-param-docs
