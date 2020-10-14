@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 # This script uses libsemanage directly to access the ports list
 # it is *much* faster than semanage port -l
 
