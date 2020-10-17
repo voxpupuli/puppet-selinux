@@ -13,5 +13,5 @@
 
 class { 'selinux':
   mode => 'enforcing',
-  type => 'mls',
+  type => 'targeted',
 }
