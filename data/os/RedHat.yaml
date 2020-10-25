@@ -1,3 +1,7 @@
 ---
 selinux::package_name: policycoreutils-python-utils
 selinux::manage_auditd_package: false
+selinux::manage_setroubleshoot_packages: false
+selinux::setroubleshoot_package_names:
+  - setroubleshoot
+  - setroubleshoot-plugins

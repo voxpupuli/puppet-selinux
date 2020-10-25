@@ -114,5 +114,24 @@ describe 'selinux' do
 
       it { is_expected.to contain_package('some_package').with(ensure: 'present') }
     end
+
+    context 'install setroubleshoot packages' do
+      let(:facts) do
+        {
+          osfamily: 'RedHat',
+          operatingsystem: 'RedHat',
+          operatingsystemmajrelease: '7',
+          os: { release: { major: 7 }, name: 'RedHat', family: 'RedHat' }
+        }
+      end
+      let(:params) do
+        {
+          manage_setroubleshoot_packages: true
+        }
+      end
+
+      it { is_expected.to contain_package('setroubleshoot').with(ensure: 'present') }
+      it { is_expected.to contain_package('setroubleshoot-plugins').with(ensure: 'present') }
+    end
   end
 end
