@@ -8,7 +8,7 @@
 class selinux::refpolicy_package (
   $manage_package = $selinux::manage_package,
   $package_name   = $selinux::refpolicy_package_name,
-) inherits ::selinux {
+) inherits selinux {
   assert_private()
   if $manage_package {
     ensure_packages ($package_name)
