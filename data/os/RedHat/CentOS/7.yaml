@@ -1,4 +1,2 @@
 ---
-selinux::package_name:
-  - policycoreutils-python
-  - python36
+selinux::package_name: policycoreutils-python
