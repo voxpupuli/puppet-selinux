@@ -51,15 +51,7 @@ class selinux (
   Optional[Hash] $port            = undef,
   Optional[Hash] $exec_restorecon = undef,
 ) {
-  class { 'selinux::package':
-    manage_package                 => $manage_package,
-    package_names                  => Array.new($package_name, true),
-    manage_auditd_package          => $manage_auditd_package,
-    auditd_package_name            => $auditd_package_name,
-    manage_setroubleshoot_packages => $manage_setroubleshoot_packages,
-    setroubleshoot_package_names   => $setroubleshoot_package_names,
-  }
-
+  include 'selinux::package'
   class { 'selinux::config':
     mode => $mode,
     type => $type,

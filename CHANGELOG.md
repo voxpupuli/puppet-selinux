@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+- Change the selinux::package module to be public.  The packages needed to support the various
+  types and providers from this module vary between OS families and versions.  Making the this
+  class available to users who wish to use the types but not use the entire module will prevent
+  them from having te recreate the logic of determing what package needs to be installed.
+
 ## [v3.2.0](https://github.com/voxpupuli/puppet-selinux/tree/v3.2.0) (2020-04-30)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v3.1.0...v3.2.0)

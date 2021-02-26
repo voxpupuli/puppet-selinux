@@ -9,12 +9,12 @@
 #### Public Classes
 
 * [`selinux`](#selinux): Manage SELinux on RHEL based systems.
+* [`selinux::package`](#selinuxpackage): Manages additional packages required to support some of the functions.
 
 #### Private Classes
 
 * `selinux::build`: Configure the system for module building
 * `selinux::config`: Configure the system to use SELinux on the system.
-* `selinux::package`: Manages additional packages required to support some of the functions.
 * `selinux::refpolicy_package`: Manages additional packages required to support some of the functions.
 
 ### Defined types
@@ -36,7 +36,7 @@
 
 ## Classes
 
-### `selinux`
+### <a name="selinux"></a>`selinux`
 
 Manage SELinux on RHEL based systems.
 
@@ -53,16 +53,35 @@ class { 'selinux':
 
 #### Parameters
 
-The following parameters are available in the `selinux` class.
+The following parameters are available in the `selinux` class:
 
-##### `package_name`
+* [`package_name`](#package_name)
+* [`manage_auditd_package`](#manage_auditd_package)
+* [`refpolicy_package_name`](#refpolicy_package_name)
+* [`mode`](#mode)
+* [`type`](#type)
+* [`refpolicy_makefile`](#refpolicy_makefile)
+* [`manage_package`](#manage_package)
+* [`auditd_package_name`](#auditd_package_name)
+* [`manage_setroubleshoot_packages`](#manage_setroubleshoot_packages)
+* [`setroubleshoot_package_names`](#setroubleshoot_package_names)
+* [`module_build_root`](#module_build_root)
+* [`default_builder`](#default_builder)
+* [`boolean`](#boolean)
+* [`fcontext`](#fcontext)
+* [`module`](#module)
+* [`permissive`](#permissive)
+* [`port`](#port)
+* [`exec_restorecon`](#exec_restorecon)
+
+##### <a name="package_name"></a>`package_name`
 
 Data type: `Variant[String[1], Array[String[1]]]`
 
 sets the name(s) for the selinux tools package
 Default value: OS dependent (see data/).
 
-##### `manage_auditd_package`
+##### <a name="manage_auditd_package"></a>`manage_auditd_package`
 
 Data type: `Boolean`
 
@@ -70,7 +89,7 @@ install auditd to log SELinux violations,
 for OSes that do not have auditd installed by default.
 Default value: OS dependent (see data/)
 
-##### `refpolicy_package_name`
+##### <a name="refpolicy_package_name"></a>`refpolicy_package_name`
 
 Data type: `String`
 
@@ -78,7 +97,7 @@ sets the name for the refpolicy development package, required for the
 refpolicy module builder
 Default value: OS dependent (see data/)
 
-##### `mode`
+##### <a name="mode"></a>`mode`
 
 Data type: `Optional[Enum['enforcing', 'permissive', 'disabled']]`
 
@@ -86,7 +105,7 @@ sets the operating state for SELinux.
 
 Default value: ``undef``
 
-##### `type`
+##### <a name="type"></a>`type`
 
 Data type: `Optional[Enum['targeted', 'minimum', 'mls']]`
 
@@ -94,7 +113,7 @@ sets the selinux type
 
 Default value: ``undef``
 
-##### `refpolicy_makefile`
+##### <a name="refpolicy_makefile"></a>`refpolicy_makefile`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -102,7 +121,7 @@ the path to the system's SELinux makefile for the refpolicy framework
 
 Default value: `'/usr/share/selinux/devel/Makefile'`
 
-##### `manage_package`
+##### <a name="manage_package"></a>`manage_package`
 
 Data type: `Boolean`
 
@@ -110,7 +129,7 @@ manage the package for selinux tools and refpolicy
 
 Default value: ``true``
 
-##### `auditd_package_name`
+##### <a name="auditd_package_name"></a>`auditd_package_name`
 
 Data type: `String[1]`
 
@@ -118,7 +137,21 @@ used when `manage_auditd_package` is true
 
 Default value: `'auditd'`
 
-##### `module_build_root`
+##### <a name="manage_setroubleshoot_packages"></a>`manage_setroubleshoot_packages`
+
+Data type: `Boolean`
+
+manage the setroubleshoot packages
+
+##### <a name="setroubleshoot_package_names"></a>`setroubleshoot_package_names`
+
+Data type: `Array[String]`
+
+the names of the setroubleshoot packages
+
+Default value: `[]`
+
+##### <a name="module_build_root"></a>`module_build_root`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -126,7 +159,7 @@ directory where modules are built. Defaults to `$vardir/puppet-selinux`
 
 Default value: `"${facts['puppet_vardir']}/puppet-selinux"`
 
-##### `default_builder`
+##### <a name="default_builder"></a>`default_builder`
 
 Data type: `Enum['refpolicy', 'simple']`
 
@@ -134,7 +167,7 @@ which builder to use by default with selinux::module
 
 Default value: `'simple'`
 
-##### `boolean`
+##### <a name="boolean"></a>`boolean`
 
 Data type: `Optional[Hash]`
 
@@ -142,7 +175,7 @@ Hash of selinux::boolean resource parameters
 
 Default value: ``undef``
 
-##### `fcontext`
+##### <a name="fcontext"></a>`fcontext`
 
 Data type: `Optional[Hash]`
 
@@ -150,7 +183,7 @@ Hash of selinux::fcontext resource parameters
 
 Default value: ``undef``
 
-##### `module`
+##### <a name="module"></a>`module`
 
 Data type: `Optional[Hash]`
 
@@ -158,7 +191,7 @@ Hash of selinux::module resource parameters
 
 Default value: ``undef``
 
-##### `permissive`
+##### <a name="permissive"></a>`permissive`
 
 Data type: `Optional[Hash]`
 
@@ -166,7 +199,7 @@ Hash of selinux::module resource parameters
 
 Default value: ``undef``
 
-##### `port`
+##### <a name="port"></a>`port`
 
 Data type: `Optional[Hash]`
 
@@ -174,7 +207,7 @@ Hash of selinux::port resource parameters
 
 Default value: ``undef``
 
-##### `exec_restorecon`
+##### <a name="exec_restorecon"></a>`exec_restorecon`
 
 Data type: `Optional[Hash]`
 
@@ -182,9 +215,73 @@ Hash of selinux::exec_restorecon resource parameters
 
 Default value: ``undef``
 
+### <a name="selinuxpackage"></a>`selinux::package`
+
+Manages additional packages required to support some of the functions.
+
+#### Parameters
+
+The following parameters are available in the `selinux::package` class:
+
+* [`manage_package`](#manage_package)
+* [`package_names`](#package_names)
+* [`manage_auditd_package`](#manage_auditd_package)
+* [`auditd_package_name`](#auditd_package_name)
+* [`setroubleshoot_package_names`](#setroubleshoot_package_names)
+* [`manage_setroubleshoot_packages`](#manage_setroubleshoot_packages)
+
+##### <a name="manage_package"></a>`manage_package`
+
+Data type: `Boolean`
+
+See main class
+
+Default value: `$selinux::manage_package`
+
+##### <a name="package_names"></a>`package_names`
+
+Data type: `Variant[String[1],
+    Array[String[1]]]`
+
+See main class
+
+Default value: `$selinux::package_name`
+
+##### <a name="manage_auditd_package"></a>`manage_auditd_package`
+
+Data type: `Boolean`
+
+See main class
+
+Default value: `$selinux::manage_auditd_package`
+
+##### <a name="auditd_package_name"></a>`auditd_package_name`
+
+Data type: `String[1]`
+
+See main class
+
+Default value: `$selinux::auditd_package_name`
+
+##### <a name="setroubleshoot_package_names"></a>`setroubleshoot_package_names`
+
+Data type: `Array[String]`
+
+See main class
+
+Default value: `$selinux::setroubleshoot_package_names`
+
+##### <a name="manage_setroubleshoot_packages"></a>`manage_setroubleshoot_packages`
+
+Data type: `Boolean`
+
+See main class
+
+Default value: `$selinux::manage_setroubleshoot_packages`
+
 ## Defined types
 
-### `selinux::boolean`
+### <a name="selinuxboolean"></a>`selinux::boolean`
 
 Manage the state of an SELinux boolean.
 
@@ -208,9 +305,12 @@ selinux::boolean{ 'named_write_master_zones':
 
 #### Parameters
 
-The following parameters are available in the `selinux::boolean` defined type.
+The following parameters are available in the `selinux::boolean` defined type:
 
-##### `ensure`
+* [`ensure`](#ensure)
+* [`persistent`](#persistent)
+
+##### <a name="ensure"></a>`ensure`
 
 Data type: `Variant[Boolean, Enum['on', 'off', 'present', 'absent']]`
 
@@ -218,7 +318,7 @@ Set to on or off
 
 Default value: `'on'`
 
-##### `persistent`
+##### <a name="persistent"></a>`persistent`
 
 Data type: `Boolean`
 
@@ -226,16 +326,23 @@ Set to false if you don't want it to survive a reboot.
 
 Default value: ``true``
 
-### `selinux::exec_restorecon`
+### <a name="selinuxexec_restorecon"></a>`selinux::exec_restorecon`
 
 Will execute after all other SELinux changes have been applied, but before
 Anchor['selinux::end']
 
 #### Parameters
 
-The following parameters are available in the `selinux::exec_restorecon` defined type.
+The following parameters are available in the `selinux::exec_restorecon` defined type:
 
-##### `path`
+* [`path`](#path)
+* [`recurse`](#recurse)
+* [`force`](#force)
+* [`refreshonly`](#refreshonly)
+* [`unless`](#unless)
+* [`onlyif`](#onlyif)
+
+##### <a name="path"></a>`path`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -243,7 +350,7 @@ The path to run restorecon on. Defaults to resource title.
 
 Default value: `$title`
 
-##### `recurse`
+##### <a name="recurse"></a>`recurse`
 
 Data type: `Boolean`
 
@@ -251,7 +358,7 @@ Whether restorecon should recurse. Defaults to true
 
 Default value: ``true``
 
-##### `force`
+##### <a name="force"></a>`force`
 
 Data type: `Boolean`
 
@@ -259,7 +366,7 @@ Whether restorecon should use force.  Defaults to false.
 
 Default value: ``false``
 
-##### `refreshonly`
+##### <a name="refreshonly"></a>`refreshonly`
 
 Data type: `Boolean`
 
@@ -267,7 +374,7 @@ see the Exec resource
 
 Default value: ``true``
 
-##### `unless`
+##### <a name="unless"></a>`unless`
 
 Data type: `Optional[String]`
 
@@ -275,7 +382,7 @@ see the Exec resource
 
 Default value: ``undef``
 
-##### `onlyif`
+##### <a name="onlyif"></a>`onlyif`
 
 Data type: `Optional[String]`
 
@@ -283,7 +390,7 @@ see the Exec resource
 
 Default value: ``undef``
 
-### `selinux::fcontext`
+### <a name="selinuxfcontext"></a>`selinux::fcontext`
 
 For fcontext equivalences, see selinux::fcontext::equivalence
 
@@ -312,9 +419,15 @@ selinux::fcontext{'/u/users/[^/]*':
 
 #### Parameters
 
-The following parameters are available in the `selinux::fcontext` defined type.
+The following parameters are available in the `selinux::fcontext` defined type:
 
-##### `ensure`
+* [`ensure`](#ensure)
+* [`seltype`](#seltype)
+* [`seluser`](#seluser)
+* [`pathspec`](#pathspec)
+* [`filetype`](#filetype)
+
+##### <a name="ensure"></a>`ensure`
 
 Data type: `Enum['absent', 'present']`
 
@@ -322,7 +435,7 @@ The desired state of the resource. Default: 'present'
 
 Default value: `'present'`
 
-##### `seltype`
+##### <a name="seltype"></a>`seltype`
 
 Data type: `Optional[String]`
 
@@ -330,7 +443,7 @@ String A particular SELinux type, like "mysqld_log_t"
 
 Default value: ``undef``
 
-##### `seluser`
+##### <a name="seluser"></a>`seluser`
 
 Data type: `Optional[String]`
 
@@ -338,7 +451,7 @@ String A particular SELinux user, like "sysadm_u"
 
 Default value: ``undef``
 
-##### `pathspec`
+##### <a name="pathspec"></a>`pathspec`
 
 Data type: `String`
 
@@ -347,7 +460,7 @@ like "/var/log/mysql(/.*)?". Defaults to title
 
 Default value: `$title`
 
-##### `filetype`
+##### <a name="filetype"></a>`filetype`
 
 Data type: `Optional[String]`
 
@@ -364,7 +477,7 @@ File type the context applies to (i.e. regular file, directory, block device, al
 
 Default value: `'a'`
 
-### `selinux::fcontext::equivalence`
+### <a name="selinuxfcontextequivalence"></a>`selinux::fcontext::equivalence`
 
 Manage SELinux fcontext equivalences
 
@@ -381,9 +494,13 @@ selinux::fcontext::equivalence { '/opt/wordpress':
 
 #### Parameters
 
-The following parameters are available in the `selinux::fcontext::equivalence` defined type.
+The following parameters are available in the `selinux::fcontext::equivalence` defined type:
 
-##### `path`
+* [`path`](#path)
+* [`target`](#target)
+* [`ensure`](#ensure)
+
+##### <a name="path"></a>`path`
 
 Data type: `String`
 
@@ -391,13 +508,13 @@ the path to define and equivalence for. Default: Resource title
 
 Default value: `$title`
 
-##### `target`
+##### <a name="target"></a>`target`
 
 Data type: `String`
 
 the path that this resource will be equivalent to.
 
-##### `ensure`
+##### <a name="ensure"></a>`ensure`
 
 Data type: `Enum['present', 'absent']`
 
@@ -405,7 +522,7 @@ the desired state of the equivalence. Default: present
 
 Default value: `'present'`
 
-### `selinux::module`
+### <a name="selinuxmodule"></a>`selinux::module`
 
 This class will either install or uninstall a SELinux module from a running system.
 This module allows an admin to keep .te files in text form in a repository, while
@@ -461,9 +578,19 @@ selinux::module{ 'zabbix_fix':
 
 #### Parameters
 
-The following parameters are available in the `selinux::module` defined type.
+The following parameters are available in the `selinux::module` defined type:
 
-##### `ensure`
+* [`ensure`](#ensure)
+* [`source_pp`](#source_pp)
+* [`source_te`](#source_te)
+* [`source_fc`](#source_fc)
+* [`source_if`](#source_if)
+* [`content_te`](#content_te)
+* [`content_fc`](#content_fc)
+* [`content_if`](#content_if)
+* [`builder`](#builder)
+
+##### <a name="ensure"></a>`ensure`
 
 Data type: `Enum['absent', 'present']`
 
@@ -471,7 +598,7 @@ present or absent
 
 Default value: `'present'`
 
-##### `source_pp`
+##### <a name="source_pp"></a>`source_pp`
 
 Data type: `Optional[String]`
 
@@ -480,7 +607,7 @@ Mutually excludsive with using source files.
 
 Default value: ``undef``
 
-##### `source_te`
+##### <a name="source_te"></a>`source_te`
 
 Data type: `Optional[String]`
 
@@ -488,7 +615,7 @@ the source file (either a puppet URI or local file) of the SELinux .te file
 
 Default value: ``undef``
 
-##### `source_fc`
+##### <a name="source_fc"></a>`source_fc`
 
 Data type: `Optional[String]`
 
@@ -496,7 +623,7 @@ the source file (either a puppet URI or local file) of the SELinux .fc file
 
 Default value: ``undef``
 
-##### `source_if`
+##### <a name="source_if"></a>`source_if`
 
 Data type: `Optional[String]`
 
@@ -504,7 +631,7 @@ the source file (either a puppet URI or local file) of the SELinux .if file
 
 Default value: ``undef``
 
-##### `content_te`
+##### <a name="content_te"></a>`content_te`
 
 Data type: `Optional[String]`
 
@@ -512,7 +639,7 @@ content of the SELinux .te file
 
 Default value: ``undef``
 
-##### `content_fc`
+##### <a name="content_fc"></a>`content_fc`
 
 Data type: `Optional[String]`
 
@@ -520,7 +647,7 @@ content of the SELinux .fc file
 
 Default value: ``undef``
 
-##### `content_if`
+##### <a name="content_if"></a>`content_if`
 
 Data type: `Optional[String]`
 
@@ -528,7 +655,7 @@ content of the SELinux .if file
 
 Default value: ``undef``
 
-##### `builder`
+##### <a name="builder"></a>`builder`
 
 Data type: `Optional[Enum['simple', 'refpolicy']]`
 
@@ -537,7 +664,7 @@ to build the module, whereas 'refpolicy' uses the refpolicy framework, but requi
 
 Default value: ``undef``
 
-### `selinux::permissive`
+### <a name="selinuxpermissive"></a>`selinux::permissive`
 
 Set SELinux type to permissive
 
@@ -553,9 +680,12 @@ selinux::permissive { 'oddjob_mkhomedir_t':
 
 #### Parameters
 
-The following parameters are available in the `selinux::permissive` defined type.
+The following parameters are available in the `selinux::permissive` defined type:
 
-##### `ensure`
+* [`ensure`](#ensure)
+* [`seltype`](#seltype)
+
+##### <a name="ensure"></a>`ensure`
 
 Data type: `Enum['present', 'absent']`
 
@@ -563,7 +693,7 @@ Set to present to add or absent to remove a permissive mode of a type
 
 Default value: `'present'`
 
-##### `seltype`
+##### <a name="seltype"></a>`seltype`
 
 Data type: `String`
 
@@ -571,7 +701,7 @@ A particular selinux type to make permissive, like "oddjob_mkhomedir_t"
 
 Default value: `$title`
 
-### `selinux::port`
+### <a name="selinuxport"></a>`selinux::port`
 
 This method will manage a local network port context setting, and will
 persist it across reboots.
@@ -591,9 +721,15 @@ selinux::port { 'allow-syslog-relp':
 
 #### Parameters
 
-The following parameters are available in the `selinux::port` defined type.
+The following parameters are available in the `selinux::port` defined type:
 
-##### `ensure`
+* [`ensure`](#ensure)
+* [`seltype`](#seltype)
+* [`protocol`](#protocol)
+* [`port`](#port)
+* [`port_range`](#port_range)
+
+##### <a name="ensure"></a>`ensure`
 
 Data type: `Enum['present', 'absent']`
 
@@ -601,19 +737,19 @@ Set to present to add or absent to remove a port context.
 
 Default value: `'present'`
 
-##### `seltype`
+##### <a name="seltype"></a>`seltype`
 
 Data type: `String`
 
 An SELinux port type
 
-##### `protocol`
+##### <a name="protocol"></a>`protocol`
 
 Data type: `Enum['tcp', 'udp']`
 
 Either 'tcp', 'udp', 'ipv4' or 'ipv6'
 
-##### `port`
+##### <a name="port"></a>`port`
 
 Data type: `Optional[Integer[1,65535]]`
 
@@ -621,7 +757,7 @@ A network port number, like 8514,
 
 Default value: ``undef``
 
-##### `port_range`
+##### <a name="port_range"></a>`port_range`
 
 Data type: `Optional[Tuple[Integer[1,65535], 2, 2]]`
 
@@ -631,7 +767,7 @@ Default value: ``undef``
 
 ## Resource types
 
-### `selinux_fcontext`
+### <a name="selinux_fcontext"></a>`selinux_fcontext`
 
 Manage SELinux fcontext definitions. You should use selinux::fcontext instead of this directly.
 
@@ -683,20 +819,24 @@ The SELinux user name
 
 The following parameters are available in the `selinux_fcontext` type.
 
-##### `pathspec`
+* [`pathspec`](#pathspec)
+* [`provider`](#provider)
+* [`title`](#title)
+
+##### <a name="pathspec"></a>`pathspec`
 
 Path regular expression
 
-##### `provider`
+##### <a name="provider"></a>`provider`
 
 The specific backend to use for this `selinux_fcontext` resource. You will seldom need to specify this --- Puppet will
 usually discover the appropriate provider for your platform.
 
-##### `title`
+##### <a name="title"></a>`title`
 
 The namevar. Should be of the format pathspec_filetype
 
-### `selinux_fcontext_equivalence`
+### <a name="selinux_fcontext_equivalence"></a>`selinux_fcontext_equivalence`
 
 Manage SELinux fcontext equivalence definitions. You should use selinux::fcontext instead of this directly.
 
@@ -720,16 +860,19 @@ The target of the equivalence. ie. the path that this resource will be equivalen
 
 The following parameters are available in the `selinux_fcontext_equivalence` type.
 
-##### `path`
+* [`path`](#path)
+* [`provider`](#provider)
+
+##### <a name="path"></a>`path`
 
 The path to set equivalence for
 
-##### `provider`
+##### <a name="provider"></a>`provider`
 
 The specific backend to use for this `selinux_fcontext_equivalence` resource. You will seldom need to specify this ---
 Puppet will usually discover the appropriate provider for your platform.
 
-### `selinux_permissive`
+### <a name="selinux_permissive"></a>`selinux_permissive`
 
 Manage SELinux permissive types.
 
@@ -749,24 +892,28 @@ Default value: `present`
 
 The following parameters are available in the `selinux_permissive` type.
 
-##### `local`
+* [`local`](#local)
+* [`provider`](#provider)
+* [`seltype`](#seltype)
+
+##### <a name="local"></a>`local`
 
 Valid values: ``true``, ``false``
 
 A read-only attribue indicating whether the type is locally customized
 
-##### `provider`
+##### <a name="provider"></a>`provider`
 
 The specific backend to use for this `selinux_permissive` resource. You will seldom need to specify this --- Puppet will
 usually discover the appropriate provider for your platform.
 
-##### `seltype`
+##### <a name="seltype"></a>`seltype`
 
 namevar
 
 The SELinux type that should be permissive
 
-### `selinux_port`
+### <a name="selinux_port"></a>`selinux_port`
 
 Manage SELinux port definitions. You should use selinux::port instead of this directly.
 
@@ -810,12 +957,15 @@ Source of the port configuration - either policy or local
 
 The following parameters are available in the `selinux_port` type.
 
-##### `provider`
+* [`provider`](#provider)
+* [`title`](#title)
+
+##### <a name="provider"></a>`provider`
 
 The specific backend to use for this `selinux_port` resource. You will seldom need to specify this --- Puppet will
 usually discover the appropriate provider for your platform.
 
-##### `title`
+##### <a name="title"></a>`title`
 
 Should be of the form "protocol_lowport-highport" or the type may misbehave
 

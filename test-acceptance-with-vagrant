@@ -9,7 +9,7 @@ export PUPPET_INSTALL_TYPE=agent
 
 # https://github.com/puppetlabs/beaker-hostgenerator/pull/184 fixes the Fedora boxes and adds 32
 for layout in \
-  {debian10,centos{6,7}}'-64a' \
+  {debian10,centos{7,8}}'-64a' \
   'fedora30-64a{box=fedora/30-cloud-base}' \
   'fedora31-64a{box=fedora/31-cloud-base}'
 do
