@@ -4,6 +4,32 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v3.3.0](https://github.com/voxpupuli/puppet-selinux/tree/v3.3.0) (2021-04-26)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v3.2.0...v3.3.0)
+
+**Implemented enhancements:**
+
+- Install setroubleshoot helpers [\#328](https://github.com/voxpupuli/puppet-selinux/pull/328) ([jcpunk](https://github.com/jcpunk))
+- Support Fedora 31 & 32, drop EOL 28 & 29 [\#321](https://github.com/voxpupuli/puppet-selinux/pull/321) ([ekohl](https://github.com/ekohl))
+
+**Closed issues:**
+
+- Error finding provider when using selinux\_port [\#337](https://github.com/voxpupuli/puppet-selinux/issues/337)
+- missing semanage tools on el8 [\#333](https://github.com/voxpupuli/puppet-selinux/issues/333)
+- Manage setroubleshootd/sealert? [\#327](https://github.com/voxpupuli/puppet-selinux/issues/327)
+- Unable to manage ports on RHEL/CentOS 8 [\#316](https://github.com/voxpupuli/puppet-selinux/issues/316)
+
+**Merged pull requests:**
+
+- allow puppetlabs/stdlib 7 [\#340](https://github.com/voxpupuli/puppet-selinux/pull/340) ([kenyon](https://github.com/kenyon))
+- Support Puppet 7 [\#339](https://github.com/voxpupuli/puppet-selinux/pull/339) ([mattock](https://github.com/mattock))
+- examples/enable\_and\_targeted.pp: match type to filename [\#331](https://github.com/voxpupuli/puppet-selinux/pull/331) ([kenyon](https://github.com/kenyon))
+- Add puppet-lint-param-docs linter / regenerate REFERENCE.md [\#329](https://github.com/voxpupuli/puppet-selinux/pull/329) ([bastelfreak](https://github.com/bastelfreak))
+- Resolve puppet-lint [\#326](https://github.com/voxpupuli/puppet-selinux/pull/326) ([jcpunk](https://github.com/jcpunk))
+- modulesync 3.0.0 + code reformatting because of puppet-lint updates [\#324](https://github.com/voxpupuli/puppet-selinux/pull/324) ([bastelfreak](https://github.com/bastelfreak))
+- Update module.pp to match current version [\#308](https://github.com/voxpupuli/puppet-selinux/pull/308) ([ubellavance](https://github.com/ubellavance))
+
 ## [v3.2.0](https://github.com/voxpupuli/puppet-selinux/tree/v3.2.0) (2020-04-30)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v3.1.0...v3.2.0)
@@ -430,7 +456,7 @@ These should not affect the functionality of the module.
 - Fix module installation [\#92](https://github.com/voxpupuli/puppet-selinux/pull/92) ([toddnni](https://github.com/toddnni))
 - Switch to devel package for makefile on RHEL7 and Fedora 21+ [\#89](https://github.com/voxpupuli/puppet-selinux/pull/89) ([ncsutmf](https://github.com/ncsutmf))
 - add more lint checks [\#86](https://github.com/voxpupuli/puppet-selinux/pull/86) ([jlambert121](https://github.com/jlambert121))
-- Add support for Factor 1.6 [\#55](https://github.com/voxpupuli/puppet-selinux/pull/55) ([Gilum](https://github.com/Gilum))
+- Add support for Factor 1.6 [\#55](https://github.com/voxpupuli/puppet-selinux/pull/55) ([yannbeulque](https://github.com/yannbeulque))
 
 ## [v0.3.1](https://github.com/voxpupuli/puppet-selinux/tree/v0.3.1) (2016-03-08)
 
