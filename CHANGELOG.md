@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v3.3.1](https://github.com/voxpupuli/puppet-selinux/tree/v3.3.1) (2021-05-18)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v3.3.0...v3.3.1)
+
+**Closed issues:**
+
+- Add support for Fedora 33 [\#343](https://github.com/voxpupuli/puppet-selinux/issues/343)
+- Add support for Puppet 7 [\#342](https://github.com/voxpupuli/puppet-selinux/issues/342)
+- The semanage\_ports.py script needs to pick the correct version of python on a system with multiple installed [\#335](https://github.com/voxpupuli/puppet-selinux/issues/335)
+
+**Merged pull requests:**
+
+- Deprecate selinux\_python\_command fact and move handling into provider [\#336](https://github.com/voxpupuli/puppet-selinux/pull/336) ([trevor-vaughan](https://github.com/trevor-vaughan))
+
 ## [v3.3.0](https://github.com/voxpupuli/puppet-selinux/tree/v3.3.0) (2021-04-26)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v3.2.0...v3.3.0)
