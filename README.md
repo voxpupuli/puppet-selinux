@@ -56,6 +56,8 @@ running system.
 
 ## Known problems / limitations
 
+* The `selinux_python_command` fact is now deprecated and will be removed in
+  version 4 of the module.
 * If SELinux is disabled and you want to switch to permissive or enforcing you
   are required to reboot the system (limitation of SELinux). The module won't
   do this for you.
