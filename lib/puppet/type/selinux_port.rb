@@ -54,6 +54,7 @@ Puppet::Type.newtype(:selinux_port) do
     [
       'policycoreutils',
       'policycoreutils-python',
+      'policycoreutils-python-utils',
       'python3-policycoreutils',
       'selinux-policy-dev',
       'selinux-policy-devel'
