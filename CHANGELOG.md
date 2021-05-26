@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v3.4.0](https://github.com/voxpupuli/puppet-selinux/tree/v3.4.0) (2021-05-26)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v3.3.1...v3.4.0)
+
+**Implemented enhancements:**
+
+- Resources that use 'semanage' should have an autorequires on the various packages [\#345](https://github.com/voxpupuli/puppet-selinux/issues/345)
+
+**Merged pull requests:**
+
+- Add package autorequires to native types [\#346](https://github.com/voxpupuli/puppet-selinux/pull/346) ([trevor-vaughan](https://github.com/trevor-vaughan))
+
 ## [v3.3.1](https://github.com/voxpupuli/puppet-selinux/tree/v3.3.1) (2021-05-18)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v3.3.0...v3.3.1)
