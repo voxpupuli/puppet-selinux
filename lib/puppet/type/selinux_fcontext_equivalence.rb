@@ -25,4 +25,15 @@ Puppet::Type.newtype(:selinux_fcontext_equivalence) do
       end
     end
   end
+
+  autorequire(:package) do
+    [
+      'policycoreutils',
+      'policycoreutils-python',
+      'policycoreutils-python-utils',
+      'python3-policycoreutils',
+      'selinux-policy-dev',
+      'selinux-policy-devel'
+    ]
+  end
 end

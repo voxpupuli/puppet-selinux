@@ -49,4 +49,15 @@ Puppet::Type.newtype(:selinux_port) do
       raise ArgumentError, ':source is a read-only property'
     end
   end
+
+  autorequire(:package) do
+    [
+      'policycoreutils',
+      'policycoreutils-python',
+      'policycoreutils-python-utils',
+      'python3-policycoreutils',
+      'selinux-policy-dev',
+      'selinux-policy-devel'
+    ]
+  end
 end

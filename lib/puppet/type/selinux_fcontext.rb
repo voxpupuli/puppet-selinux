@@ -44,4 +44,15 @@ Puppet::Type.newtype(:selinux_fcontext) do
     desc 'The SELinux range'
     newvalues(%r{\w+})
   end
+
+  autorequire(:package) do
+    [
+      'policycoreutils',
+      'policycoreutils-python',
+      'policycoreutils-python-utils',
+      'python3-policycoreutils',
+      'selinux-policy-dev',
+      'selinux-policy-devel'
+    ]
+  end
 end
