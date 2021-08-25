@@ -14,7 +14,7 @@ describe 'selinux' do
           }
         end
 
-        it { is_expected.to contain_package('policycoreutils-python').with(ensure: 'present') }
+        it { is_expected.to contain_package('policycoreutils-python').with(ensure: 'installed') }
         it { is_expected.not_to contain_package('auditd') }
       end
     end
@@ -30,7 +30,7 @@ describe 'selinux' do
         }
       end
 
-      it { is_expected.to contain_package('policycoreutils-python-utils').with(ensure: 'present') }
+      it { is_expected.to contain_package('policycoreutils-python-utils').with(ensure: 'installed') }
     end
 
     %w[24 25].each do |majrelease|
@@ -45,7 +45,7 @@ describe 'selinux' do
           }
         end
 
-        it { is_expected.to contain_package('policycoreutils-python-utils').with(ensure: 'present') }
+        it { is_expected.to contain_package('policycoreutils-python-utils').with(ensure: 'installed') }
       end
     end
 
@@ -60,7 +60,7 @@ describe 'selinux' do
         }
       end
 
-      it { is_expected.to contain_package('policycoreutils').with(ensure: 'present') }
+      it { is_expected.to contain_package('policycoreutils').with(ensure: 'installed') }
     end
 
     context 'On Debian 10' do
@@ -75,7 +75,7 @@ describe 'selinux' do
       end
 
       %w[policycoreutils-python-utils selinux-basics selinux-policy-default auditd].each do |package|
-        it { is_expected.to contain_package(package).with(ensure: 'present') }
+        it { is_expected.to contain_package(package).with(ensure: 'installed') }
       end
     end
 
@@ -94,7 +94,7 @@ describe 'selinux' do
         }
       end
 
-      it { is_expected.not_to contain_package('policycoreutils-python').with(ensure: 'present') }
+      it { is_expected.not_to contain_package('policycoreutils-python').with(ensure: 'installed') }
     end
 
     context 'install a different package name' do
@@ -112,7 +112,7 @@ describe 'selinux' do
         }
       end
 
-      it { is_expected.to contain_package('some_package').with(ensure: 'present') }
+      it { is_expected.to contain_package('some_package').with(ensure: 'installed') }
     end
 
     context 'install setroubleshoot packages' do
@@ -130,8 +130,8 @@ describe 'selinux' do
         }
       end
 
-      it { is_expected.to contain_package('setroubleshoot').with(ensure: 'present') }
-      it { is_expected.to contain_package('setroubleshoot-plugins').with(ensure: 'present') }
+      it { is_expected.to contain_package('setroubleshoot').with(ensure: 'installed') }
+      it { is_expected.to contain_package('setroubleshoot-plugins').with(ensure: 'installed') }
     end
   end
 end
