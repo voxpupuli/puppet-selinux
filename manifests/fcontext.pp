@@ -36,7 +36,7 @@ define selinux::fcontext (
   Enum['absent', 'present'] $ensure = 'present',
   Optional[String] $seltype         = undef,
   Optional[String] $seluser         = undef,
-  Optional[String] $filetype        = 'a',
+  String[1] $filetype               = 'a',
 ) {
   include selinux
   if $ensure == 'present' {
