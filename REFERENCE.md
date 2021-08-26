@@ -398,7 +398,7 @@ Default value: `$title`
 
 ##### <a name="filetype"></a>`filetype`
 
-Data type: `Optional[String]`
+Data type: `String[1]`
 
 File type the context applies to (i.e. regular file, directory, block device, all files, etc.)
 - Types:
