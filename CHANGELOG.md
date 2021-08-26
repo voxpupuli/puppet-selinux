@@ -4,11 +4,19 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
-## [v3.4.0](https://github.com/voxpupuli/puppet-selinux/tree/v3.4.0) (2021-05-26)
+## [v3.4.1](https://github.com/voxpupuli/puppet-selinux/tree/v3.4.1) (2021-08-26)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v3.4.0...v3.4.1)
+
+**Merged pull requests:**
+
+- Allow stdlib 8.0.0 [\#348](https://github.com/voxpupuli/puppet-selinux/pull/348) ([smortex](https://github.com/smortex))
+
+## [v3.4.0](https://github.com/voxpupuli/puppet-selinux/tree/v3.4.0) (2021-05-29)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v3.3.1...v3.4.0)
 
-**Implemented enhancements:**
+**Closed issues:**
 
 - Resources that use 'semanage' should have an autorequires on the various packages [\#345](https://github.com/voxpupuli/puppet-selinux/issues/345)
 
