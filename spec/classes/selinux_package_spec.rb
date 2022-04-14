@@ -133,5 +133,24 @@ describe 'selinux' do
       it { is_expected.to contain_package('setroubleshoot').with(ensure: 'installed') }
       it { is_expected.to contain_package('setroubleshoot-plugins').with(ensure: 'installed') }
     end
+
+    context 'install selinux sandbox packages' do
+      let(:facts) do
+        {
+          osfamily: 'RedHat',
+          operatingsystem: 'RedHat',
+          operatingsystemmajrelease: '7',
+          os: { release: { major: 7 }, name: 'RedHat', family: 'RedHat' }
+        }
+      end
+      let(:params) do
+        {
+          manage_selinux_sandbox_packages: true
+        }
+      end
+
+      it { is_expected.to contain_package('policycoreutils-sandbox').with(ensure: 'installed') }
+      it { is_expected.to contain_package('selinux-policy-sandbox').with(ensure: 'installed') }
+    end
   end
 end

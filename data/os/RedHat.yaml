@@ -5,3 +5,7 @@ selinux::manage_setroubleshoot_packages: false
 selinux::setroubleshoot_package_names:
   - setroubleshoot
   - setroubleshoot-plugins
+selinux::manage_selinux_sandbox_packages: false
+selinux::selinux_sandbox_package_names: 
+ - policycoreutils-sandbox
+ - selinux-policy-sandbox
