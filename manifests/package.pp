@@ -6,6 +6,10 @@
 # @param package_names See main class
 # @param manage_auditd_package See main class
 # @param auditd_package_name See main class
+# @param manage_setroubleshoot_packages See main class
+# @param setroubleshoot_package_names See main class
+# @param manage_selinux_sandbox_packages See main class
+# @param selinux_sandbox_package_names See main class
 #
 class selinux::package (
   Boolean $manage_package,
@@ -14,6 +18,8 @@ class selinux::package (
   String[1] $auditd_package_name,
   Boolean $manage_setroubleshoot_packages,
   Array[String] $setroubleshoot_package_names,
+  Boolean $manage_selinux_sandbox_packages,
+  Array[String] $selinux_sandbox_package_names,
 ) {
   assert_private()
   if $manage_package {
@@ -24,5 +30,8 @@ class selinux::package (
   }
   if $manage_setroubleshoot_packages {
     ensure_packages ($setroubleshoot_package_names)
+  }
+  if $manage_selinux_sandbox_packages {
+    ensure_packages ($selinux_sandbox_package_names)
   }
 }
