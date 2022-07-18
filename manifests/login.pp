@@ -36,9 +36,9 @@ define selinux::login (
   # Do nothing unless SELinux is enabled
   if $facts['os']['selinux']['enabled'] {
     selinux_login { "${selinux_login_name}_${selinux_user}":
-      ensure              => $ensure,
-      selinux_login_name  => $selinux_login_name,
-      selinux_user        => $selinux_user,
+      ensure             => $ensure,
+      selinux_login_name => $selinux_login_name,
+      selinux_user       => $selinux_user,
     }
   }
 }
