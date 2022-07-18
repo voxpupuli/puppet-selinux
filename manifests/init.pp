@@ -31,6 +31,7 @@
 # @param permissive Hash of selinux::module resource parameters
 # @param port Hash of selinux::port resource parameters
 # @param exec_restorecon Hash of selinux::exec_restorecon resource parameters
+# @param login Hash of selinux::login resource parameters
 #
 class selinux (
   Variant[String[1], Array[String[1]]] $package_name,
