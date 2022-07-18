@@ -5,10 +5,6 @@ Puppet::Type.type(:selinux_login).provide(:semanage) do
   # semanage fails when SELinux is disabled, so let's not pretend to work in that situation.
   confine selinux: true
 
-  osfamily        = Facter.value('osfamily')
-  osversion       = Facter.value('operatingsystemmajrelease')
-  operatingsystem = Facter.value('operatingsystem')
-
   # Determine the appropriate python command
   def self.python_command
     @python_command ||= nil
