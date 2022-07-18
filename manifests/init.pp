@@ -54,6 +54,7 @@ class selinux (
   Optional[Hash] $permissive      = undef,
   Optional[Hash] $port            = undef,
   Optional[Hash] $exec_restorecon = undef,
+  Optional[Hash] $login           = undef,
 ) {
   class { 'selinux::package':
     manage_package                  => $manage_package,
@@ -88,6 +89,9 @@ class selinux (
   }
   if $exec_restorecon {
     create_resources ( 'selinux::exec_restorecon', $exec_restorecon )
+  }
+  if $login {
+    create_resources ( 'selinux::login', $login)
   }
 
   # Ordering
