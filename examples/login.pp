@@ -1,4 +1,3 @@
-
 # Groups
 selinux::login { '%cn_cegbu_aconex_fr-dev-ops-priv_staff_u':
   ensure             => 'present',
