@@ -15,8 +15,8 @@
 # @param selinux_user The selinux user to map to
 #
 define selinux::login (
-  String                    $selinux_login_name,
-  String                    $selinux_user,
+  String[1]                    $selinux_login_name,
+  String[1]                    $selinux_user,
   Enum['present', 'absent'] $ensure = 'present',
 ) {
   include selinux
