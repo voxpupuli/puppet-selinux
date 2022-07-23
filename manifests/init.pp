@@ -91,12 +91,10 @@ class selinux (
   if $exec_restorecon {
     create_resources ( 'selinux::exec_restorecon', $exec_restorecon )
   }
-  if $login {
-    $login.each |$login_name, $login_attributes| {
-      selinux::login { $login_name:
+  $login.each |$login_name, $login_attributes| {
+    selinux::login { $login_name:
       * => $login_attributes,
     }
-}
   }
 
   # Ordering
