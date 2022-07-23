@@ -55,7 +55,7 @@ class selinux (
   Optional[Hash] $permissive      = undef,
   Optional[Hash] $port            = undef,
   Optional[Hash] $exec_restorecon = undef,
-  Optional[Hash] $login           = undef,
+  Hash[String[1],Hash[String[1],String[1]]] $login = {},
 ) {
   class { 'selinux::package':
     manage_package                  => $manage_package,
