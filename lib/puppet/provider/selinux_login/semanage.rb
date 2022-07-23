@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Puppet::Type.type(:selinux_login).provide(:semanage) do
   desc 'Support managing SELinux login definitions via semanage'
 
@@ -24,6 +26,7 @@ Puppet::Type.type(:selinux_login).provide(:semanage) do
       candidate = Puppet::Util.which(pypath)
 
       next unless candidate
+
       valid_paths << candidate
 
       if Puppet::Util::Execution.execute("#{candidate} -c 'import semanage'", failonfail: false).exitstatus.zero?
@@ -90,11 +93,13 @@ Puppet::Type.type(:selinux_login).provide(:semanage) do
         unless resource[:selinux_user].to_s == provider.selinux_user && resource[:selinux_login_name].to_s == provider.selinux_login_name || resource.purging?
           raise Puppet::ResourceError, "Selinux_port['#{resource[:name]}']: title does not match its port and protocol, and a conflicting resource exists"
         end
+
         resource.provider = provider
         resource[:ensure] = :present if provider.source == :policy
       else
-        resources.values.each do |res|
+        resources.each_value do |res|
           next unless res[:selinux_user] == provider.selinux_user && res[:selinux_login_name] == provider.selinux_login_name
+
           warning("Selinux_login['#{resource[:name]}']: title does not match format selinux_login_name_selinux_user")
           resource.provider = provider
           resource[:ensure] = :present if provider.source == :policy

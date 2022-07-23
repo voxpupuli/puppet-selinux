@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 # Provide a dummy Selinux module for the test
@@ -10,10 +12,10 @@ end
 semanage_provider = Puppet::Type.type(:selinux_fcontext_equivalence).provider(:semanage)
 fc_equiv = Puppet::Type.type(:selinux_fcontext_equivalence)
 
-fcontext_equivs = <<-EOS
-/foobar /var/lib/whatever
-/opt/my/other/app /var/lib/whatever
-/opt/foo /usr/share/wordpress
+fcontext_equivs = <<~EOS
+  /foobar /var/lib/whatever
+  /opt/my/other/app /var/lib/whatever
+  /opt/foo /usr/share/wordpress
 EOS
 
 describe semanage_provider do
@@ -29,9 +31,11 @@ describe semanage_provider do
           File.expects(:exist?).with('spec_dummy').returns(true)
           File.expects(:readlines).with('spec_dummy').returns(fcontext_equivs.split("\n"))
         end
+
         it 'returns three resources' do
           expect(described_class.instances.size).to eq(3)
         end
+
         it 'equivalences get parsed properly' do
           expect(described_class.instances[0].instance_variable_get('@property_hash')).to eq(
             ensure: :present,
@@ -40,15 +44,18 @@ describe semanage_provider do
           )
         end
       end
+
       context 'with no equivalences file' do
         before do
           Selinux.expects(:selinux_file_context_subs_path).returns('spec_dummy')
           File.expects(:exist?).with('spec_dummy').returns(false)
         end
+
         it 'returns no resources' do
           expect(described_class.instances.size).to eq(0)
         end
       end
+
       context 'Creating' do
         let(:resource) do
           res = fc_equiv.new(name: '/foobar', ensure: :present, target: '/something')
@@ -61,6 +68,7 @@ describe semanage_provider do
           resource.provider.create
         end
       end
+
       context 'Deleting' do
         let(:provider) do
           semanage_provider.new(name: '/foobar', ensure: :present, target: '/something')
@@ -71,6 +79,7 @@ describe semanage_provider do
           provider.destroy
         end
       end
+
       context 'With resources differing from the catalog' do
         let(:resources) do
           return { '/opt/myapp' => fc_equiv.new(
@@ -90,15 +99,18 @@ describe semanage_provider do
           File.expects(:readlines).with('spec_dummy').returns(fcontext_equivs.split("\n"))
           semanage_provider.prefetch(resources)
         end
+
         it 'finds provider for /foobar' do
           p = resources['/foobar'].provider
           expect(p).not_to eq(nil)
         end
+
         context 'has the correct target' do
           let(:p) { resources['/foobar'].provider }
 
           it { expect(p.target).to eq('/var/lib/whatever') }
         end
+
         it 'can change target by doing a non-reloading delete' do
           p = resources['/foobar'].provider
           described_class.expects(:semanage).with('fcontext', '-N', '-d', '-e', '/var/lib/whatever', '/foobar')

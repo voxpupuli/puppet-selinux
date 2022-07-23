@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Puppet::Type.newtype(:selinux_permissive) do
   @doc = 'Manage SELinux permissive types.'
 
@@ -14,13 +16,13 @@ Puppet::Type.newtype(:selinux_permissive) do
   end
 
   autorequire(:package) do
-    [
-      'policycoreutils',
-      'policycoreutils-python',
-      'policycoreutils-python-utils',
-      'python3-policycoreutils',
-      'selinux-policy-dev',
-      'selinux-policy-devel'
+    %w[
+      policycoreutils
+      policycoreutils-python
+      policycoreutils-python-utils
+      python3-policycoreutils
+      selinux-policy-dev
+      selinux-policy-devel
     ]
   end
 end

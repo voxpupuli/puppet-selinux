@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'beaker-rspec'
 require 'beaker-puppet'
 require 'beaker/puppet_install_helper'
@@ -39,9 +41,7 @@ RSpec.configure do |c|
     end
   end
 
-  unless have_selinux_ruby_library(hosts)
-    c.filter_run_excluding requires_selinux_ruby_library: true
-  end
+  c.filter_run_excluding requires_selinux_ruby_library: true unless have_selinux_ruby_library(hosts)
 end
 
 shared_examples 'a idempotent resource' do

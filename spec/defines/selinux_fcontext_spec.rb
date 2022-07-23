@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'selinux::fcontext' do
@@ -20,6 +22,7 @@ describe 'selinux::fcontext' do
         it { is_expected.to contain_selinux__fcontext('myfile').that_requires('Anchor[selinux::module post]') }
         it { is_expected.to contain_selinux__fcontext('myfile').that_comes_before('Anchor[selinux::end]') }
       end
+
       context 'removal ordering' do
         let(:params) do
           {
@@ -45,6 +48,7 @@ describe 'selinux::fcontext' do
 
         it { is_expected.to compile.and_raise_error(%r{"filetype" must be one of: a,f,d,c,b,s,l,p - see "man semanage-fcontext"}) }
       end
+
       context 'invalid multiple filetype' do
         let(:params) do
           {
@@ -56,6 +60,7 @@ describe 'selinux::fcontext' do
 
         it { is_expected.to compile.and_raise_error(%r{"filetype" must be one of: a,f,d,c,b,s,l,p - see "man semanage-fcontext"}) }
       end
+
       context 'set filemode and context' do
         let(:params) do
           {
@@ -67,6 +72,7 @@ describe 'selinux::fcontext' do
 
         it { is_expected.to contain_selinux_fcontext('/tmp/file1_a').with(pathspec: '/tmp/file1', seltype: 'user_home_dir_t', file_type: 'a') }
       end
+
       context 'set context' do
         let(:params) do
           {

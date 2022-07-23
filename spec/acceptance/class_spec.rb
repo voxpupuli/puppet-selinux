@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 
 describe 'selinux class' do
@@ -121,6 +123,7 @@ describe 'selinux class' do
     describe command('semodule -l | grep puppet_selinux_test_policy') do
       its(:stdout) { is_expected.to match(%r{puppet_selinux_test_policy}) }
     end
+
     describe command('semodule -l | grep puppet_selinux_simple_policy') do
       its(:stdout) { is_expected.to match(%r{puppet_selinux_simple_policy}) }
     end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'selinux::port' do
@@ -34,6 +36,7 @@ describe 'selinux::port' do
 
           it { is_expected.to contain_selinux_port("#{protocol}_8080-8080").with(seltype: 'http_port_t') }
         end
+
         context "protocol #{protocol} and port_range" do
           let(:params) do
             {
