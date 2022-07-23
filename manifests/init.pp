@@ -31,6 +31,7 @@
 # @param permissive Hash of selinux::module resource parameters
 # @param port Hash of selinux::port resource parameters
 # @param exec_restorecon Hash of selinux::exec_restorecon resource parameters
+# @param login Hash of selinux::login resource parameters
 #
 class selinux (
   Variant[String[1], Array[String[1]]] $package_name,
@@ -54,6 +55,7 @@ class selinux (
   Optional[Hash] $permissive      = undef,
   Optional[Hash] $port            = undef,
   Optional[Hash] $exec_restorecon = undef,
+  Hash[String[1],Hash[String[1],String[1]]] $login = {},
 ) {
   class { 'selinux::package':
     manage_package                  => $manage_package,
@@ -88,6 +90,11 @@ class selinux (
   }
   if $exec_restorecon {
     create_resources ( 'selinux::exec_restorecon', $exec_restorecon )
+  }
+  $login.each |$login_name, $login_attributes| {
+    selinux::login { $login_name:
+      * => $login_attributes,
+    }
   }
 
   # Ordering
