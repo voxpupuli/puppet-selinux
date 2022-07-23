@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'selinux' do
   context 'package' do
-    %w[6 7].each do |majrelease|
+    %w[7].each do |majrelease|
       context "On RedHat #{majrelease} based OSes" do
         let(:facts) do
           {
@@ -14,6 +14,7 @@ describe 'selinux' do
           }
         end
 
+        it { is_expected.to compile.with_all_deps }
         it { is_expected.to contain_package('policycoreutils-python').with(ensure: 'installed') }
         it { is_expected.not_to contain_package('auditd') }
       end
@@ -30,6 +31,7 @@ describe 'selinux' do
         }
       end
 
+      it { is_expected.to compile.with_all_deps }
       it { is_expected.to contain_package('policycoreutils-python-utils').with(ensure: 'installed') }
     end
 
@@ -45,6 +47,7 @@ describe 'selinux' do
           }
         end
 
+        it { is_expected.to compile.with_all_deps }
         it { is_expected.to contain_package('policycoreutils-python-utils').with(ensure: 'installed') }
       end
     end
@@ -60,6 +63,7 @@ describe 'selinux' do
         }
       end
 
+      it { is_expected.to compile.with_all_deps }
       it { is_expected.to contain_package('policycoreutils').with(ensure: 'installed') }
     end
 
@@ -73,6 +77,8 @@ describe 'selinux' do
           os: { release: { major: '10' }, name: 'Debian', family: 'Debian' }
         }
       end
+
+      it { is_expected.to compile.with_all_deps }
 
       %w[policycoreutils-python-utils selinux-basics selinux-policy-default auditd].each do |package|
         it { is_expected.to contain_package(package).with(ensure: 'installed') }
@@ -94,6 +100,7 @@ describe 'selinux' do
         }
       end
 
+      it { is_expected.to compile.with_all_deps }
       it { is_expected.not_to contain_package('policycoreutils-python').with(ensure: 'installed') }
     end
 
@@ -112,6 +119,7 @@ describe 'selinux' do
         }
       end
 
+      it { is_expected.to compile.with_all_deps }
       it { is_expected.to contain_package('some_package').with(ensure: 'installed') }
     end
 
@@ -130,6 +138,7 @@ describe 'selinux' do
         }
       end
 
+      it { is_expected.to compile.with_all_deps }
       it { is_expected.to contain_package('setroubleshoot').with(ensure: 'installed') }
       it { is_expected.to contain_package('setroubleshoot-plugins').with(ensure: 'installed') }
     end
@@ -149,6 +158,7 @@ describe 'selinux' do
         }
       end
 
+      it { is_expected.to compile.with_all_deps }
       it { is_expected.to contain_package('policycoreutils-sandbox').with(ensure: 'installed') }
       it { is_expected.to contain_package('selinux-policy-sandbox').with(ensure: 'installed') }
     end
