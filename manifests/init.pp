@@ -27,6 +27,7 @@
 # @param default_builder which builder to use by default with selinux::module
 # @param boolean Hash of selinux::boolean resource parameters
 # @param fcontext Hash of selinux::fcontext resource parameters
+# @param fcontext_equivalence Hash of selinux::fcontext::equivalence resource parameters
 # @param module Hash of selinux::module resource parameters
 # @param permissive Hash of selinux::module resource parameters
 # @param port Hash of selinux::port resource parameters
@@ -49,12 +50,13 @@ class selinux (
   Stdlib::Absolutepath $module_build_root                     = "${facts['puppet_vardir']}/puppet-selinux",
   Enum['refpolicy', 'simple'] $default_builder                = 'simple',
 
-  Optional[Hash] $boolean         = undef,
-  Optional[Hash] $fcontext        = undef,
-  Optional[Hash] $module          = undef,
-  Optional[Hash] $permissive      = undef,
-  Optional[Hash] $port            = undef,
-  Optional[Hash] $exec_restorecon = undef,
+  Optional[Hash] $boolean              = undef,
+  Optional[Hash] $fcontext             = undef,
+  Optional[Hash] $fcontext_equivalence = undef,
+  Optional[Hash] $module               = undef,
+  Optional[Hash] $permissive           = undef,
+  Optional[Hash] $port                 = undef,
+  Optional[Hash] $exec_restorecon      = undef,
   Hash[String[1],Hash[String[1],String[1]]] $login = {},
 ) {
   class { 'selinux::package':
@@ -78,6 +80,9 @@ class selinux (
   }
   if $fcontext {
     create_resources ( 'selinux::fcontext', $fcontext )
+  }
+  if $fcontext_equivalence {
+    create_resources ( 'selinux::fcontext::equivalence', $fcontext_equivalence )
   }
   if $module {
     create_resources ( 'selinux::module', $module )
