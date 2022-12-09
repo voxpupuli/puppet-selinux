@@ -2,5 +2,10 @@
 selinux::manage_auditd_package: true
 selinux::manage_setroubleshoot_packages: false
 selinux::manage_selinux_sandbox_packages: false
+selinux::package_name:
+  - policycoreutils-python-utils
+  - selinux-basics
+  - selinux-policy-default
+selinux::refpolicy_package_name: selinux-policy-dev
 selinux::selinux_sandbox_package_names:
  - policycoreutils-sandbox
