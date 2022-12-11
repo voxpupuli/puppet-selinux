@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'selinux' do
@@ -25,8 +27,8 @@ describe 'selinux' do
         let(:params) do
           {
             module: {
-              'mymodule1' =>  { 'source_te' => 'dummy' },
-              'mymodule2' =>  { 'source_te' => 'dummy' }
+              'mymodule1' => { 'source_te' => 'dummy' },
+              'mymodule2' => { 'source_te' => 'dummy' }
             }
           }
         end
@@ -84,6 +86,10 @@ describe 'selinux' do
               'myfcontext1'    => { 'seltype' => 'mysqld_log_t', 'pathspec' => '/u01/log/mysql(/.*)?' },
               'myfcontext2'    => { 'seltype' => 'mysqld_log_t', 'pathspec' => '/u02/log/mysql(/.*)?' },
               '/path/spec(.*)' => { 'seltype' => 'mysqld_log_t', 'pathspec' => '/path/spec(.*)' }
+            },
+            fcontext_equivalence: {
+              'myequiv1' => { 'target' => '/home', 'path' => '/test', },
+              '/example' => { 'target' => '/usr' },
             }
           }
         end
@@ -91,6 +97,8 @@ describe 'selinux' do
         it { is_expected.to contain_selinux__fcontext('myfcontext1') }
         it { is_expected.to contain_selinux__fcontext('myfcontext2') }
         it { is_expected.to contain_selinux__fcontext('/path/spec(.*)') }
+        it { is_expected.to contain_selinux__fcontext__equivalence('myequiv1') }
+        it { is_expected.to contain_selinux__fcontext__equivalence('/example') }
       end
     end
   end
