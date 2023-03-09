@@ -89,100 +89,102 @@ define selinux::module (
   -> Selinux::Module[$title]
   -> Anchor['selinux::module post']
 
-  $has_source = (pick($source_te, $source_fc, $source_if, $content_te, $content_fc, $content_if, false) != false)
-  if $has_source and $build_command == undef {
-    fail('No builder or default builder specified')
-  }
-
-  if $has_source and $source_pp != undef {
-    fail('Specifying source files and a pre-compiled policy package are mutually exclusive options')
-  }
-
-  if $has_source and $ensure == 'present' {
-    file { "${module_file}.te":
-      ensure  => 'file',
-      source  => $source_te,
-      content => $content_te,
-      notify  => Exec["clean-module-${title}"],
+  if $facts['os']['selinux']['enabled'] {
+    $has_source = (pick($source_te, $source_fc, $source_if, $content_te, $content_fc, $content_if, false) != false)
+    if $has_source and $build_command == undef {
+      fail('No builder or default builder specified')
     }
 
-    $content_fc_real = $content_fc ? { undef => $source_fc ? { undef => '', default => undef }, default => $content_fc }
-    file { "${module_file}.fc":
-      ensure  => 'file',
-      source  => $source_fc,
-      content => $content_fc_real,
-      notify  => Exec["clean-module-${title}"],
+    if $has_source and $source_pp != undef {
+      fail('Specifying source files and a pre-compiled policy package are mutually exclusive options')
     }
 
-    $content_if_real = $content_if ? { undef => $source_if ? { undef => '', default => undef }, default => $content_if }
-    file { "${module_file}.if":
-      ensure  => 'file',
-      source  => $source_if,
-      content => $content_if_real,
-      notify  => Exec["clean-module-${title}"],
+    if $has_source and $ensure == 'present' {
+      file { "${module_file}.te":
+        ensure  => 'file',
+        source  => $source_te,
+        content => $content_te,
+        notify  => Exec["clean-module-${title}"],
+      }
+
+      $content_fc_real = $content_fc ? { undef => $source_fc ? { undef => '', default => undef }, default => $content_fc }
+      file { "${module_file}.fc":
+        ensure  => 'file',
+        source  => $source_fc,
+        content => $content_fc_real,
+        notify  => Exec["clean-module-${title}"],
+      }
+
+      $content_if_real = $content_if ? { undef => $source_if ? { undef => '', default => undef }, default => $content_if }
+      file { "${module_file}.if":
+        ensure  => 'file',
+        source  => $source_if,
+        content => $content_if_real,
+        notify  => Exec["clean-module-${title}"],
+      }
+      # ensure it doesn't get purged if it exists
+      file { "${module_file}.pp": selinux_ignore_defaults => true }
+
+      exec { "clean-module-${title}":
+        path        => '/bin:/usr/bin',
+        cwd         => $module_dir,
+        command     => "rm -f '${module_file}.pp' '${module_file}.loaded'",
+        refreshonly => true,
+        notify      => Exec["build-module-${title}"],
+      }
+
+      exec { "build-module-${title}":
+        path    => '/bin:/usr/bin',
+        cwd     => $module_dir,
+        command => "${build_command} || (rm -f ${module_file}.pp ${module_file}.loaded && exit 1)",
+        creates => "${module_file}.pp",
+        notify  => Exec["install-module-${title}"],
+      }
+      $install = true
+    } elsif $source_pp != undef and $ensure == 'present' {
+      file { "${module_file}.pp":
+        ensure => 'file',
+        source => $source_pp,
+        notify => Exec["clean-module-${title}"],
+      }
+
+      exec { "clean-module-${title}":
+        path        => '/bin:/usr/bin',
+        cwd         => $module_dir,
+        command     => "rm -f '${module_file}.loaded'",
+        refreshonly => true,
+        notify      => Exec["install-module-${title}"],
+      }
+
+      $install = true
+    } else {
+      # no source and no .pp, just do plain selmodule {$title:}
+      $install = false
     }
-    # ensure it doesn't get purged if it exists
-    file { "${module_file}.pp": selinux_ignore_defaults => true }
 
-    exec { "clean-module-${title}":
-      path        => '/bin:/usr/bin',
-      cwd         => $module_dir,
-      command     => "rm -f '${module_file}.pp' '${module_file}.loaded'",
-      refreshonly => true,
-      notify      => Exec["build-module-${title}"],
+    if $install {
+      # we need to install the module manually because selmodule is kind of dumb. It ends up
+      # working fine, though.
+      exec { "install-module-${title}":
+        path    => '/sbin:/usr/sbin:/bin:/usr/bin',
+        cwd     => $module_dir,
+        command => "semodule -i ${module_file}.pp && touch ${module_file}.loaded",
+        creates => "${module_file}.loaded",
+        before  => Selmodule[$title],
+      }
+
+      # ensure it doesn't get purged if it exists
+      file { "${module_file}.loaded": }
     }
 
-    exec { "build-module-${title}":
-      path    => '/bin:/usr/bin',
-      cwd     => $module_dir,
-      command => "${build_command} || (rm -f ${module_file}.pp ${module_file}.loaded && exit 1)",
-      creates => "${module_file}.pp",
-      notify  => Exec["install-module-${title}"],
-    }
-    $install = true
-  } elsif $source_pp != undef and $ensure == 'present' {
-    file { "${module_file}.pp":
-      ensure => 'file',
-      source => $source_pp,
-      notify => Exec["clean-module-${title}"],
+    $module_path = ($has_source or $source_pp != undef) ? {
+      true  => "${module_file}.pp",
+      false => undef
     }
 
-    exec { "clean-module-${title}":
-      path        => '/bin:/usr/bin',
-      cwd         => $module_dir,
-      command     => "rm -f '${module_file}.loaded'",
-      refreshonly => true,
-      notify      => Exec["install-module-${title}"],
+    selmodule { $title:
+      ensure        => $ensure,
+      selmodulepath => $module_path,
     }
-
-    $install = true
-  } else {
-    # no source and no .pp, just do plain selmodule {$title:}
-    $install = false
-  }
-
-  if $install {
-    # we need to install the module manually because selmodule is kind of dumb. It ends up
-    # working fine, though.
-    exec { "install-module-${title}":
-      path    => '/sbin:/usr/sbin:/bin:/usr/bin',
-      cwd     => $module_dir,
-      command => "semodule -i ${module_file}.pp && touch ${module_file}.loaded",
-      creates => "${module_file}.loaded",
-      before  => Selmodule[$title],
-    }
-
-    # ensure it doesn't get purged if it exists
-    file { "${module_file}.loaded": }
-  }
-
-  $module_path = ($has_source or $source_pp != undef) ? {
-    true  => "${module_file}.pp",
-    false => undef
-  }
-
-  selmodule { $title:
-    ensure        => $ensure,
-    selmodulepath => $module_path,
   }
 }

@@ -23,7 +23,9 @@ define selinux::permissive (
     -> Anchor['selinux::module pre']
   }
 
-  selinux_permissive { $seltype:
-    ensure => $ensure,
+  if $facts['os']['selinux']['enabled'] {
+    selinux_permissive { $seltype:
+      ensure => $ensure,
+    }
   }
 }
