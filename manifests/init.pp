@@ -20,8 +20,8 @@
 # @param manage_package manage the package for selinux tools and refpolicy
 # @param auditd_package_name used when `manage_auditd_package` is true
 # @param manage_setroubleshoot_packages manage the setroubleshoot packages
-# @param setroubleshoot_package_names the names of the setroubleshoot packages
 # @param manage_selinux_sandbox_packages manage the selinux sandbox packages
+# @param setroubleshoot_package_names the names of the setroubleshoot packages
 # @param selinux_sandbox_package_names the names of the selinux sandbox packages
 # @param module_build_root directory where modules are built. Defaults to `$vardir/puppet-selinux`
 # @param default_builder which builder to use by default with selinux::module
@@ -39,8 +39,8 @@ class selinux (
   Boolean $manage_auditd_package,
   String $refpolicy_package_name,
   Boolean $manage_setroubleshoot_packages,
-  Array[String] $setroubleshoot_package_names                 = [],
   Boolean $manage_selinux_sandbox_packages,
+  Array[String] $setroubleshoot_package_names                 = [],
   Array[String] $selinux_sandbox_package_names                = [],
   Optional[Enum['enforcing', 'permissive', 'disabled']] $mode = undef,
   Optional[Enum['targeted', 'minimum', 'mls']] $type          = undef,
