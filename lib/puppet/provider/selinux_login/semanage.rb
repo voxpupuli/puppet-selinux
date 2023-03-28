@@ -85,13 +85,13 @@ Puppet::Type.type(:selinux_login).provide(:semanage) do
   end
 
   def self.prefetch(resources)
-    # is there a better way to do this? map port/protocol pairs to the provider regardless of the title
+    # is there a better way to do this? Map selinux_user/selinux_login_name to the provider regardless of the title
     # and make sure all system resources have ensure => :present so that we don't try to remove them
     instances.each do |provider|
       resource = resources[provider.name]
       if resource
         unless resource[:selinux_user].to_s == provider.selinux_user && resource[:selinux_login_name].to_s == provider.selinux_login_name || resource.purging?
-          raise Puppet::ResourceError, "Selinux_port['#{resource[:name]}']: title does not match its port and protocol, and a conflicting resource exists"
+          raise Puppet::ResourceError, "Selinux_login['#{resource[:name]}']: title does not match its seuser and login, and a conflicting resource exists"
         end
 
         resource.provider = provider
