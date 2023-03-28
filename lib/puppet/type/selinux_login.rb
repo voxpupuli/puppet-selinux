@@ -19,6 +19,15 @@ Puppet::Type.newtype(:selinux_login) do
     isrequired
   end
 
+  newproperty(:source) do
+    desc 'Source of the login configuration - either policy or local'
+    newvalues(:policy, :local)
+
+    validate do |_value|
+      raise ArgumentError, ':source is a read-only property'
+    end
+  end
+
   autorequire(:package) do
     %w[
       policycoreutils

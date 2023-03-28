@@ -913,6 +913,12 @@ The name of the linux user or group to map.
 
 The selinux user to map to.
 
+##### `source`
+
+Valid values: `policy`, `local`
+
+Source of the login configuration - either policy or local
+
 #### Parameters
 
 The following parameters are available in the `selinux_login` type.

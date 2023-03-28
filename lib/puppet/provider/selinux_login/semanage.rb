@@ -58,17 +58,28 @@ Puppet::Type.type(:selinux_login).provide(:semanage) do
     lines.each do |line|
       split = line.split(%r{\s+})
       # helper format is:
-      # root unconfined_u
-      # system_u system_u
-      # __default__ unconfined_u
-      # %cn_cegbu_aconex_fr-dev-ops-priv unconfined_u
-      # %cn_cegbu_aconex_fr-dev-platform-priv unconfined_u
-      selinux_login_name, selinux_user = split
+      # policy root unconfined_u
+      # policy system_u system_u
+      # policy __default__ unconfined_u
+      # policy %cn_cegbu_aconex_fr-dev-ops-priv unconfined_u
+      # policy %cn_cegbu_aconex_fr-dev-platform-priv unconfined_u
+      # local %cn_cegbu_aconex_fr-dev-ops-priv unconfined_u
+      # local %cn_cegbu_aconex_fr-dev-platform-priv unconfined_u
+      source_str, selinux_login_name, selinux_user = split
 
-      key = selinux_login_name.to_s
+      key = "#{selinux_login_name}_#{selinux_user}"
+      source =
+        case source_str
+        when 'policy' then :policy
+        when 'local'  then :local
+        else
+          raise Puppet::ResourceError, "Selinux_login['#{key}']: unknown mapping source #{source_str}."
+        end
+
       ret[key] = {
         ensure: :present,
         name: key,
+        source: source,
         selinux_login_name: selinux_login_name,
         selinux_user: selinux_user
       }
