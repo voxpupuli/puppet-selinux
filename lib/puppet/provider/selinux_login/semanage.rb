@@ -100,7 +100,7 @@ Puppet::Type.type(:selinux_login).provide(:semanage) do
         resources.each_value do |res|
           next unless res[:selinux_user] == provider.selinux_user && res[:selinux_login_name] == provider.selinux_login_name
 
-          warning("Selinux_login['#{resource[:name]}']: title does not match format selinux_login_name_selinux_user")
+          warning("Selinux_login['#{res[:name]}']: title does not match format selinux_login_name_selinux_user")
           resource.provider = provider
           resource[:ensure] = :present if provider.source == :policy
         end
