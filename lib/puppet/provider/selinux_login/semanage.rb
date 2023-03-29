@@ -78,6 +78,7 @@ Puppet::Type.type(:selinux_login).provide(:semanage) do
 
       ret[key] = {
         ensure: :present,
+        title: key,
         name: key,
         source: source,
         selinux_login_name: selinux_login_name,
