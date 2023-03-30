@@ -17,6 +17,12 @@ Puppet::Type.newtype(:selinux_login) do
   newproperty(:selinux_user) do
     desc 'The selinux user to map to.'
     isrequired
+
+    def sync
+      event = super
+      provider.sync
+      event
+    end
   end
 
   newproperty(:source) do

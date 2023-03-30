@@ -125,6 +125,11 @@ Puppet::Type.type(:selinux_login).provide(:semanage) do
     semanage(*args)
   end
 
+  def sync
+    args = ['login', '-m', '-s', @resource[:selinux_user], @resource[:selinux_login_name]]
+    semanage(*args)
+  end
+
   def destroy
     args = ['login', '-d', @property_hash[:selinux_login_name]]
     semanage(*args)
