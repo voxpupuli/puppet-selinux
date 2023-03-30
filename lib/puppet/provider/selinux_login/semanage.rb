@@ -102,8 +102,8 @@ Puppet::Type.type(:selinux_login).provide(:semanage) do
     instances.each do |provider|
       resource = resources[provider.name]
       if resource
-        unless resource[:selinux_user].to_s == provider.selinux_user && resource[:selinux_login_name].to_s == provider.selinux_login_name || resource.purging?
-          raise Puppet::ResourceError, "Selinux_login['#{resource[:name]}']: title does not match its seuser and login ('#{provider.name}' != '#{provider.selinux_user}_#{provider.selinux_login_name}'), and a conflicting resource exists"
+        unless resource[:selinux_login_name].to_s == provider.selinux_login_name || resource.purging?
+          raise Puppet::ResourceError, "Selinux_login['#{resource[:name]}']: title does not match its login ('#{provider.name}' != '#{provider.selinux_login_name}'), and a conflicting resource exists"
         end
 
         resource.provider = provider
@@ -112,7 +112,7 @@ Puppet::Type.type(:selinux_login).provide(:semanage) do
         resources.each_values do |res|
           next unless res[:selinux_user] == provider.selinux_user && res[:selinux_login_name] == provider.selinux_login_name
 
-          warning("Selinux_login['#{res[:name]}']: title does not match its seuser and login ('#{provider.name}' != '#{provider.selinux_user}_#{provider.selinux_login_name}')")
+          warning("Selinux_login['#{res[:name]}']: title does not match its login ('#{provider.name}' != '#{provider.selinux_login_name}')")
           resource.provider = provider
           resource[:ensure] = :present if provider.source == :policy
         end
