@@ -23,15 +23,15 @@ class selinux::package (
 ) {
   assert_private()
   if $manage_package {
-    ensure_packages ($package_names)
+    stdlib::ensure_packages ($package_names)
   }
   if $manage_auditd_package {
-    ensure_packages ($auditd_package_name)
+    stdlib::ensure_packages ($auditd_package_name)
   }
   if $manage_setroubleshoot_packages {
-    ensure_packages ($setroubleshoot_package_names)
+    stdlib::ensure_packages ($setroubleshoot_package_names)
   }
   if $manage_selinux_sandbox_packages {
-    ensure_packages ($selinux_sandbox_package_names)
+    stdlib::ensure_packages ($selinux_sandbox_package_names)
   }
 }
