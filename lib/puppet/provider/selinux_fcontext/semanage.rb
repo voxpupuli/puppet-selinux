@@ -11,8 +11,6 @@ Puppet::Type.type(:selinux_fcontext).provide(:semanage) do
 
   mk_resource_methods
 
-  @old_semanage = false
-
   @file_types = {
     'all files' => 'a',
     '-d'        => 'd',
@@ -26,12 +24,6 @@ Puppet::Type.type(:selinux_fcontext).provide(:semanage) do
 
   def self.file_type_map(val)
     @file_types[val]
-  end
-
-  def self.type_param(file_type)
-    return file_type unless @old_semanage
-
-    @file_types.invert[file_type]
   end
 
   def self.parse_fcontext_lines(lines)
@@ -97,14 +89,14 @@ Puppet::Type.type(:selinux_fcontext).provide(:semanage) do
 
   def create
     # is there really no way to have a provider-global helper function cleanly?
-    args = ['fcontext', '-a', '-t', @resource[:seltype], '-f', self.class.type_param(@resource[:file_type])]
+    args = ['fcontext', '-a', '-t', @resource[:seltype], '-f', @resource[:file_type]]
     args.concat(['-s', @resource[:seluser]]) if @resource[:seluser]
     args.push(@resource[:pathspec])
     semanage(*args)
   end
 
   def destroy
-    args = ['fcontext', '-d', '-t', @property_hash[:seltype], '-f', self.class.type_param(@property_hash[:file_type])]
+    args = ['fcontext', '-d', '-t', @property_hash[:seltype], '-f', @property_hash[:file_type]]
     args.concat(['-s', @property_hash[:seluser]]) if @property_hash[:seluser]
     args.push(@property_hash[:pathspec])
     semanage(*args)
@@ -112,12 +104,12 @@ Puppet::Type.type(:selinux_fcontext).provide(:semanage) do
 
   def seltype=(val)
     val = '<<none>>' if val == :none
-    args = ['fcontext', '-m', '-t', val, '-f', self.class.type_param(@property_hash[:file_type]), @property_hash[:pathspec]]
+    args = ['fcontext', '-m', '-t', val, '-f', @property_hash[:file_type], @property_hash[:pathspec]]
     semanage(*args)
   end
 
   def seluser=(val)
-    args = ['fcontext', '-m', '-s', val, '-t', @property_hash[:seltype], '-f', self.class.type_param(@property_hash[:file_type]), @property_hash[:pathspec]]
+    args = ['fcontext', '-m', '-s', val, '-t', @property_hash[:seltype], '-f', @property_hash[:file_type], @property_hash[:pathspec]]
     semanage(*args)
   end
 
