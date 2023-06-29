@@ -4,6 +4,29 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v4.0.0](https://github.com/voxpupuli/puppet-selinux/tree/v4.0.0) (2023-06-29)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v3.4.1...v4.0.0)
+
+**Breaking changes:**
+
+- puppetlabs/stdlib: Require 9.x [\#370](https://github.com/voxpupuli/puppet-selinux/pull/370) ([bastelfreak](https://github.com/bastelfreak))
+- Drop EoL RHEL 6 support [\#368](https://github.com/voxpupuli/puppet-selinux/pull/368) ([bastelfreak](https://github.com/bastelfreak))
+- Drop Puppet 6 support [\#365](https://github.com/voxpupuli/puppet-selinux/pull/365) ([bastelfreak](https://github.com/bastelfreak))
+- Drop Puppet 5 support [\#361](https://github.com/voxpupuli/puppet-selinux/pull/361) ([ekohl](https://github.com/ekohl))
+
+**Implemented enhancements:**
+
+- Add puppet 8 support [\#369](https://github.com/voxpupuli/puppet-selinux/pull/369) ([bastelfreak](https://github.com/bastelfreak))
+- Add param for selinux::fcontext::equivalence elements [\#360](https://github.com/voxpupuli/puppet-selinux/pull/360) ([jcpunk](https://github.com/jcpunk))
+- Add Debian 11 support by moving the policy packages definition [\#359](https://github.com/voxpupuli/puppet-selinux/pull/359) ([jcpunk](https://github.com/jcpunk))
+- add support for selinux login [\#356](https://github.com/voxpupuli/puppet-selinux/pull/356) ([bshelton](https://github.com/bshelton))
+- Simplify loading of selinux sandbox tooling [\#354](https://github.com/voxpupuli/puppet-selinux/pull/354) ([jcpunk](https://github.com/jcpunk))
+
+**Fixed bugs:**
+
+- Wrap some more commands in "if selinux is enabled" [\#363](https://github.com/voxpupuli/puppet-selinux/pull/363) ([jcpunk](https://github.com/jcpunk))
+
 ## [v3.4.1](https://github.com/voxpupuli/puppet-selinux/tree/v3.4.1) (2021-08-26)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v3.4.0...v3.4.1)
@@ -527,7 +550,7 @@ These should not affect the functionality of the module.
 - Whitespace lint fixes [\#63](https://github.com/voxpupuli/puppet-selinux/pull/63) ([mld](https://github.com/mld))
 - Implements SELinux type checking and ensuring. [\#62](https://github.com/voxpupuli/puppet-selinux/pull/62) ([ElvenSpellmaker](https://github.com/ElvenSpellmaker))
 - added hiera support [\#49](https://github.com/voxpupuli/puppet-selinux/pull/49) ([dacron](https://github.com/dacron))
-- Make port exec statement unique for protocol [\#37](https://github.com/voxpupuli/puppet-selinux/pull/37) ([dlevene1](https://github.com/dlevene1))
+- Make port exec statement unique for protocol [\#37](https://github.com/voxpupuli/puppet-selinux/pull/37) ([DLV111](https://github.com/DLV111))
 
 ## [v0.2.6](https://github.com/voxpupuli/puppet-selinux/tree/v0.2.6) (2015-10-20)
 
