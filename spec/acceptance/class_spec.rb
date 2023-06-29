@@ -7,7 +7,7 @@ describe 'selinux class' do
     ensure_permissive_mode_on(hosts)
   end
 
-  let(:pp) do
+  let(:manifest) do
     <<-EOS
       $have_selinux_ruby_library = #{have_selinux_ruby_library(hosts) ? 'true' : 'false'}
 
@@ -105,7 +105,7 @@ describe 'selinux class' do
   # We should really add something for it to purge, but we can't because
   # semanage doesn't even exist at the start. maybe a separate spec run after this?
 
-  it_behaves_like 'a idempotent resource'
+  it_behaves_like 'an idempotent resource'
 
   describe package(policy_package_for(hosts)) do
     it { is_expected.to be_installed }
