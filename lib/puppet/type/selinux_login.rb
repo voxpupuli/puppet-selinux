@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Puppet::Type.newtype(:selinux_login) do
   @doc = 'Manage SELinux login definitions. You should use selinux::login instead of this directly.'
 
@@ -18,13 +20,13 @@ Puppet::Type.newtype(:selinux_login) do
   end
 
   autorequire(:package) do
-    [
-      'policycoreutils',
-      'policycoreutils-python',
-      'policycoreutils-python-utils',
-      'python3-policycoreutils',
-      'selinux-policy-dev',
-      'selinux-policy-devel'
+    %w[
+      policycoreutils
+      policycoreutils-python
+      policycoreutils-python-utils
+      python3-policycoreutils
+      selinux-policy-dev
+      selinux-policy-devel
     ]
   end
 end

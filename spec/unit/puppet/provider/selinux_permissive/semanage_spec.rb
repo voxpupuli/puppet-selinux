@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 semanage_provider = Puppet::Type.type(:selinux_permissive).provider(:semanage)
@@ -41,9 +43,11 @@ describe semanage_provider do
         before do
           described_class.expects(:semanage).with('permissive', '--list').returns(semanage_output)
         end
+
         it 'returns one resource' do
           expect(described_class.instances.size).to eq(1)
         end
+
         it 'has a name tlp_t and ensure present' do
           expect(described_class.instances[0].instance_variable_get('@property_hash')).to eq(
             name: 'tlp_t',
@@ -53,36 +57,43 @@ describe semanage_provider do
           )
         end
       end
+
       context 'With a custom type' do
         before do
           described_class.expects(:semanage).with('permissive', '--list').returns(semanage_output_custom)
         end
+
         it 'returns two resources' do
           expect(described_class.instances.size).to eq(2)
         end
       end
     end
+
     context 'Creating' do
       it 'runs semanage permissive -a' do
         described_class.expects(:semanage).with('permissive', '-a', 'test_t')
         provider.create
       end
     end
+
     context 'Deleting' do
       it 'runs semanage permissive -d' do
         described_class.expects(:semanage).with('permissive', '-d', 'test_t')
         provider.destroy
       end
     end
+
     context 'Prefetch' do
       before do
         described_class.expects(:semanage).with('permissive', '--list').returns(semanage_output_custom)
       end
+
       it 'matches the provider' do
         semanage_provider.prefetch('test_t' => resource, 'tlp_t' => permissive.new(seltype: 'tlp_t', ensure: :present))
         expect(resource.provider.exists?).to eq(true)
       end
     end
+
     context 'Prefetch when purging' do
       let(:built_in) do
         b = permissive.new(seltype: 'tlp_t')

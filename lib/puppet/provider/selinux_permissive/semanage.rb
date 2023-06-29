@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Puppet::Type.type(:selinux_permissive).provide(:semanage) do
   desc 'Support managing SELinux permissive types definitions via semanage'
 
@@ -25,6 +27,7 @@ Puppet::Type.type(:selinux_permissive).provide(:semanage) do
         next
       end
       next if line.strip.empty?
+
       name = line.strip
       # do not use built-in provider if we find a customized type
       next if res[name] && !local
@@ -41,6 +44,7 @@ Puppet::Type.type(:selinux_permissive).provide(:semanage) do
       resource = resources[provider.seltype]
       # consider built-in resources absent for purposes of purging
       next unless resource
+
       resource.provider = provider
       if resource.purging? && !provider.local
         debug("Can't purge built-in resource #{resource[:seltype]}")

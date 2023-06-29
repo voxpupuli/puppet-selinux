@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Puppet::Type.newtype(:selinux_port) do
   @doc = 'Manage SELinux port definitions. You should use selinux::port instead of this directly.'
 
@@ -13,9 +15,7 @@ Puppet::Type.newtype(:selinux_port) do
 
     validate do |val|
       val = Integer(val)
-      if val < 1 || val > 65_535
-        raise ArgumentError, "Illegal port value '#{val}'"
-      end
+      raise ArgumentError, "Illegal port value '#{val}'" if val < 1 || val > 65_535
     end
   end
 
@@ -25,9 +25,7 @@ Puppet::Type.newtype(:selinux_port) do
 
     validate do |val|
       val = Integer(val)
-      if val < 1 || val > 65_535
-        raise ArgumentError, "Illegal port value '#{val}'"
-      end
+      raise ArgumentError, "Illegal port value '#{val}'" if val < 1 || val > 65_535
     end
   end
 
@@ -51,13 +49,13 @@ Puppet::Type.newtype(:selinux_port) do
   end
 
   autorequire(:package) do
-    [
-      'policycoreutils',
-      'policycoreutils-python',
-      'policycoreutils-python-utils',
-      'python3-policycoreutils',
-      'selinux-policy-dev',
-      'selinux-policy-devel'
+    %w[
+      policycoreutils
+      policycoreutils-python
+      policycoreutils-python-utils
+      python3-policycoreutils
+      selinux-policy-dev
+      selinux-policy-devel
     ]
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 
 describe 'selinux class - mode switching' do
@@ -9,14 +11,14 @@ describe 'selinux class - mode switching' do
   # On Debian, SELinux is disabled by default. This first step brings it up to
   # par with EL and exercises the Debian-specific code.
   context 'when switching from unknown mode to permissive' do
-    let(:pp) do
+    let(:manifest) do
       <<-EOS
         class { 'selinux': mode => 'permissive' }
       EOS
     end
 
     context 'before reboot' do
-      it_behaves_like 'a idempotent resource'
+      it_behaves_like 'an idempotent resource'
 
       describe package(policy_package_for(hosts)) do
         it { is_expected.to be_installed }
@@ -55,7 +57,7 @@ describe 'selinux class - mode switching' do
         shell('setenforce Enforcing && test "$(getenforce)" = "Enforcing"')
       end
 
-      it_behaves_like 'a idempotent resource'
+      it_behaves_like 'an idempotent resource'
 
       describe file('/etc/selinux/config') do
         its(:content) { is_expected.to match(%r{^SELINUX=disabled$}) }
@@ -93,14 +95,14 @@ describe 'selinux class - mode switching' do
   end
 
   context 'when switching from disabled to permissive' do
-    let(:pp) do
+    let(:manifest) do
       <<-EOS
         class { 'selinux': mode => 'permissive' }
       EOS
     end
 
     context 'before reboot' do
-      it_behaves_like 'a idempotent resource'
+      it_behaves_like 'an idempotent resource'
 
       describe file('/etc/selinux/config') do
         its(:content) { is_expected.to match(%r{^SELINUX=permissive$}) }

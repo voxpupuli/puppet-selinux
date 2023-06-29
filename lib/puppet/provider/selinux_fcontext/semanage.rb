@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Puppet::Type.type(:selinux_fcontext).provide(:semanage) do
   desc 'Support managing SELinux custom fcontext definitions via semanage'
 
@@ -28,6 +30,7 @@ Puppet::Type.type(:selinux_fcontext).provide(:semanage) do
 
   def self.type_param(file_type)
     return file_type unless @old_semanage
+
     @file_types.invert[file_type]
   end
 
@@ -36,6 +39,7 @@ Puppet::Type.type(:selinux_fcontext).provide(:semanage) do
     lines.each do |line|
       next if line.strip.empty?
       next if line =~ %r{^#}
+
       split = line.split(%r{\s+})
       if split.length == 2
         path_spec, context_spec = split
@@ -63,6 +67,7 @@ Puppet::Type.type(:selinux_fcontext).provide(:semanage) do
 
   def self.parse_fcontext_file(path)
     return [] unless File.exist?(path)
+
     parse_fcontext_lines(File.readlines(path))
   end
 

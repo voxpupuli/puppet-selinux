@@ -1,10 +1,9 @@
 ---
-.pmtignore:
-  paths:
-    - .puppet-lint.rc
 spec/spec_helper.rb:
   mock_with: ':mocha'
-Gemfile:
-  optional:
-    ':test':
-      - gem: puppet-lint-param-docs
+.puppet-lint.rc:
+  disabled_lint_checks:
+    - anchor_resource
+  enabled_lint_checks:
+    - parameter_documentation
+    - parameter_types

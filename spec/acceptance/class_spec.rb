@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 
 describe 'selinux class' do
@@ -5,7 +7,7 @@ describe 'selinux class' do
     ensure_permissive_mode_on(hosts)
   end
 
-  let(:pp) do
+  let(:manifest) do
     <<-EOS
       $have_selinux_ruby_library = #{have_selinux_ruby_library(hosts) ? 'true' : 'false'}
 
@@ -103,7 +105,7 @@ describe 'selinux class' do
   # We should really add something for it to purge, but we can't because
   # semanage doesn't even exist at the start. maybe a separate spec run after this?
 
-  it_behaves_like 'a idempotent resource'
+  it_behaves_like 'an idempotent resource'
 
   describe package(policy_package_for(hosts)) do
     it { is_expected.to be_installed }
@@ -121,6 +123,7 @@ describe 'selinux class' do
     describe command('semodule -l | grep puppet_selinux_test_policy') do
       its(:stdout) { is_expected.to match(%r{puppet_selinux_test_policy}) }
     end
+
     describe command('semodule -l | grep puppet_selinux_simple_policy') do
       its(:stdout) { is_expected.to match(%r{puppet_selinux_simple_policy}) }
     end

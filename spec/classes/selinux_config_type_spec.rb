@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'selinux' do
@@ -13,6 +15,7 @@ describe 'selinux' do
 
           it { is_expected.to compile.and_raise_error(%r{Enum}) }
         end
+
         context 'undef type' do
           it { is_expected.to have_file_resource_count(0) }
           it { is_expected.to have_file_line_resource_count(0) }
@@ -21,11 +24,13 @@ describe 'selinux' do
           it { is_expected.not_to contain_file_line('set-selinux-config-type-to-minimum') }
           it { is_expected.not_to contain_file_line('set-selinux-config-type-to-mls') }
         end
+
         context 'targeted' do
           let(:params) { { type: 'targeted' } }
 
           it { is_expected.to contain_file_line('set-selinux-config-type-to-targeted').with(line: 'SELINUXTYPE=targeted') }
         end
+
         context 'minimum' do
           let(:params) { { type: 'minimum' } }
 
