@@ -19,18 +19,20 @@
 
 ### Defined types
 
-* [`selinux::boolean`](#selinuxboolean): Manage the state of an SELinux boolean.
-* [`selinux::exec_restorecon`](#selinuxexec_restorecon): A convenience wrapper around a restorecon exec
-* [`selinux::fcontext`](#selinuxfcontext): For fcontext equivalences, see selinux::fcontext::equivalence
-* [`selinux::fcontext::equivalence`](#selinuxfcontextequivalence): Manage SELinux fcontext equivalences
-* [`selinux::module`](#selinuxmodule): Manage a SELinux module on a running system
-* [`selinux::permissive`](#selinuxpermissive): Set SELinux type to permissive
-* [`selinux::port`](#selinuxport): Manage a SELinux local network port context setting
+* [`selinux::boolean`](#selinux--boolean): Manage the state of an SELinux boolean.
+* [`selinux::exec_restorecon`](#selinux--exec_restorecon): A convenience wrapper around a restorecon exec
+* [`selinux::fcontext`](#selinux--fcontext): For fcontext equivalences, see selinux::fcontext::equivalence
+* [`selinux::fcontext::equivalence`](#selinux--fcontext--equivalence): Manage SELinux fcontext equivalences
+* [`selinux::login`](#selinux--login): Manage a SELinux login
+* [`selinux::module`](#selinux--module): Manage a SELinux module on a running system
+* [`selinux::permissive`](#selinux--permissive): Set SELinux type to permissive
+* [`selinux::port`](#selinux--port): Manage a SELinux local network port context setting
 
 ### Resource types
 
 * [`selinux_fcontext`](#selinux_fcontext): Manage SELinux fcontext definitions. You should use selinux::fcontext instead of this directly.
 * [`selinux_fcontext_equivalence`](#selinux_fcontext_equivalence): Manage SELinux fcontext equivalence definitions. You should use selinux::fcontext instead of this directly.
+* [`selinux_login`](#selinux_login): Manage SELinux login definitions. You should use selinux::login instead of this directly.
 * [`selinux_permissive`](#selinux_permissive): Manage SELinux permissive types.
 * [`selinux_port`](#selinux_port): Manage SELinux port definitions. You should use selinux::port instead of this directly.
 
@@ -55,33 +57,37 @@ class { 'selinux':
 
 The following parameters are available in the `selinux` class:
 
-* [`package_name`](#package_name)
-* [`manage_auditd_package`](#manage_auditd_package)
-* [`refpolicy_package_name`](#refpolicy_package_name)
-* [`mode`](#mode)
-* [`type`](#type)
-* [`refpolicy_makefile`](#refpolicy_makefile)
-* [`manage_package`](#manage_package)
-* [`auditd_package_name`](#auditd_package_name)
-* [`manage_setroubleshoot_packages`](#manage_setroubleshoot_packages)
-* [`setroubleshoot_package_names`](#setroubleshoot_package_names)
-* [`module_build_root`](#module_build_root)
-* [`default_builder`](#default_builder)
-* [`boolean`](#boolean)
-* [`fcontext`](#fcontext)
-* [`module`](#module)
-* [`permissive`](#permissive)
-* [`port`](#port)
-* [`exec_restorecon`](#exec_restorecon)
+* [`package_name`](#-selinux--package_name)
+* [`manage_auditd_package`](#-selinux--manage_auditd_package)
+* [`refpolicy_package_name`](#-selinux--refpolicy_package_name)
+* [`mode`](#-selinux--mode)
+* [`type`](#-selinux--type)
+* [`refpolicy_makefile`](#-selinux--refpolicy_makefile)
+* [`manage_package`](#-selinux--manage_package)
+* [`auditd_package_name`](#-selinux--auditd_package_name)
+* [`manage_setroubleshoot_packages`](#-selinux--manage_setroubleshoot_packages)
+* [`manage_selinux_sandbox_packages`](#-selinux--manage_selinux_sandbox_packages)
+* [`setroubleshoot_package_names`](#-selinux--setroubleshoot_package_names)
+* [`selinux_sandbox_package_names`](#-selinux--selinux_sandbox_package_names)
+* [`module_build_root`](#-selinux--module_build_root)
+* [`default_builder`](#-selinux--default_builder)
+* [`boolean`](#-selinux--boolean)
+* [`fcontext`](#-selinux--fcontext)
+* [`fcontext_equivalence`](#-selinux--fcontext_equivalence)
+* [`module`](#-selinux--module)
+* [`permissive`](#-selinux--permissive)
+* [`port`](#-selinux--port)
+* [`exec_restorecon`](#-selinux--exec_restorecon)
+* [`login`](#-selinux--login)
 
-##### <a name="package_name"></a>`package_name`
+##### <a name="-selinux--package_name"></a>`package_name`
 
 Data type: `Variant[String[1], Array[String[1]]]`
 
 sets the name(s) for the selinux tools package
 Default value: OS dependent (see data/).
 
-##### <a name="manage_auditd_package"></a>`manage_auditd_package`
+##### <a name="-selinux--manage_auditd_package"></a>`manage_auditd_package`
 
 Data type: `Boolean`
 
@@ -89,7 +95,7 @@ install auditd to log SELinux violations,
 for OSes that do not have auditd installed by default.
 Default value: OS dependent (see data/)
 
-##### <a name="refpolicy_package_name"></a>`refpolicy_package_name`
+##### <a name="-selinux--refpolicy_package_name"></a>`refpolicy_package_name`
 
 Data type: `String`
 
@@ -97,23 +103,23 @@ sets the name for the refpolicy development package, required for the
 refpolicy module builder
 Default value: OS dependent (see data/)
 
-##### <a name="mode"></a>`mode`
+##### <a name="-selinux--mode"></a>`mode`
 
 Data type: `Optional[Enum['enforcing', 'permissive', 'disabled']]`
 
 sets the operating state for SELinux.
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="type"></a>`type`
+##### <a name="-selinux--type"></a>`type`
 
 Data type: `Optional[Enum['targeted', 'minimum', 'mls']]`
 
 sets the selinux type
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="refpolicy_makefile"></a>`refpolicy_makefile`
+##### <a name="-selinux--refpolicy_makefile"></a>`refpolicy_makefile`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -121,15 +127,15 @@ the path to the system's SELinux makefile for the refpolicy framework
 
 Default value: `'/usr/share/selinux/devel/Makefile'`
 
-##### <a name="manage_package"></a>`manage_package`
+##### <a name="-selinux--manage_package"></a>`manage_package`
 
 Data type: `Boolean`
 
 manage the package for selinux tools and refpolicy
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="auditd_package_name"></a>`auditd_package_name`
+##### <a name="-selinux--auditd_package_name"></a>`auditd_package_name`
 
 Data type: `String[1]`
 
@@ -137,13 +143,19 @@ used when `manage_auditd_package` is true
 
 Default value: `'auditd'`
 
-##### <a name="manage_setroubleshoot_packages"></a>`manage_setroubleshoot_packages`
+##### <a name="-selinux--manage_setroubleshoot_packages"></a>`manage_setroubleshoot_packages`
 
 Data type: `Boolean`
 
 manage the setroubleshoot packages
 
-##### <a name="setroubleshoot_package_names"></a>`setroubleshoot_package_names`
+##### <a name="-selinux--manage_selinux_sandbox_packages"></a>`manage_selinux_sandbox_packages`
+
+Data type: `Boolean`
+
+manage the selinux sandbox packages
+
+##### <a name="-selinux--setroubleshoot_package_names"></a>`setroubleshoot_package_names`
 
 Data type: `Array[String]`
 
@@ -151,7 +163,15 @@ the names of the setroubleshoot packages
 
 Default value: `[]`
 
-##### <a name="module_build_root"></a>`module_build_root`
+##### <a name="-selinux--selinux_sandbox_package_names"></a>`selinux_sandbox_package_names`
+
+Data type: `Array[String]`
+
+the names of the selinux sandbox packages
+
+Default value: `[]`
+
+##### <a name="-selinux--module_build_root"></a>`module_build_root`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -159,7 +179,7 @@ directory where modules are built. Defaults to `$vardir/puppet-selinux`
 
 Default value: `"${facts['puppet_vardir']}/puppet-selinux"`
 
-##### <a name="default_builder"></a>`default_builder`
+##### <a name="-selinux--default_builder"></a>`default_builder`
 
 Data type: `Enum['refpolicy', 'simple']`
 
@@ -167,57 +187,73 @@ which builder to use by default with selinux::module
 
 Default value: `'simple'`
 
-##### <a name="boolean"></a>`boolean`
+##### <a name="-selinux--boolean"></a>`boolean`
 
 Data type: `Optional[Hash]`
 
 Hash of selinux::boolean resource parameters
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="fcontext"></a>`fcontext`
+##### <a name="-selinux--fcontext"></a>`fcontext`
 
 Data type: `Optional[Hash]`
 
 Hash of selinux::fcontext resource parameters
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="module"></a>`module`
+##### <a name="-selinux--fcontext_equivalence"></a>`fcontext_equivalence`
+
+Data type: `Optional[Hash]`
+
+Hash of selinux::fcontext::equivalence resource parameters
+
+Default value: `undef`
+
+##### <a name="-selinux--module"></a>`module`
 
 Data type: `Optional[Hash]`
 
 Hash of selinux::module resource parameters
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="permissive"></a>`permissive`
+##### <a name="-selinux--permissive"></a>`permissive`
 
 Data type: `Optional[Hash]`
 
 Hash of selinux::module resource parameters
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="port"></a>`port`
+##### <a name="-selinux--port"></a>`port`
 
 Data type: `Optional[Hash]`
 
 Hash of selinux::port resource parameters
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="exec_restorecon"></a>`exec_restorecon`
+##### <a name="-selinux--exec_restorecon"></a>`exec_restorecon`
 
 Data type: `Optional[Hash]`
 
 Hash of selinux::exec_restorecon resource parameters
 
-Default value: ``undef``
+Default value: `undef`
+
+##### <a name="-selinux--login"></a>`login`
+
+Data type: `Hash[String[1],Hash[String[1],String[1]]]`
+
+Hash of selinux::login resource parameters
+
+Default value: `{}`
 
 ## Defined types
 
-### <a name="selinuxboolean"></a>`selinux::boolean`
+### <a name="selinux--boolean"></a>`selinux::boolean`
 
 Manage the state of an SELinux boolean.
 
@@ -243,10 +279,10 @@ selinux::boolean{ 'named_write_master_zones':
 
 The following parameters are available in the `selinux::boolean` defined type:
 
-* [`ensure`](#ensure)
-* [`persistent`](#persistent)
+* [`ensure`](#-selinux--boolean--ensure)
+* [`persistent`](#-selinux--boolean--persistent)
 
-##### <a name="ensure"></a>`ensure`
+##### <a name="-selinux--boolean--ensure"></a>`ensure`
 
 Data type: `Variant[Boolean, Enum['on', 'off', 'present', 'absent']]`
 
@@ -254,15 +290,15 @@ Set to on or off
 
 Default value: `'on'`
 
-##### <a name="persistent"></a>`persistent`
+##### <a name="-selinux--boolean--persistent"></a>`persistent`
 
 Data type: `Boolean`
 
 Set to false if you don't want it to survive a reboot.
 
-Default value: ``true``
+Default value: `true`
 
-### <a name="selinuxexec_restorecon"></a>`selinux::exec_restorecon`
+### <a name="selinux--exec_restorecon"></a>`selinux::exec_restorecon`
 
 Will execute after all other SELinux changes have been applied, but before
 Anchor['selinux::end']
@@ -271,14 +307,14 @@ Anchor['selinux::end']
 
 The following parameters are available in the `selinux::exec_restorecon` defined type:
 
-* [`path`](#path)
-* [`recurse`](#recurse)
-* [`force`](#force)
-* [`refreshonly`](#refreshonly)
-* [`unless`](#unless)
-* [`onlyif`](#onlyif)
+* [`path`](#-selinux--exec_restorecon--path)
+* [`recurse`](#-selinux--exec_restorecon--recurse)
+* [`force`](#-selinux--exec_restorecon--force)
+* [`refreshonly`](#-selinux--exec_restorecon--refreshonly)
+* [`unless`](#-selinux--exec_restorecon--unless)
+* [`onlyif`](#-selinux--exec_restorecon--onlyif)
 
-##### <a name="path"></a>`path`
+##### <a name="-selinux--exec_restorecon--path"></a>`path`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -286,47 +322,47 @@ The path to run restorecon on. Defaults to resource title.
 
 Default value: `$title`
 
-##### <a name="recurse"></a>`recurse`
+##### <a name="-selinux--exec_restorecon--recurse"></a>`recurse`
 
 Data type: `Boolean`
 
 Whether restorecon should recurse. Defaults to true
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="force"></a>`force`
+##### <a name="-selinux--exec_restorecon--force"></a>`force`
 
 Data type: `Boolean`
 
 Whether restorecon should use force.  Defaults to false.
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="refreshonly"></a>`refreshonly`
+##### <a name="-selinux--exec_restorecon--refreshonly"></a>`refreshonly`
 
 Data type: `Boolean`
 
 see the Exec resource
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="unless"></a>`unless`
-
-Data type: `Optional[String]`
-
-see the Exec resource
-
-Default value: ``undef``
-
-##### <a name="onlyif"></a>`onlyif`
+##### <a name="-selinux--exec_restorecon--unless"></a>`unless`
 
 Data type: `Optional[String]`
 
 see the Exec resource
 
-Default value: ``undef``
+Default value: `undef`
 
-### <a name="selinuxfcontext"></a>`selinux::fcontext`
+##### <a name="-selinux--exec_restorecon--onlyif"></a>`onlyif`
+
+Data type: `Optional[String]`
+
+see the Exec resource
+
+Default value: `undef`
+
+### <a name="selinux--fcontext"></a>`selinux::fcontext`
 
 For fcontext equivalences, see selinux::fcontext::equivalence
 
@@ -357,13 +393,13 @@ selinux::fcontext{'/u/users/[^/]*':
 
 The following parameters are available in the `selinux::fcontext` defined type:
 
-* [`ensure`](#ensure)
-* [`seltype`](#seltype)
-* [`seluser`](#seluser)
-* [`pathspec`](#pathspec)
-* [`filetype`](#filetype)
+* [`ensure`](#-selinux--fcontext--ensure)
+* [`seltype`](#-selinux--fcontext--seltype)
+* [`seluser`](#-selinux--fcontext--seluser)
+* [`pathspec`](#-selinux--fcontext--pathspec)
+* [`filetype`](#-selinux--fcontext--filetype)
 
-##### <a name="ensure"></a>`ensure`
+##### <a name="-selinux--fcontext--ensure"></a>`ensure`
 
 Data type: `Enum['absent', 'present']`
 
@@ -371,23 +407,23 @@ The desired state of the resource. Default: 'present'
 
 Default value: `'present'`
 
-##### <a name="seltype"></a>`seltype`
+##### <a name="-selinux--fcontext--seltype"></a>`seltype`
 
 Data type: `Optional[String]`
 
 String A particular SELinux type, like "mysqld_log_t"
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="seluser"></a>`seluser`
+##### <a name="-selinux--fcontext--seluser"></a>`seluser`
 
 Data type: `Optional[String]`
 
 String A particular SELinux user, like "sysadm_u"
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="pathspec"></a>`pathspec`
+##### <a name="-selinux--fcontext--pathspec"></a>`pathspec`
 
 Data type: `String`
 
@@ -396,7 +432,7 @@ like "/var/log/mysql(/.*)?". Defaults to title
 
 Default value: `$title`
 
-##### <a name="filetype"></a>`filetype`
+##### <a name="-selinux--fcontext--filetype"></a>`filetype`
 
 Data type: `String[1]`
 
@@ -413,7 +449,7 @@ File type the context applies to (i.e. regular file, directory, block device, al
 
 Default value: `'a'`
 
-### <a name="selinuxfcontextequivalence"></a>`selinux::fcontext::equivalence`
+### <a name="selinux--fcontext--equivalence"></a>`selinux::fcontext::equivalence`
 
 Manage SELinux fcontext equivalences
 
@@ -432,11 +468,11 @@ selinux::fcontext::equivalence { '/opt/wordpress':
 
 The following parameters are available in the `selinux::fcontext::equivalence` defined type:
 
-* [`path`](#path)
-* [`target`](#target)
-* [`ensure`](#ensure)
+* [`path`](#-selinux--fcontext--equivalence--path)
+* [`target`](#-selinux--fcontext--equivalence--target)
+* [`ensure`](#-selinux--fcontext--equivalence--ensure)
 
-##### <a name="path"></a>`path`
+##### <a name="-selinux--fcontext--equivalence--path"></a>`path`
 
 Data type: `String`
 
@@ -444,13 +480,13 @@ the path to define and equivalence for. Default: Resource title
 
 Default value: `$title`
 
-##### <a name="target"></a>`target`
+##### <a name="-selinux--fcontext--equivalence--target"></a>`target`
 
 Data type: `String`
 
 the path that this resource will be equivalent to.
 
-##### <a name="ensure"></a>`ensure`
+##### <a name="-selinux--fcontext--equivalence--ensure"></a>`ensure`
 
 Data type: `Enum['present', 'absent']`
 
@@ -458,7 +494,52 @@ the desired state of the equivalence. Default: present
 
 Default value: `'present'`
 
-### <a name="selinuxmodule"></a>`selinux::module`
+### <a name="selinux--login"></a>`selinux::login`
+
+This method will manage a selinux login, and will
+persist it across reboots.
+
+#### Examples
+
+##### Add a map for the localuser to staff_u
+
+```puppet
+selinux::login { 'localuser_staff_u':
+  ensure   => 'present',
+  selinux_login_name  => 'localuser',
+  selinux_user => 'staff_u',
+}
+```
+
+#### Parameters
+
+The following parameters are available in the `selinux::login` defined type:
+
+* [`ensure`](#-selinux--login--ensure)
+* [`selinux_login_name`](#-selinux--login--selinux_login_name)
+* [`selinux_user`](#-selinux--login--selinux_user)
+
+##### <a name="-selinux--login--ensure"></a>`ensure`
+
+Data type: `Enum['present', 'absent']`
+
+Set to present to add or absent to remove a selinux login.
+
+Default value: `'present'`
+
+##### <a name="-selinux--login--selinux_login_name"></a>`selinux_login_name`
+
+Data type: `String[1]`
+
+A Linux user or group
+
+##### <a name="-selinux--login--selinux_user"></a>`selinux_user`
+
+Data type: `String[1]`
+
+The selinux user to map to
+
+### <a name="selinux--module"></a>`selinux::module`
 
 This class will either install or uninstall a SELinux module from a running system.
 This module allows an admin to keep .te files in text form in a repository, while
@@ -516,17 +597,17 @@ selinux::module{ 'zabbix_fix':
 
 The following parameters are available in the `selinux::module` defined type:
 
-* [`ensure`](#ensure)
-* [`source_pp`](#source_pp)
-* [`source_te`](#source_te)
-* [`source_fc`](#source_fc)
-* [`source_if`](#source_if)
-* [`content_te`](#content_te)
-* [`content_fc`](#content_fc)
-* [`content_if`](#content_if)
-* [`builder`](#builder)
+* [`ensure`](#-selinux--module--ensure)
+* [`source_pp`](#-selinux--module--source_pp)
+* [`source_te`](#-selinux--module--source_te)
+* [`source_fc`](#-selinux--module--source_fc)
+* [`source_if`](#-selinux--module--source_if)
+* [`content_te`](#-selinux--module--content_te)
+* [`content_fc`](#-selinux--module--content_fc)
+* [`content_if`](#-selinux--module--content_if)
+* [`builder`](#-selinux--module--builder)
 
-##### <a name="ensure"></a>`ensure`
+##### <a name="-selinux--module--ensure"></a>`ensure`
 
 Data type: `Enum['absent', 'present']`
 
@@ -534,73 +615,73 @@ present or absent
 
 Default value: `'present'`
 
-##### <a name="source_pp"></a>`source_pp`
+##### <a name="-selinux--module--source_pp"></a>`source_pp`
 
 Data type: `Optional[String]`
 
 the source file (either a puppet URI or local file) of a pre-compiled SELinux policy package.
 Mutually excludsive with using source files.
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="source_te"></a>`source_te`
+##### <a name="-selinux--module--source_te"></a>`source_te`
 
 Data type: `Optional[String]`
 
 the source file (either a puppet URI or local file) of the SELinux .te file
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="source_fc"></a>`source_fc`
+##### <a name="-selinux--module--source_fc"></a>`source_fc`
 
 Data type: `Optional[String]`
 
 the source file (either a puppet URI or local file) of the SELinux .fc file
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="source_if"></a>`source_if`
+##### <a name="-selinux--module--source_if"></a>`source_if`
 
 Data type: `Optional[String]`
 
 the source file (either a puppet URI or local file) of the SELinux .if file
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="content_te"></a>`content_te`
+##### <a name="-selinux--module--content_te"></a>`content_te`
 
 Data type: `Optional[String]`
 
 content of the SELinux .te file
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="content_fc"></a>`content_fc`
+##### <a name="-selinux--module--content_fc"></a>`content_fc`
 
 Data type: `Optional[String]`
 
 content of the SELinux .fc file
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="content_if"></a>`content_if`
+##### <a name="-selinux--module--content_if"></a>`content_if`
 
 Data type: `Optional[String]`
 
 content of the SELinux .if file
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="builder"></a>`builder`
+##### <a name="-selinux--module--builder"></a>`builder`
 
 Data type: `Optional[Enum['simple', 'refpolicy']]`
 
 either 'simple' or 'refpolicy'. The simple builder attempts to use checkmodule
 to build the module, whereas 'refpolicy' uses the refpolicy framework, but requires 'make'
 
-Default value: ``undef``
+Default value: `undef`
 
-### <a name="selinuxpermissive"></a>`selinux::permissive`
+### <a name="selinux--permissive"></a>`selinux::permissive`
 
 Set SELinux type to permissive
 
@@ -618,10 +699,10 @@ selinux::permissive { 'oddjob_mkhomedir_t':
 
 The following parameters are available in the `selinux::permissive` defined type:
 
-* [`ensure`](#ensure)
-* [`seltype`](#seltype)
+* [`ensure`](#-selinux--permissive--ensure)
+* [`seltype`](#-selinux--permissive--seltype)
 
-##### <a name="ensure"></a>`ensure`
+##### <a name="-selinux--permissive--ensure"></a>`ensure`
 
 Data type: `Enum['present', 'absent']`
 
@@ -629,7 +710,7 @@ Set to present to add or absent to remove a permissive mode of a type
 
 Default value: `'present'`
 
-##### <a name="seltype"></a>`seltype`
+##### <a name="-selinux--permissive--seltype"></a>`seltype`
 
 Data type: `String`
 
@@ -637,7 +718,7 @@ A particular selinux type to make permissive, like "oddjob_mkhomedir_t"
 
 Default value: `$title`
 
-### <a name="selinuxport"></a>`selinux::port`
+### <a name="selinux--port"></a>`selinux::port`
 
 This method will manage a local network port context setting, and will
 persist it across reboots.
@@ -659,13 +740,13 @@ selinux::port { 'allow-syslog-relp':
 
 The following parameters are available in the `selinux::port` defined type:
 
-* [`ensure`](#ensure)
-* [`seltype`](#seltype)
-* [`protocol`](#protocol)
-* [`port`](#port)
-* [`port_range`](#port_range)
+* [`ensure`](#-selinux--port--ensure)
+* [`seltype`](#-selinux--port--seltype)
+* [`protocol`](#-selinux--port--protocol)
+* [`port`](#-selinux--port--port)
+* [`port_range`](#-selinux--port--port_range)
 
-##### <a name="ensure"></a>`ensure`
+##### <a name="-selinux--port--ensure"></a>`ensure`
 
 Data type: `Enum['present', 'absent']`
 
@@ -673,33 +754,33 @@ Set to present to add or absent to remove a port context.
 
 Default value: `'present'`
 
-##### <a name="seltype"></a>`seltype`
+##### <a name="-selinux--port--seltype"></a>`seltype`
 
 Data type: `String`
 
 An SELinux port type
 
-##### <a name="protocol"></a>`protocol`
+##### <a name="-selinux--port--protocol"></a>`protocol`
 
 Data type: `Enum['tcp', 'udp']`
 
 Either 'tcp', 'udp', 'ipv4' or 'ipv6'
 
-##### <a name="port"></a>`port`
+##### <a name="-selinux--port--port"></a>`port`
 
 Data type: `Optional[Integer[1,65535]]`
 
 A network port number, like 8514,
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="port_range"></a>`port_range`
+##### <a name="-selinux--port--port_range"></a>`port_range`
 
 Data type: `Optional[Tuple[Integer[1,65535], 2, 2]]`
 
 A port-range tuple, eg. [9090, 9095].
 
-Default value: ``undef``
+Default value: `undef`
 
 ## Resource types
 
@@ -755,20 +836,20 @@ The SELinux user name
 
 The following parameters are available in the `selinux_fcontext` type.
 
-* [`pathspec`](#pathspec)
-* [`provider`](#provider)
-* [`title`](#title)
+* [`pathspec`](#-selinux_fcontext--pathspec)
+* [`provider`](#-selinux_fcontext--provider)
+* [`title`](#-selinux_fcontext--title)
 
-##### <a name="pathspec"></a>`pathspec`
+##### <a name="-selinux_fcontext--pathspec"></a>`pathspec`
 
 Path regular expression
 
-##### <a name="provider"></a>`provider`
+##### <a name="-selinux_fcontext--provider"></a>`provider`
 
 The specific backend to use for this `selinux_fcontext` resource. You will seldom need to specify this --- Puppet will
 usually discover the appropriate provider for your platform.
 
-##### <a name="title"></a>`title`
+##### <a name="-selinux_fcontext--title"></a>`title`
 
 The namevar. Should be of the format pathspec_filetype
 
@@ -796,17 +877,57 @@ The target of the equivalence. ie. the path that this resource will be equivalen
 
 The following parameters are available in the `selinux_fcontext_equivalence` type.
 
-* [`path`](#path)
-* [`provider`](#provider)
+* [`path`](#-selinux_fcontext_equivalence--path)
+* [`provider`](#-selinux_fcontext_equivalence--provider)
 
-##### <a name="path"></a>`path`
+##### <a name="-selinux_fcontext_equivalence--path"></a>`path`
 
 The path to set equivalence for
 
-##### <a name="provider"></a>`provider`
+##### <a name="-selinux_fcontext_equivalence--provider"></a>`provider`
 
 The specific backend to use for this `selinux_fcontext_equivalence` resource. You will seldom need to specify this ---
 Puppet will usually discover the appropriate provider for your platform.
+
+### <a name="selinux_login"></a>`selinux_login`
+
+Manage SELinux login definitions. You should use selinux::login instead of this directly.
+
+#### Properties
+
+The following properties are available in the `selinux_login` type.
+
+##### `ensure`
+
+Valid values: `present`, `absent`
+
+The basic property that the resource should be in.
+
+Default value: `present`
+
+##### `selinux_login_name`
+
+The name of the linux user or group to map.
+
+##### `selinux_user`
+
+The selinux user to map to.
+
+#### Parameters
+
+The following parameters are available in the `selinux_login` type.
+
+* [`provider`](#-selinux_login--provider)
+* [`title`](#-selinux_login--title)
+
+##### <a name="-selinux_login--provider"></a>`provider`
+
+The specific backend to use for this `selinux_login` resource. You will seldom need to specify this --- Puppet will
+usually discover the appropriate provider for your platform.
+
+##### <a name="-selinux_login--title"></a>`title`
+
+Should be of the form "linuxuser_selinuxuser" or the type may misbehave
 
 ### <a name="selinux_permissive"></a>`selinux_permissive`
 
@@ -828,22 +949,22 @@ Default value: `present`
 
 The following parameters are available in the `selinux_permissive` type.
 
-* [`local`](#local)
-* [`provider`](#provider)
-* [`seltype`](#seltype)
+* [`local`](#-selinux_permissive--local)
+* [`provider`](#-selinux_permissive--provider)
+* [`seltype`](#-selinux_permissive--seltype)
 
-##### <a name="local"></a>`local`
+##### <a name="-selinux_permissive--local"></a>`local`
 
-Valid values: ``true``, ``false``
+Valid values: `true`, `false`
 
 A read-only attribue indicating whether the type is locally customized
 
-##### <a name="provider"></a>`provider`
+##### <a name="-selinux_permissive--provider"></a>`provider`
 
 The specific backend to use for this `selinux_permissive` resource. You will seldom need to specify this --- Puppet will
 usually discover the appropriate provider for your platform.
 
-##### <a name="seltype"></a>`seltype`
+##### <a name="-selinux_permissive--seltype"></a>`seltype`
 
 namevar
 
@@ -893,15 +1014,15 @@ Source of the port configuration - either policy or local
 
 The following parameters are available in the `selinux_port` type.
 
-* [`provider`](#provider)
-* [`title`](#title)
+* [`provider`](#-selinux_port--provider)
+* [`title`](#-selinux_port--title)
 
-##### <a name="provider"></a>`provider`
+##### <a name="-selinux_port--provider"></a>`provider`
 
 The specific backend to use for this `selinux_port` resource. You will seldom need to specify this --- Puppet will
 usually discover the appropriate provider for your platform.
 
-##### <a name="title"></a>`title`
+##### <a name="-selinux_port--title"></a>`title`
 
 Should be of the form "protocol_lowport-highport" or the type may misbehave
 
