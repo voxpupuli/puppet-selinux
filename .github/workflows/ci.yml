@@ -13,4 +13,6 @@ concurrency:
 jobs:
   puppet:
     name: Puppet
-    uses: voxpupuli/gha-puppet/.github/workflows/basic.yml@v1
+    uses: voxpupuli/gha-puppet/.github/workflows/beaker.yml@v1
+    with:
+      pidfile_workaround: 'false'
