@@ -102,7 +102,7 @@ describe semanage_provider do
 
         it 'finds provider for /foobar' do
           p = resources['/foobar'].provider
-          expect(p).not_to eq(nil)
+          expect(p).not_to be_nil
         end
 
         context 'has the correct target' do

@@ -90,14 +90,14 @@ Puppet::Type.type(:selinux_fcontext).provide(:semanage) do
   def create
     # is there really no way to have a provider-global helper function cleanly?
     args = ['fcontext', '-a', '-t', @resource[:seltype], '-f', @resource[:file_type]]
-    args.concat(['-s', @resource[:seluser]]) if @resource[:seluser]
+    args.push('-s', @resource[:seluser]) if @resource[:seluser]
     args.push(@resource[:pathspec])
     semanage(*args)
   end
 
   def destroy
     args = ['fcontext', '-d', '-t', @property_hash[:seltype], '-f', @property_hash[:file_type]]
-    args.concat(['-s', @property_hash[:seluser]]) if @property_hash[:seluser]
+    args.push('-s', @property_hash[:seluser]) if @property_hash[:seluser]
     args.push(@property_hash[:pathspec])
     semanage(*args)
   end
