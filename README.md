@@ -23,7 +23,7 @@ This class manages SELinux.
 
 ## Requirements
 
-* Puppet 5 or later
+* See `metadata.json`
 
 ## Module Description
 
