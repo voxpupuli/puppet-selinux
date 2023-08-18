@@ -58,17 +58,29 @@ Puppet::Type.type(:selinux_login).provide(:semanage) do
     lines.each do |line|
       split = line.split(%r{\s+})
       # helper format is:
-      # root unconfined_u
-      # system_u system_u
-      # __default__ unconfined_u
-      # %cn_cegbu_aconex_fr-dev-ops-priv unconfined_u
-      # %cn_cegbu_aconex_fr-dev-platform-priv unconfined_u
-      selinux_login_name, selinux_user = split
+      # policy root unconfined_u
+      # policy system_u system_u
+      # policy __default__ unconfined_u
+      # policy %cn_cegbu_aconex_fr-dev-ops-priv unconfined_u
+      # policy %cn_cegbu_aconex_fr-dev-platform-priv unconfined_u
+      # local %cn_cegbu_aconex_fr-dev-ops-priv unconfined_u
+      # local %cn_cegbu_aconex_fr-dev-platform-priv unconfined_u
+      source_str, selinux_login_name, selinux_user = split
 
-      key = selinux_login_name.to_s
+      key = "#{selinux_login_name}_#{selinux_user}"
+      source =
+        case source_str
+        when 'policy' then :policy
+        when 'local'  then :local
+        else
+          raise Puppet::ResourceError, "Selinux_login['#{key}']: unknown mapping source #{source_str}."
+        end
+
       ret[key] = {
         ensure: :present,
+        title: key,
         name: key,
+        source: source,
         selinux_login_name: selinux_login_name,
         selinux_user: selinux_user
       }
@@ -85,22 +97,22 @@ Puppet::Type.type(:selinux_login).provide(:semanage) do
   end
 
   def self.prefetch(resources)
-    # is there a better way to do this? map port/protocol pairs to the provider regardless of the title
+    # is there a better way to do this? Map selinux_user/selinux_login_name to the provider regardless of the title
     # and make sure all system resources have ensure => :present so that we don't try to remove them
     instances.each do |provider|
       resource = resources[provider.name]
       if resource
-        unless resource[:selinux_user].to_s == provider.selinux_user && resource[:selinux_login_name].to_s == provider.selinux_login_name || resource.purging?
-          raise Puppet::ResourceError, "Selinux_port['#{resource[:name]}']: title does not match its port and protocol, and a conflicting resource exists"
+        unless resource[:selinux_login_name].to_s == provider.selinux_login_name || resource.purging?
+          raise Puppet::ResourceError, "Selinux_login['#{resource[:name]}']: title does not match its login ('#{provider.name}' != '#{provider.selinux_login_name}'), and a conflicting resource exists"
         end
 
         resource.provider = provider
         resource[:ensure] = :present if provider.source == :policy
       else
-        resources.each_value do |res|
+        resources.each_values do |res|
           next unless res[:selinux_user] == provider.selinux_user && res[:selinux_login_name] == provider.selinux_login_name
 
-          warning("Selinux_login['#{resource[:name]}']: title does not match format selinux_login_name_selinux_user")
+          warning("Selinux_login['#{res[:name]}']: title does not match its login ('#{provider.name}' != '#{provider.selinux_login_name}')")
           resource.provider = provider
           resource[:ensure] = :present if provider.source == :policy
         end
@@ -110,6 +122,11 @@ Puppet::Type.type(:selinux_login).provide(:semanage) do
 
   def create
     args = ['login', '-a', '-s', @resource[:selinux_user], @resource[:selinux_login_name]]
+    semanage(*args)
+  end
+
+  def sync
+    args = ['login', '-m', '-s', @resource[:selinux_user], @resource[:selinux_login_name]]
     semanage(*args)
   end
 

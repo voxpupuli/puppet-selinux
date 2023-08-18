@@ -17,6 +17,21 @@ Puppet::Type.newtype(:selinux_login) do
   newproperty(:selinux_user) do
     desc 'The selinux user to map to.'
     isrequired
+
+    def sync
+      event = super
+      provider.sync
+      event
+    end
+  end
+
+  newproperty(:source) do
+    desc 'Source of the login configuration - either policy or local'
+    newvalues(:policy, :local)
+
+    validate do |_value|
+      raise ArgumentError, ':source is a read-only property'
+    end
   end
 
   autorequire(:package) do
