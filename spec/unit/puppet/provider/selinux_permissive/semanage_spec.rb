@@ -90,7 +90,7 @@ describe semanage_provider do
 
       it 'matches the provider' do
         semanage_provider.prefetch('test_t' => resource, 'tlp_t' => permissive.new(seltype: 'tlp_t', ensure: :present))
-        expect(resource.provider.exists?).to eq(true)
+        expect(resource.provider.exists?).to be(true)
       end
     end
 
