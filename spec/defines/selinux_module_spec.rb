@@ -46,8 +46,8 @@ describe 'selinux::module' do
           it { is_expected.to contain_file("#{workdir}/mymodule.fc").with(source: nil, content: '') }
           it { is_expected.to contain_file("#{workdir}/mymodule.if").with(source: nil, content: '') }
           it { is_expected.to contain_exec('clean-module-mymodule').with(command: "rm -f '#{module_basepath}.pp' '#{module_basepath}.loaded'", cwd: workdir) }
-          it { is_expected.to contain_exec('build-module-mymodule').with(command: "make -f /usr/share/selinux/devel/Makefile mymodule.pp || (rm -f #{module_basepath}.pp #{module_basepath}.loaded && exit 1)", creates: "#{module_basepath}.pp") }
-          it { is_expected.to contain_exec('install-module-mymodule').with(command: "semodule -i #{module_basepath}.pp && touch #{module_basepath}.loaded", cwd: workdir, creates: "#{module_basepath}.loaded") }
+          it { is_expected.to contain_exec('build-module-mymodule').with(command: "make -f /usr/share/selinux/devel/Makefile mymodule.pp || (rm -f '#{module_basepath}.pp' '#{module_basepath}.loaded' && exit 1)", creates: "#{module_basepath}.pp") }
+          it { is_expected.to contain_exec('install-module-mymodule').with(command: "semodule -i '#{module_basepath}.pp' && touch '#{module_basepath}.loaded'", cwd: workdir, creates: "#{module_basepath}.loaded") }
           it { is_expected.to contain_selmodule('mymodule').with_ensure('present', selmodulepath: workdir) }
         end
 
@@ -65,8 +65,8 @@ describe 'selinux::module' do
           it { is_expected.to contain_file("#{workdir}/mymodule.fc").that_notifies('Exec[clean-module-mymodule]') }
           it { is_expected.to contain_file("#{workdir}/mymodule.if").with(source: nil, content: '') }
           it { is_expected.to contain_exec('clean-module-mymodule').with(command: "rm -f '#{module_basepath}.pp' '#{module_basepath}.loaded'", cwd: workdir) }
-          it { is_expected.to contain_exec('build-module-mymodule').with(command: "make -f /usr/share/selinux/devel/Makefile mymodule.pp || (rm -f #{module_basepath}.pp #{module_basepath}.loaded && exit 1)", creates: "#{module_basepath}.pp") }
-          it { is_expected.to contain_exec('install-module-mymodule').with(command: "semodule -i #{module_basepath}.pp && touch #{module_basepath}.loaded", cwd: workdir, creates: "#{module_basepath}.loaded") }
+          it { is_expected.to contain_exec('build-module-mymodule').with(command: "make -f /usr/share/selinux/devel/Makefile mymodule.pp || (rm -f '#{module_basepath}.pp' '#{module_basepath}.loaded' && exit 1)", creates: "#{module_basepath}.pp") }
+          it { is_expected.to contain_exec('install-module-mymodule').with(command: "semodule -i '#{module_basepath}.pp' && touch '#{module_basepath}.loaded'", cwd: workdir, creates: "#{module_basepath}.loaded") }
           it { is_expected.to contain_selmodule('mymodule').with_ensure('present', selmodulepath: workdir) }
         end
 
@@ -85,8 +85,8 @@ describe 'selinux::module' do
           it { is_expected.to contain_file("#{workdir}/mymodule.if").that_notifies('Exec[clean-module-mymodule]') }
           it { is_expected.to contain_file("#{workdir}/mymodule.fc").that_notifies('Exec[clean-module-mymodule]') }
           it { is_expected.to contain_exec('clean-module-mymodule').with(command: "rm -f '#{module_basepath}.pp' '#{module_basepath}.loaded'", cwd: workdir) }
-          it { is_expected.to contain_exec('build-module-mymodule').with(command: "make -f /usr/share/selinux/devel/Makefile mymodule.pp || (rm -f #{module_basepath}.pp #{module_basepath}.loaded && exit 1)", creates: "#{module_basepath}.pp") }
-          it { is_expected.to contain_exec('install-module-mymodule').with(command: "semodule -i #{module_basepath}.pp && touch #{module_basepath}.loaded", cwd: workdir, creates: "#{module_basepath}.loaded") }
+          it { is_expected.to contain_exec('build-module-mymodule').with(command: "make -f /usr/share/selinux/devel/Makefile mymodule.pp || (rm -f '#{module_basepath}.pp' '#{module_basepath}.loaded' && exit 1)", creates: "#{module_basepath}.pp") }
+          it { is_expected.to contain_exec('install-module-mymodule').with(command: "semodule -i '#{module_basepath}.pp' && touch '#{module_basepath}.loaded'", cwd: workdir, creates: "#{module_basepath}.loaded") }
           it { is_expected.to contain_selmodule('mymodule').with_ensure('present', selmodulepath: workdir) }
         end
 
@@ -105,8 +105,8 @@ describe 'selinux::module' do
           it { is_expected.to contain_file("#{workdir}/mymodule.if").with(source: nil, content: 'interface(puppet_test)').that_notifies('Exec[clean-module-mymodule]') }
           it { is_expected.to contain_file("#{workdir}/mymodule.fc").with(source: nil, content: '/bin/sh system_u:object_r:bin_t').that_notifies('Exec[clean-module-mymodule]') }
           it { is_expected.to contain_exec('clean-module-mymodule').with(command: "rm -f '#{module_basepath}.pp' '#{module_basepath}.loaded'", cwd: workdir) }
-          it { is_expected.to contain_exec('build-module-mymodule').with(command: "make -f /usr/share/selinux/devel/Makefile mymodule.pp || (rm -f #{module_basepath}.pp #{module_basepath}.loaded && exit 1)", creates: "#{module_basepath}.pp") }
-          it { is_expected.to contain_exec('install-module-mymodule').with(command: "semodule -i #{module_basepath}.pp && touch #{module_basepath}.loaded", cwd: workdir, creates: "#{module_basepath}.loaded") }
+          it { is_expected.to contain_exec('build-module-mymodule').with(command: "make -f /usr/share/selinux/devel/Makefile mymodule.pp || (rm -f '#{module_basepath}.pp' '#{module_basepath}.loaded' && exit 1)", creates: "#{module_basepath}.pp") }
+          it { is_expected.to contain_exec('install-module-mymodule').with(command: "semodule -i '#{module_basepath}.pp' && touch '#{module_basepath}.loaded'", cwd: workdir, creates: "#{module_basepath}.loaded") }
           it { is_expected.to contain_selmodule('mymodule').with_ensure('present', selmodulepath: workdir) }
         end
 
@@ -124,8 +124,8 @@ describe 'selinux::module' do
           it { is_expected.to contain_file("#{workdir}/mymodule.fc").with(source: nil, content: '') }
           it { is_expected.to contain_file("#{workdir}/mymodule.if").with(source: nil, content: '') }
           it { is_expected.to contain_exec('clean-module-mymodule').with(command: "rm -f '#{module_basepath}.pp' '#{module_basepath}.loaded'", cwd: workdir) }
-          it { is_expected.to contain_exec('build-module-mymodule').with(command: "/var/lib/puppet/puppet-selinux/bin/selinux_build_module_simple.sh mymodule #{workdir} || (rm -f #{module_basepath}.pp #{module_basepath}.loaded && exit 1)", creates: "#{module_basepath}.pp") }
-          it { is_expected.to contain_exec('install-module-mymodule').with(command: "semodule -i #{module_basepath}.pp && touch #{module_basepath}.loaded", cwd: workdir, creates: "#{module_basepath}.loaded") }
+          it { is_expected.to contain_exec('build-module-mymodule').with(command: "/var/lib/puppet/puppet-selinux/bin/selinux_build_module_simple.sh mymodule #{workdir} || (rm -f '#{module_basepath}.pp' '#{module_basepath}.loaded' && exit 1)", creates: "#{module_basepath}.pp") }
+          it { is_expected.to contain_exec('install-module-mymodule').with(command: "semodule -i '#{module_basepath}.pp' && touch '#{module_basepath}.loaded'", cwd: workdir, creates: "#{module_basepath}.loaded") }
           it { is_expected.to contain_selmodule('mymodule').with_ensure('present', selmodulepath: workdir) }
         end
 
@@ -142,8 +142,8 @@ describe 'selinux::module' do
           it { is_expected.to contain_file("#{workdir}/mymodule.fc").with(source: nil, content: '') }
           it { is_expected.to contain_file("#{workdir}/mymodule.if").with(source: nil, content: '') }
           it { is_expected.to contain_exec('clean-module-mymodule').with(command: "rm -f '#{module_basepath}.pp' '#{module_basepath}.loaded'", cwd: workdir) }
-          it { is_expected.to contain_exec('build-module-mymodule').with(command: "/var/lib/puppet/puppet-selinux/bin/selinux_build_module_simple.sh mymodule #{workdir} || (rm -f #{module_basepath}.pp #{module_basepath}.loaded && exit 1)", creates: "#{module_basepath}.pp") }
-          it { is_expected.to contain_exec('install-module-mymodule').with(command: "semodule -i #{module_basepath}.pp && touch #{module_basepath}.loaded", cwd: workdir, creates: "#{module_basepath}.loaded") }
+          it { is_expected.to contain_exec('build-module-mymodule').with(command: "/var/lib/puppet/puppet-selinux/bin/selinux_build_module_simple.sh mymodule #{workdir} || (rm -f '#{module_basepath}.pp' '#{module_basepath}.loaded' && exit 1)", creates: "#{module_basepath}.pp") }
+          it { is_expected.to contain_exec('install-module-mymodule').with(command: "semodule -i '#{module_basepath}.pp' && touch '#{module_basepath}.loaded'", cwd: workdir, creates: "#{module_basepath}.loaded") }
           it { is_expected.to contain_selmodule('mymodule').with_ensure('present', selmodulepath: workdir) }
         end
 
@@ -170,7 +170,7 @@ describe 'selinux::module' do
           it { is_expected.to contain_file(workdir) }
           it { is_expected.to contain_file("#{workdir}/mymodule.pp").that_notifies('Exec[clean-module-mymodule]') }
           it { is_expected.to contain_exec('clean-module-mymodule').with(command: "rm -f '#{module_basepath}.loaded'", cwd: workdir) }
-          it { is_expected.to contain_exec('install-module-mymodule').with(command: "semodule -i #{module_basepath}.pp && touch #{module_basepath}.loaded", cwd: workdir, creates: "#{module_basepath}.loaded") }
+          it { is_expected.to contain_exec('install-module-mymodule').with(command: "semodule -i '#{module_basepath}.pp' && touch '#{module_basepath}.loaded'", cwd: workdir, creates: "#{module_basepath}.loaded") }
           it { is_expected.to contain_selmodule('mymodule').with_ensure('present', selmodulepath: workdir) }
         end
 
