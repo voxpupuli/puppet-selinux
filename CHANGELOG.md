@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v4.1.0](https://github.com/voxpupuli/puppet-selinux/tree/v4.1.0) (2023-10-31)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v4.0.0...v4.1.0)
+
+**Implemented enhancements:**
+
+- Add EL9 support [\#378](https://github.com/voxpupuli/puppet-selinux/pull/378) ([bastelfreak](https://github.com/bastelfreak))
+- Add Rocky/AlmaLinux/OracleLinux support [\#377](https://github.com/voxpupuli/puppet-selinux/pull/377) ([bastelfreak](https://github.com/bastelfreak))
+- Add Debian 12 support [\#376](https://github.com/voxpupuli/puppet-selinux/pull/376) ([bastelfreak](https://github.com/bastelfreak))
+
+**Fixed bugs:**
+
+- selinux::login: Miscellaneous fixes [\#364](https://github.com/voxpupuli/puppet-selinux/pull/364) ([EmRowlands](https://github.com/EmRowlands))
+
+**Merged pull requests:**
+
+- README: refer to metadata.json in the Requirements section [\#374](https://github.com/voxpupuli/puppet-selinux/pull/374) ([kenyon](https://github.com/kenyon))
+- Remove now redundant variable and method [\#372](https://github.com/voxpupuli/puppet-selinux/pull/372) ([ekohl](https://github.com/ekohl))
+
 ## [v4.0.0](https://github.com/voxpupuli/puppet-selinux/tree/v4.0.0) (2023-06-29)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v3.4.1...v4.0.0)
