@@ -136,7 +136,7 @@ define selinux::module (
       exec { "build-module-${title}":
         path    => '/bin:/usr/bin',
         cwd     => $module_dir,
-        command => "${build_command} || (rm -f ${module_file}.pp ${module_file}.loaded && exit 1)",
+        command => "${build_command} || (rm -f '${module_file}.pp' '${module_file}.loaded' && exit 1)",
         creates => "${module_file}.pp",
         notify  => Exec["install-module-${title}"],
       }
@@ -168,7 +168,7 @@ define selinux::module (
       exec { "install-module-${title}":
         path    => '/sbin:/usr/sbin:/bin:/usr/bin',
         cwd     => $module_dir,
-        command => "semodule -i ${module_file}.pp && touch ${module_file}.loaded",
+        command => "semodule -i '${module_file}.pp' && touch '${module_file}.loaded'",
         creates => "${module_file}.loaded",
         before  => Selmodule[$title],
       }
