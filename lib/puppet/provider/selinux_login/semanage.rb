@@ -67,7 +67,7 @@ Puppet::Type.type(:selinux_login).provide(:semanage) do
       # local %cn_cegbu_aconex_fr-dev-platform-priv unconfined_u
       source_str, selinux_login_name, selinux_user = split
 
-      key = "#{selinux_login_name}_#{selinux_user}"
+      key = selinux_login_name
       source =
         case source_str
         when 'policy' then :policy
