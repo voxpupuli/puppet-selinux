@@ -17,6 +17,7 @@ end
 
 group :system_tests do
   gem 'voxpupuli-acceptance', '~> 3.0',  :require => false
+  gem 'beaker-vagrant', github: 'ekohl/beaker-vagrant', branch: 'shorter-directory-names'
 end
 
 group :release do
