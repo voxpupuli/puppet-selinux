@@ -17,7 +17,10 @@ end
 
 group :system_tests do
   gem 'voxpupuli-acceptance', '~> 3.0',  :require => false
-  gem 'beaker-vagrant', github: 'ekohl/beaker-vagrant', branch: 'shorter-directory-names'
+  # https://github.com/voxpupuli/beaker-vagrant/pull/80
+  gem 'beaker-vagrant', github: 'ekohl/beaker-vagrant', branch: 'shorter-directory-names', require: false
+  # https://github.com/voxpupuli/beaker-hostgenerator/pull/353
+  gem 'beaker-hostgenerator', github: 'ekohl/beaker-hostgenerator', branch: 'use-latest-centos-images-on-vagrant', require: false
 end
 
 group :release do
