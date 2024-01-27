@@ -12,5 +12,5 @@
 #
 
 class { 'selinux':
-  type => 'minimal',
+  type => 'minimum',
 }
