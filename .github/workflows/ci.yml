@@ -19,4 +19,6 @@ concurrency:
 jobs:
   puppet:
     name: Puppet
-    uses: voxpupuli/gha-puppet/.github/workflows/basic.yml@v3
+    uses: voxpupuli/gha-puppet/.github/workflows/beaker.yml@v3
+    with:
+      beaker_hypervisor: 'vagrant_libvirt'

@@ -9,4 +9,4 @@ spec/spec_helper.rb:
     - parameter_documentation
     - parameter_types
 .github/workflows/ci.yml:
-  acceptance_tests: false
+  beaker_hypervisor: vagrant_libvirt
