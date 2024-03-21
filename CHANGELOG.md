@@ -224,7 +224,7 @@ These should not affect the functionality of the module.
 **Closed issues:**
 
 - Puppet change for each selinux module for every Puppet run [\#261](https://github.com/voxpupuli/puppet-selinux/issues/261)
-- Calls to $::selinux facts should use the $facts hash [\#258](https://github.com/voxpupuli/puppet-selinux/issues/258)
+- Calls to $selinux facts should use the $facts hash [\#258](https://github.com/voxpupuli/puppet-selinux/issues/258)
 
 **Merged pull requests:**
 
@@ -427,7 +427,7 @@ These should not affect the functionality of the module.
 **Merged pull requests:**
 
 - Release 0.7.1 [\#160](https://github.com/voxpupuli/puppet-selinux/pull/160) ([vinzent](https://github.com/vinzent))
-- Fix usage of non-existent $::selinux\_enabled fact [\#159](https://github.com/voxpupuli/puppet-selinux/pull/159) ([vinzent](https://github.com/vinzent))
+- Fix usage of non-existent $selinux\_enabled fact [\#159](https://github.com/voxpupuli/puppet-selinux/pull/159) ([vinzent](https://github.com/vinzent))
 - Default to undef for syncversion parameter in selinux::module  [\#158](https://github.com/voxpupuli/puppet-selinux/pull/158) ([vinzent](https://github.com/vinzent))
 - Remove mentions of Ruby requirements in README [\#156](https://github.com/voxpupuli/puppet-selinux/pull/156) ([juniorsysadmin](https://github.com/juniorsysadmin))
 
