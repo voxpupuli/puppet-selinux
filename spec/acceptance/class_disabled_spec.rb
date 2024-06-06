@@ -53,6 +53,10 @@ describe 'selinux class - mode switching' do
 
     context 'before reboot' do
       before(:all) do
+        # Tag vagrant user to an administrative group
+        shell('login -a -s staff_u vagrant')
+        # Vagrant is logging in and using privileges commands, we need to allow that
+        shell('setsebool -P ssh_sysadm_login 1')
         shell('sed -i "s/SELINUX=.*/SELINUX=enforcing/" /etc/selinux/config')
         shell('setenforce Enforcing && test "$(getenforce)" = "Enforcing"')
       end
