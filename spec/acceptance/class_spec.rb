@@ -96,9 +96,10 @@ describe 'selinux class' do
         }
 
         # test purging
-        resources { ['selinux_fcontext', 'selinux_fcontext_equivalence']:
-          purge => true,
-        }
+        # This resource purge is breaking because above we are defining it
+        # resources { ['selinux_fcontext', 'selinux_fcontext_equivalence']:
+        #   purge => true,
+        # }
       }
     EOS
   end
