@@ -7,7 +7,7 @@ group :test do
   gem 'voxpupuli-test', '~> 7.0',   :require => false
   gem 'coveralls',                  :require => false
   gem 'simplecov-console',          :require => false
-  gem 'puppet_metadata', '~> 3.5',  :require => false
+  gem 'puppet_metadata', github: 'voxpupuli/puppet_metadata', :require => false
 end
 
 group :development do
@@ -20,7 +20,7 @@ group :system_tests do
   # https://github.com/voxpupuli/beaker-vagrant/pull/80
   gem 'beaker-vagrant', github: 'voxpupuli/beaker-vagrant', require: false
   # https://github.com/voxpupuli/beaker-hostgenerator/pull/353
-  gem 'beaker-hostgenerator', github: 'voxpupuli/beaker-hostgenerator', require: false
+  gem 'beaker-hostgenerator', github: 'daberkow/beaker-hostgenerator', branch: "fix/update_centos_box", require: false
 end
 
 group :release do
