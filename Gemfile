@@ -20,7 +20,8 @@ group :system_tests do
   # https://github.com/voxpupuli/beaker-vagrant/pull/80
   gem 'beaker-vagrant', github: 'voxpupuli/beaker-vagrant', require: false
   # https://github.com/voxpupuli/beaker-hostgenerator/pull/353
-  gem 'beaker-hostgenerator', github: 'ekohl/beaker-hostgenerator', branch: 'use-latest-centos-images-on-vagrant', require: false
+  # Needed a newer base branch, updated with same lines
+  gem 'beaker-hostgenerator', github: 'daberkow/beaker-hostgenerator', branch: "fix/update_centos_box", require: false
 end
 
 group :release do
