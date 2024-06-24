@@ -11,6 +11,6 @@ class selinux::refpolicy_package (
 ) inherits selinux {
   assert_private()
   if $manage_package {
-    ensure_packages ($package_name)
+    stdlib::ensure_packages ($package_name)
   }
 }
