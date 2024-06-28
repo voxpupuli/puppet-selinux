@@ -17,9 +17,8 @@ end
 
 group :system_tests do
   gem 'voxpupuli-acceptance', '~> 3.0',  :require => false
-  # https://github.com/voxpupuli/beaker-vagrant/pull/80
-  gem 'beaker-vagrant', github: 'voxpupuli/beaker-vagrant', require: false
-  gem 'beaker-hostgenerator', github: 'voxpupuli/beaker-hostgenerator', require: false
+  gem 'beaker-vagrant', '~> 1.4.0', require: false
+  gem 'beaker-hostgenerator', '~> 2.14.1', require: false
 end
 
 group :release do
