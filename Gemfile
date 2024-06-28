@@ -19,9 +19,7 @@ group :system_tests do
   gem 'voxpupuli-acceptance', '~> 3.0',  :require => false
   # https://github.com/voxpupuli/beaker-vagrant/pull/80
   gem 'beaker-vagrant', github: 'voxpupuli/beaker-vagrant', require: false
-  # https://github.com/voxpupuli/beaker-hostgenerator/pull/353
-  # Needed a newer base branch, updated with same lines
-  gem 'beaker-hostgenerator', github: 'daberkow/beaker-hostgenerator', branch: "fix/update_centos_box", require: false
+  gem 'beaker-hostgenerator', github: 'voxpupuli/beaker-hostgenerator', require: false
 end
 
 group :release do
