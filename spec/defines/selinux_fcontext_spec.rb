@@ -8,7 +8,7 @@ describe 'selinux::fcontext' do
   on_supported_os.each do |os, os_facts|
     context "on #{os}" do
       let(:facts) do
-        override_facts(os_facts, os: { selinux: { enabled: true } })
+        override_facts(os_facts, 'os' => { 'selinux' => { 'enabled' => true } })
       end
 
       context 'ordering' do

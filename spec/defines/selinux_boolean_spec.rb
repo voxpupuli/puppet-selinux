@@ -16,7 +16,7 @@ describe 'selinux::boolean' do
 
       context 'SELinux enabled' do
         let(:facts) do
-          override_facts(super(), os: { selinux: { enabled: true } })
+          override_facts(super(), 'os' => { 'selinux' => { 'enabled' => true } })
         end
 
         ['on', true, 'present'].each do |value|
@@ -56,7 +56,7 @@ describe 'selinux::boolean' do
 
       context 'SELinux disabled' do
         let(:facts) do
-          override_facts(super(), os: { selinux: { enabled: false } })
+          override_facts(super(), 'os' => { 'selinux' => { 'enabled' => false } })
         end
 
         ['on', true, 'present'].each do |value|

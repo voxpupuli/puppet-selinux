@@ -1,9 +1,12 @@
 ---
 spec/spec_helper.rb:
   mock_with: ':mocha'
+  facterdb_string_keys: true
 .puppet-lint.rc:
   disabled_lint_checks:
     - anchor_resource
   enabled_lint_checks:
     - parameter_documentation
     - parameter_types
+.github/workflows/ci.yml:
+  acceptance_tests: false
