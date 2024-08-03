@@ -13,7 +13,7 @@ describe 'selinux::permissive' do
 
       context 'SELinux enabled' do
         let(:facts) do
-          override_facts(super(), os: { selinux: { enabled: true } })
+          override_facts(super(), 'os' => { 'selinux' => { 'enabled' => true } })
         end
 
         context 'ensure selinux_permissive oddjob_mkhomedir_t is present' do
@@ -54,7 +54,7 @@ describe 'selinux::permissive' do
 
       context 'SELinux disabled' do
         let(:facts) do
-          override_facts(super(), os: { selinux: { enabled: false } })
+          override_facts(super(), 'os' => { 'selinux' => { 'enabled' => false } })
         end
 
         context 'make sure it compiles' do

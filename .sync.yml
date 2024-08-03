@@ -1,6 +1,7 @@
 ---
 spec/spec_helper.rb:
   mock_with: ':mocha'
+  facterdb_string_keys: true
 .puppet-lint.rc:
   disabled_lint_checks:
     - anchor_resource
