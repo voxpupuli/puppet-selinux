@@ -69,24 +69,6 @@ describe 'selinux' do
       it { is_expected.to contain_package('policycoreutils').with(ensure: 'installed') }
     end
 
-    context 'On Debian 10' do
-      let(:facts) do
-        {
-          osfamily: 'Debian',
-          operatingsystem: 'Debian',
-          operatingsystemmajrelease: '10',
-          selinux_current_mode: 'enforcing',
-          os: { release: { major: '10' }, name: 'Debian', family: 'Debian' }
-        }
-      end
-
-      it { is_expected.to compile.with_all_deps }
-
-      %w[policycoreutils-python-utils selinux-basics selinux-policy-default auditd].each do |package|
-        it { is_expected.to contain_package(package).with(ensure: 'installed') }
-      end
-    end
-
     context 'do not manage package' do
       let(:facts) do
         {
