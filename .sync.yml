@@ -11,3 +11,4 @@ spec/spec_helper.rb:
 .github/workflows/ci.yml:
   beaker_hypervisor: vagrant_libvirt
   acceptance_runs_on: macarne
+  install_vagrant_dependencies: false
