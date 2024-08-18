@@ -10,3 +10,4 @@ spec/spec_helper.rb:
     - parameter_types
 .github/workflows/ci.yml:
   beaker_hypervisor: vagrant_libvirt
+  acceptance_runs_on: macarne
