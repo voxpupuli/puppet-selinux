@@ -4,6 +4,28 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v5.0.0](https://github.com/voxpupuli/puppet-selinux/tree/v5.0.0) (2024-09-12)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v4.1.0...v5.0.0)
+
+**Breaking changes:**
+
+- Drop EoL Fedora 36 [\#398](https://github.com/voxpupuli/puppet-selinux/pull/398) ([bastelfreak](https://github.com/bastelfreak))
+- Drop EoL RedHat 7 support [\#397](https://github.com/voxpupuli/puppet-selinux/pull/397) ([bastelfreak](https://github.com/bastelfreak))
+- Drop EoL Fedora 30,31,32,33 support [\#396](https://github.com/voxpupuli/puppet-selinux/pull/396) ([bastelfreak](https://github.com/bastelfreak))
+- Drop EoL CentOS 7/8 [\#394](https://github.com/voxpupuli/puppet-selinux/pull/394) ([bastelfreak](https://github.com/bastelfreak))
+- Drop EoL Debian 10 support [\#393](https://github.com/voxpupuli/puppet-selinux/pull/393) ([bastelfreak](https://github.com/bastelfreak))
+
+**Implemented enhancements:**
+
+- Add Fedora 36/40 support [\#395](https://github.com/voxpupuli/puppet-selinux/pull/395) ([bastelfreak](https://github.com/bastelfreak))
+- use modern stdlib function [\#391](https://github.com/voxpupuli/puppet-selinux/pull/391) ([vchepkov](https://github.com/vchepkov))
+- selinux\_build\_module\_simple.sh: improve quoting [\#375](https://github.com/voxpupuli/puppet-selinux/pull/375) ([kenyon](https://github.com/kenyon))
+
+**Merged pull requests:**
+
+- Ensure examples compile [\#384](https://github.com/voxpupuli/puppet-selinux/pull/384) ([ekohl](https://github.com/ekohl))
+
 ## [v4.1.0](https://github.com/voxpupuli/puppet-selinux/tree/v4.1.0) (2023-10-31)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v4.0.0...v4.1.0)
@@ -224,7 +246,7 @@ These should not affect the functionality of the module.
 **Closed issues:**
 
 - Puppet change for each selinux module for every Puppet run [\#261](https://github.com/voxpupuli/puppet-selinux/issues/261)
-- Calls to $::selinux facts should use the $facts hash [\#258](https://github.com/voxpupuli/puppet-selinux/issues/258)
+- Calls to $selinux facts should use the $facts hash [\#258](https://github.com/voxpupuli/puppet-selinux/issues/258)
 
 **Merged pull requests:**
 
@@ -427,7 +449,7 @@ These should not affect the functionality of the module.
 **Merged pull requests:**
 
 - Release 0.7.1 [\#160](https://github.com/voxpupuli/puppet-selinux/pull/160) ([vinzent](https://github.com/vinzent))
-- Fix usage of non-existent $::selinux\_enabled fact [\#159](https://github.com/voxpupuli/puppet-selinux/pull/159) ([vinzent](https://github.com/vinzent))
+- Fix usage of non-existent $selinux\_enabled fact [\#159](https://github.com/voxpupuli/puppet-selinux/pull/159) ([vinzent](https://github.com/vinzent))
 - Default to undef for syncversion parameter in selinux::module  [\#158](https://github.com/voxpupuli/puppet-selinux/pull/158) ([vinzent](https://github.com/vinzent))
 - Remove mentions of Ruby requirements in README [\#156](https://github.com/voxpupuli/puppet-selinux/pull/156) ([juniorsysadmin](https://github.com/juniorsysadmin))
 
