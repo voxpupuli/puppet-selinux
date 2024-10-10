@@ -5,7 +5,7 @@ Puppet::Type.type(:selinux_login).provide(:semanage) do
 
   defaultfor kernel: 'Linux'
   # semanage fails when SELinux is disabled, so let's not pretend to work in that situation.
-  confine selinux: true
+  confine 'os.selinux.enabled': true
 
   # Determine the appropriate python command
   def self.python_command

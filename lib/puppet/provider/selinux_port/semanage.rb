@@ -5,7 +5,7 @@ Puppet::Type.type(:selinux_port).provide(:semanage) do
 
   defaultfor kernel: 'Linux'
   # SELinux must be enabled. Is there a way to get a better error message?
-  confine selinux: true
+  confine 'os.selinux.enabled': true
 
   # Determine the appropriate python command
   def self.python_command
