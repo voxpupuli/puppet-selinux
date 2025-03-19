@@ -7,7 +7,7 @@ Puppet::Type.type(:selinux_fcontext).provide(:semanage) do
 
   commands semanage: 'semanage'
   # semanage fails when SELinux is disabled, so let's not pretend to work in that situation.
-  confine selinux: true
+  confine 'os.selinux.enabled': true
 
   mk_resource_methods
 
