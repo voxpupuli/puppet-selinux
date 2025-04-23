@@ -9,4 +9,6 @@ spec/spec_helper.rb:
     - parameter_documentation
     - parameter_types
 .github/workflows/ci.yml:
-  acceptance_tests: false
+  beaker_hypervisor: vagrant_libvirt
+  acceptance_runs_on: macarne
+  install_vagrant_dependencies: false
