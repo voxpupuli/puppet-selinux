@@ -108,8 +108,18 @@ class { selinux:
 
 This will include the module and manage the SELinux mode (possible values are
 `enforcing`, `permissive`, and `disabled`) and enforcement type (possible values
-are `targeted`, `minimum`, and `mls`). Note that disabling SELinux requires a reboot
-to fully take effect. It will run in `permissive` mode until then.
+are `targeted`, `minimum`, and `mls`).
+
+#### Note on SELinux mode changes
+Changing SELinux between `enforcing`/`permissive` and `disabled` requires a reboot to take effect.
+
+When transitioning from `disabled` to `enforcing`:
+1. The module sets SELinux to `permissive`, which requires a reboot to take effect.
+2. After the reboot, the module updates the configuration and running state to `enforcing`.
+
+When transitioning from `enforcing` to `disabled`:
+1. The module sets SELinux to `disabled`, which requires a reboot to take effect, and sets the running state to `permissive` until then.
+2. After the reboot, SELinux will be fully disabled.
 
 ### Deploy a custom module using the refpolicy framework
 
