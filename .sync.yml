@@ -10,3 +10,7 @@ spec/spec_helper.rb:
     - parameter_types
 .github/workflows/ci.yml:
   acceptance_tests: false
+Gemfile:
+  optional:
+    ':test':
+      - gem: 'mocha'
