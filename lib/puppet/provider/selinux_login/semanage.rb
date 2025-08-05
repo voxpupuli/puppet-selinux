@@ -67,7 +67,7 @@ Puppet::Type.type(:selinux_login).provide(:semanage) do
       # local %cn_cegbu_aconex_fr-dev-platform-priv unconfined_u
       source_str, selinux_login_name, selinux_user = split
 
-      key = "#{selinux_login_name}_#{selinux_user}"
+      key = selinux_login_name
       source =
         case source_str
         when 'policy' then :policy
@@ -109,7 +109,7 @@ Puppet::Type.type(:selinux_login).provide(:semanage) do
         resource.provider = provider
         resource[:ensure] = :present if provider.source == :policy
       else
-        resources.each_values do |res|
+        resources.each_value do |res|
           next unless res[:selinux_user] == provider.selinux_user && res[:selinux_login_name] == provider.selinux_login_name
 
           warning("Selinux_login['#{res[:name]}']: title does not match its login ('#{provider.name}' != '#{provider.selinux_login_name}')")
