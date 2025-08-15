@@ -27,9 +27,9 @@ describe semanage_provider do
 
       context 'with three custom equivalences' do
         before do
-          Selinux.expects(:selinux_file_context_subs_path).returns('spec_dummy')
-          File.expects(:exist?).with('spec_dummy').returns(true)
-          File.expects(:readlines).with('spec_dummy').returns(fcontext_equivs.split("\n"))
+          expect(Selinux).to receive(:selinux_file_context_subs_path).and_return('spec_dummy')
+          expect(File).to receive(:exist?).with('spec_dummy').and_return(true)
+          expect(File).to receive(:readlines).with('spec_dummy').and_return(fcontext_equivs.split("\n"))
         end
 
         it 'returns three resources' do
@@ -47,8 +47,8 @@ describe semanage_provider do
 
       context 'with no equivalences file' do
         before do
-          Selinux.expects(:selinux_file_context_subs_path).returns('spec_dummy')
-          File.expects(:exist?).with('spec_dummy').returns(false)
+          expect(Selinux).to receive(:selinux_file_context_subs_path).and_return('spec_dummy')
+          expect(File).to receive(:exist?).with('spec_dummy').and_return(false)
         end
 
         it 'returns no resources' do
@@ -64,7 +64,7 @@ describe semanage_provider do
         end
 
         it 'runs semanage fcontext -a -e' do
-          described_class.expects(:semanage).with('fcontext', '-a', '-e', '/something', '/foobar')
+          expect(described_class).to receive(:semanage).with('fcontext', '-a', '-e', '/something', '/foobar')
           resource.provider.create
         end
       end
@@ -75,7 +75,7 @@ describe semanage_provider do
         end
 
         it 'runs semanage fcontext -d -e' do
-          described_class.expects(:semanage).with('fcontext', '-d', '-e', '/something', '/foobar')
+          expect(described_class).to receive(:semanage).with('fcontext', '-d', '-e', '/something', '/foobar')
           provider.destroy
         end
       end
@@ -94,9 +94,9 @@ describe semanage_provider do
 
         before do
           # prefetch should find the provider parsed from this:
-          Selinux.expects(:selinux_file_context_subs_path).returns('spec_dummy')
-          File.expects(:exist?).with('spec_dummy').returns(true)
-          File.expects(:readlines).with('spec_dummy').returns(fcontext_equivs.split("\n"))
+          expect(Selinux).to receive(:selinux_file_context_subs_path).and_return('spec_dummy')
+          expect(File).to receive(:exist?).with('spec_dummy').and_return(true)
+          expect(File).to receive(:readlines).with('spec_dummy').and_return(fcontext_equivs.split("\n"))
           semanage_provider.prefetch(resources)
         end
 
@@ -113,8 +113,8 @@ describe semanage_provider do
 
         it 'can change target by doing a non-reloading delete' do
           p = resources['/foobar'].provider
-          described_class.expects(:semanage).with('fcontext', '-N', '-d', '-e', '/var/lib/whatever', '/foobar')
-          described_class.expects(:semanage).with('fcontext', '-a', '-e', '/somewhere_else', '/foobar')
+          expect(described_class).to receive(:semanage).with('fcontext', '-N', '-d', '-e', '/var/lib/whatever', '/foobar')
+          expect(described_class).to receive(:semanage).with('fcontext', '-a', '-e', '/somewhere_else', '/foobar')
           p.target = '/somewhere_else'
         end
       end
