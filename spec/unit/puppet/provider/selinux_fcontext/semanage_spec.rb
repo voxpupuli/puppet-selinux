@@ -40,9 +40,9 @@ describe semanage_provider do
 
       context "with a single #{name} fcontext" do
         before do
-          Selinux.expects(:selinux_file_context_local_path).returns('spec_dummy')
-          File.expects(:exist?).with('spec_dummy').returns(true)
-          File.expects(:readlines).with('spec_dummy').returns(fcontexts_local.split("\n"))
+          expect(Selinux).to receive(:selinux_file_context_local_path).and_return('spec_dummy')
+          expect(File).to receive(:exist?).with('spec_dummy').and_return(true)
+          expect(File).to receive(:readlines).with('spec_dummy').and_return(fcontexts_local.split("\n"))
         end
 
         it 'returns three resources' do
@@ -78,8 +78,8 @@ describe semanage_provider do
 
       context 'with no fcontexts defined, and no fcontexts.local file' do
         before do
-          Selinux.expects(:selinux_file_context_local_path).returns('spec_dummy')
-          File.expects(:exist?).with('spec_dummy').returns(false)
+          expect(Selinux).to receive(:selinux_file_context_local_path).and_return('spec_dummy')
+          expect(File).to receive(:exist?).with('spec_dummy').and_return(false)
         end
 
         it 'returns no resources' do
@@ -95,7 +95,7 @@ describe semanage_provider do
         end
 
         it 'runs semanage fcontext -a' do
-          described_class.expects(:semanage).with('fcontext', '-a', '-t', 'some_type_t', '-f', 'a', '/something(/.*)')
+          expect(described_class).to receive(:semanage).with('fcontext', '-a', '-t', 'some_type_t', '-f', 'a', '/something(/.*)')
           resource.provider.create
         end
       end
@@ -106,7 +106,7 @@ describe semanage_provider do
         end
 
         it 'runs semanage fcontext -d' do
-          described_class.expects(:semanage).with('fcontext', '-d', '-t', 'some_type_t', '-f', 'a', '/something(/.*)')
+          expect(described_class).to receive(:semanage).with('fcontext', '-d', '-t', 'some_type_t', '-f', 'a', '/something(/.*)')
           provider.destroy
         end
       end
@@ -136,12 +136,12 @@ describe semanage_provider do
 
         before do
           # prefetch should find the provider parsed from this:
-          Selinux.expects(:selinux_file_context_local_path).returns('spec_dummy')
-          File.expects(:exist?).with('spec_dummy').returns(true)
-          File.expects(:readlines).with('spec_dummy').returns(fcontexts_local.split("\n"))
-          Selinux.expects(:selinux_file_context_path).returns('spec_policy_dummy')
-          File.expects(:exist?).with('spec_policy_dummy').returns(true)
-          File.expects(:readlines).with('spec_policy_dummy').returns(fcontexts_system.split("\n"))
+          expect(Selinux).to receive(:selinux_file_context_local_path).and_return('spec_dummy')
+          expect(File).to receive(:exist?).with('spec_dummy').and_return(true)
+          expect(File).to receive(:readlines).with('spec_dummy').and_return(fcontexts_local.split("\n"))
+          expect(Selinux).to receive(:selinux_file_context_path).and_return('spec_policy_dummy')
+          expect(File).to receive(:exist?).with('spec_policy_dummy').and_return(true)
+          expect(File).to receive(:readlines).with('spec_policy_dummy').and_return(fcontexts_system.split("\n"))
           semanage_provider.prefetch(resources)
         end
 
@@ -162,13 +162,13 @@ describe semanage_provider do
 
         it 'can change seltype' do
           p = resources['/foobar_a'].provider
-          described_class.expects(:semanage).with('fcontext', '-m', '-t', 'new_type_t', '-f', 'a', '/foobar')
+          expect(described_class).to receive(:semanage).with('fcontext', '-m', '-t', 'new_type_t', '-f', 'a', '/foobar')
           p.seltype = 'new_type_t'
         end
 
         it 'can change seluser' do
           p = resources['/foobar_a'].provider
-          described_class.expects(:semanage).with('fcontext', '-m', '-s', 'unconfined_u', '-t', 'bin_t', '-f', 'a', '/foobar')
+          expect(described_class).to receive(:semanage).with('fcontext', '-m', '-s', 'unconfined_u', '-t', 'bin_t', '-f', 'a', '/foobar')
           p.seluser = 'unconfined_u'
         end
 
@@ -189,13 +189,13 @@ describe semanage_provider do
 
         it 'can change seltype' do
           p = resources['/var/log_a'].provider
-          described_class.expects(:semanage).with('fcontext', '-m', '-t', 'new_type_t', '-f', 'a', '/var/log')
+          expect(described_class).to receive(:semanage).with('fcontext', '-m', '-t', 'new_type_t', '-f', 'a', '/var/log')
           p.seltype = 'new_type_t'
         end
 
         it 'can change seluser' do
           p = resources['/var/log_a'].provider
-          described_class.expects(:semanage).with('fcontext', '-m', '-s', 'unconfined_u', '-t', 'var_log_t', '-f', 'a', '/var/log')
+          expect(described_class).to receive(:semanage).with('fcontext', '-m', '-s', 'unconfined_u', '-t', 'var_log_t', '-f', 'a', '/var/log')
           p.seluser = 'unconfined_u'
         end
       end

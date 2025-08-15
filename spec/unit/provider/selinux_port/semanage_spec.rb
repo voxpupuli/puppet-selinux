@@ -92,7 +92,7 @@ describe semanage_provider do
       context 'with some local port definitions' do
         before do
           # Call to python helper script
-          semanage_provider.expects(:python).returns(ports_helper_output)
+          expect(semanage_provider).to receive(:python).and_return(ports_helper_output)
         end
 
         it 'returns 23 resources' do
@@ -114,13 +114,13 @@ describe semanage_provider do
         end
 
         it 'runs semanage port -a for a port range' do
-          described_class.expects(:semanage).with('port', '-a', '-t', 'zookeeper_client_port_t', '-p', :tcp, '15123-15132')
+          expect(described_class).to receive(:semanage).with('port', '-a', '-t', 'zookeeper_client_port_t', '-p', :tcp, '15123-15132')
           resource.provider.create
         end
 
         it 'runs semanage port -a for a single port' do
           resource[:high_port] = resource[:low_port]
-          described_class.expects(:semanage).with('port', '-a', '-t', 'zookeeper_client_port_t', '-p', :tcp, '15123')
+          expect(described_class).to receive(:semanage).with('port', '-a', '-t', 'zookeeper_client_port_t', '-p', :tcp, '15123')
           resource.provider.create
         end
       end
@@ -140,12 +140,12 @@ describe semanage_provider do
         end
 
         it 'runs semanage port -d for a port range' do
-          described_class.expects(:semanage).with('port', '-d', '-p', :tcp, '15123-15132')
+          expect(described_class).to receive(:semanage).with('port', '-d', '-p', :tcp, '15123-15132')
           res_port_range.provider.destroy
         end
 
         it 'runs semanage port -d for a single port' do
-          described_class.expects(:semanage).with('port', '-d', '-p', :tcp, '15123')
+          expect(described_class).to receive(:semanage).with('port', '-d', '-p', :tcp, '15123')
           res_single_port.provider.destroy
         end
       end
@@ -166,7 +166,7 @@ describe semanage_provider do
 
         before do
           # prefetch:
-          semanage_provider.expects(:python).returns(ports_helper_output)
+          expect(semanage_provider).to receive(:python).and_return(ports_helper_output)
           semanage_provider.prefetch(resources)
         end
 
