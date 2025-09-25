@@ -19,14 +19,14 @@ describe 'selinux class' do
         selinux::permissive { 'puppet_selinux_test_policy_t': }
 
         selinux::port { 'puppet_selinux_test_policy_port_t/tcp':
-          seltype => 'puppet_selinux_test_policy_port_t',
-          port => 55555,
+          seltype  => 'puppet_selinux_test_policy_port_t',
+          port     => 55555,
           protocol => 'tcp',
         }
       }
 
       # just something simple I found via Google:
-      file {'/tmp/selinux_simple_policy.te':
+      file { '/tmp/selinux_simple_policy.te':
         ensure  => 'file',
         content => @("EOF")
           module puppet_selinux_simple_policy 1.0;
@@ -40,7 +40,7 @@ describe 'selinux class' do
         | EOF
       }
 
-      file {'/tmp/selinux_test_policy.te':
+      file { '/tmp/selinux_test_policy.te':
         ensure  => 'file',
         content => @("EOF")
           policy_module(puppet_selinux_test_policy, 1.0.0)
@@ -56,48 +56,50 @@ describe 'selinux class' do
       selinux::module { 'puppet_selinux_simple_policy':
         source_te => 'file:///tmp/selinux_simple_policy.te',
         builder   => 'simple',
-        require   => File['/tmp/selinux_simple_policy.te']
+        require   => File['/tmp/selinux_simple_policy.te'],
       }
 
       selinux::module { 'puppet_selinux_test_policy':
-        source_te   => 'file:///tmp/selinux_test_policy.te',
-        builder     => 'refpolicy',
-        require     => File['/tmp/selinux_test_policy.te']
+        source_te => 'file:///tmp/selinux_test_policy.te',
+        builder   => 'refpolicy',
+        require   => File['/tmp/selinux_test_policy.te'],
       }
 
       if $have_selinux_ruby_library {
-        Class['selinux'] ->
-
         file { '/tmp/test_selinux_fcontext':
           content => 'TEST',
           seltype => 'puppet_selinux_test_policy_exec_t',
+          require => Class['selinux'],
         }
 
-        selinux::fcontext {'/tmp/fcontexts_source(/.*)?':
+        selinux::fcontext { '/tmp/fcontexts_source(/.*)?':
           seltype => 'puppet_selinux_test_policy_exec_t',
         }
 
-        selinux::fcontext::equivalence {'/tmp/fcontexts_equivalent':
+        selinux::fcontext::equivalence { '/tmp/fcontexts_equivalent':
           target => '/tmp/fcontexts_source',
         }
 
         file {['/tmp/fcontexts_source', '/tmp/fcontexts_equivalent']:
-          ensure => 'directory',
+          ensure  => 'directory',
           require => [Selinux::Fcontext['/tmp/fcontexts_source(/.*)?'], Selinux::Fcontext::Equivalence['/tmp/fcontexts_equivalent']],
         }
 
-        file {['/tmp/fcontexts_source/define_test', '/tmp/fcontexts_equivalent/define_test']:
-          ensure  => file,
-          notify  => Exec["/sbin/restorecon -FR /tmp/fcontexts_*"]
+        file { ['/tmp/fcontexts_source/define_test', '/tmp/fcontexts_equivalent/define_test']:
+          ensure => file,
+          notify => Exec['/sbin/restorecon -FR /tmp/fcontexts_*'],
         }
-        exec {'/sbin/restorecon -FR /tmp/fcontexts_*':
-        # this is needed because puppet creates files with the wrong context as
-        # it runs unconfined and only becomes idempotent after the second run.
+        exec { '/sbin/restorecon -FR /tmp/fcontexts_*':
+          # this is needed because puppet creates files with the wrong context as
+          # it runs unconfined and only becomes idempotent after the second run.
           refreshonly => true,
         }
 
         # test purging
-        resources {['selinux_fcontext', 'selinux_fcontext_equivalence']: purge => true }
+        # This resource purge is breaking because above we are defining it
+        # resources { ['selinux_fcontext', 'selinux_fcontext_equivalence']:
+        #   purge => true,
+        # }
       }
     EOS
   end
