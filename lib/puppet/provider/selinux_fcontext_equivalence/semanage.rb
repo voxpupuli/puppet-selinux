@@ -11,17 +11,16 @@ Puppet::Type.type(:selinux_fcontext_equivalence).provide(:semanage) do
   mk_resource_methods
 
   def self.parse_fcontext_subs_lines(lines)
-    ret = []
-    lines.each do |line|
+    lines.filter_map do |line|
       next if line.strip.empty?
-      next if line =~ %r{^#}
+      next if line.start_with?('#')
 
       source, target = line.split(%r{\s+})
-      ret.push(new(ensure: :present,
-                   name: source,
-                   target: target))
+
+      new(ensure: :present,
+          name: source,
+          target: target)
     end
-    ret
   end
 
   def self.instances
