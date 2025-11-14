@@ -1,7 +1,7 @@
 # SELinux module for Puppet
 
-[![Build Status](https://travis-ci.org/voxpupuli/puppet-selinux.png?branch=master)](https://travis-ci.org/voxpupuli/puppet-selinux)
-[![Code Coverage](https://coveralls.io/repos/github/voxpupuli/puppet-selinux/badge.svg?branch=master)](https://coveralls.io/github/voxpupuli/puppet-selinux)
+[![License](https://img.shields.io/github/license/voxpupuli/puppet-selinux.svg)](https://github.com/voxpupuli/puppet-selinux/blob/master/LICENSE)
+[![Build Status](https://github.com/voxpupuli/puppet-selinux/actions/workflows/ci.yml/badge.svg)](https://github.com/voxpupuli/puppet-selinux/actions/workflows/ci.yml)
 [![Puppet Forge](https://img.shields.io/puppetforge/v/puppet/selinux.svg)](https://forge.puppetlabs.com/puppet/selinux)
 [![Puppet Forge - downloads](https://img.shields.io/puppetforge/dt/puppet/selinux.svg)](https://forge.puppetlabs.com/puppet/selinux)
 [![Puppet Forge - endorsement](https://img.shields.io/puppetforge/e/puppet/selinux.svg)](https://forge.puppetlabs.com/puppet/selinux)
