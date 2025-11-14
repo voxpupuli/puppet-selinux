@@ -6,7 +6,7 @@ Puppet::Type.type(:selinux_fcontext_equivalence).provide(:semanage) do
   defaultfor kernel: 'Linux'
 
   commands semanage: 'semanage'
-  confine selinux: true
+  confine 'os.selinux.enabled': true
 
   mk_resource_methods
 

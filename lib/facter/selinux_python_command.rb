@@ -2,7 +2,7 @@
 
 # DEPRECATED: Determine the path to python on the system
 Facter.add(:selinux_python_command) do
-  confine osfamily: 'RedHat'
+  confine 'os.family': 'RedHat'
   setcode do
     if File.exist? '/usr/libexec/platform-python'
       # RHEL 8 / CentOS 8
