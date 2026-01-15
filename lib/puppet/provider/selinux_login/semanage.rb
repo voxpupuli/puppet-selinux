@@ -65,7 +65,7 @@ Puppet::Type.type(:selinux_login).provide(:semanage) do
       # policy %cn_cegbu_aconex_fr-dev-platform-priv unconfined_u
       # local %cn_cegbu_aconex_fr-dev-ops-priv unconfined_u
       # local %cn_cegbu_aconex_fr-dev-platform-priv unconfined_u
-      source_str, selinux_login_name, selinux_user = split
+      source_str, selinux_login_name, selinux_user, selinux_mlsrange = split
 
       key = selinux_login_name
       source =
@@ -83,6 +83,7 @@ Puppet::Type.type(:selinux_login).provide(:semanage) do
         source: source,
         selinux_login_name: selinux_login_name,
         selinux_user: selinux_user,
+        selinux_mlsrange: selinux_mlsrange,
       }
     end
     ret
@@ -110,7 +111,7 @@ Puppet::Type.type(:selinux_login).provide(:semanage) do
         resource[:ensure] = :present if provider.source == :policy
       else
         resources.each_value do |res|
-          next unless res[:selinux_user] == provider.selinux_user && res[:selinux_login_name] == provider.selinux_login_name
+          next unless res[:selinux_user] == provider.selinux_user && res[:selinux_login_name] == provider.selinux_login_name && res[:selinux_mlsrange] == provider.selinux_mlsrange
 
           warning("Selinux_login['#{res[:name]}']: title does not match its login ('#{provider.name}' != '#{provider.selinux_login_name}')")
           resource.provider = provider
@@ -121,12 +122,12 @@ Puppet::Type.type(:selinux_login).provide(:semanage) do
   end
 
   def create
-    args = ['login', '-a', '-s', @resource[:selinux_user], @resource[:selinux_login_name]]
+    args = ['login', '-a', '-s', @resource[:selinux_user], '-r', @resource[:selinux_mlsrange], @resource[:selinux_login_name]]
     semanage(*args)
   end
 
   def sync
-    args = ['login', '-m', '-s', @resource[:selinux_user], @resource[:selinux_login_name]]
+    args = ['login', '-m', '-s', @resource[:selinux_user], '-r', @resource[:selinux_mlsrange], @resource[:selinux_login_name]]
     semanage(*args)
   end
 

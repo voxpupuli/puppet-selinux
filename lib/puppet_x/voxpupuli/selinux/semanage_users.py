@@ -24,7 +24,8 @@ if semanage.semanage_connect(handle) < 0:
 def print_seuser(kind, seuser):
     seuser_login = semanage.semanage_seuser_get_name(seuser)
     selinux_user = semanage.semanage_seuser_get_sename(seuser)
-    print("{} {} {}".format(kind, seuser_login, selinux_user))
+    mls_range = semanage.semanage_seuser_get_mlsrange(seuser)
+    print("{} {} {} {}".format(kind, seuser_login, selinux_user, mls_range))
 
 
 # Always list local config afterwards so that the provider works correctly
