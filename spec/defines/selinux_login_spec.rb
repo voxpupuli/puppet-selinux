@@ -16,6 +16,7 @@ describe 'selinux::login' do
           {
             selinux_login_name: 'localuser',
             selinux_user: 'staff_u',
+            selinux_mlsrange: 's0-s0:c0.c1023'
           }
         end
 
@@ -28,10 +29,11 @@ describe 'selinux::login' do
           {
             selinux_login_name: 'localuser',
             selinux_user: 'staff_u',
+            selinux_mlsrange: 's0-s0:c0.c1023'
           }
         end
 
-        it { is_expected.to contain_selinux_login('localuser').with(selinux_login_name: 'localuser', selinux_user: 'staff_u') }
+        it { is_expected.to contain_selinux_login('localuser').with(selinux_login_name: 'localuser', selinux_user: 'staff_u', selinux_mlsrange: 's0-s0:c0.c1023') }
       end
     end
   end

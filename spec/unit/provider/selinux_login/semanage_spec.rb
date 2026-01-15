@@ -6,15 +6,15 @@ semanage_provider = Puppet::Type.type(:selinux_login).provider(:semanage)
 login = Puppet::Type.type(:selinux_login)
 
 login_helper_output = <<~EOS
-  policy root unconfined_u
-  policy __default__ unconfined_u
-  policy localuser staff_u
-  policy %localgroup unconfined_u
-  policy %localgroup2 unconfined_u
-  local __default__ user_u
-  local localuser staff_u
-  local %localgroup unconfined_u
-  local %localgroup2 unconfined_u
+  policy root unconfined_u s0-s0:c0.c1023
+  policy __default__ unconfined_u s0-s0:c0.c1023
+  policy localuser staff_u s0-s0:c0.c1023
+  policy %localgroup unconfined_u s0-s0:c0.c1023
+  policy %localgroup2 unconfined_u s0-s0:c0.c1023
+  local __default__ user_u s0
+  local localuser staff_u s0-s0:c0.c1023
+  local %localgroup unconfined_u s0-s0:c0.c1023
+  local %localgroup2 unconfined_u s0-s0:c0.c1023
 EOS
 
 instance_examples = {
@@ -22,6 +22,7 @@ instance_examples = {
     ensure: :present,
     name: 'root',
     selinux_login_name: 'root',
+    selinux_mlsrange: 's0-s0:c0.c1023',
     selinux_user: 'unconfined_u',
     source: :policy,
     title: 'root',
@@ -30,6 +31,7 @@ instance_examples = {
     ensure: :present,
     name: '__default__',
     selinux_login_name: '__default__',
+    selinux_mlsrange: 's0',
     selinux_user: 'user_u',
     source: :local,
     title: '__default__',
@@ -38,6 +40,7 @@ instance_examples = {
     ensure: :present,
     name: 'localuser',
     selinux_login_name: 'localuser',
+    selinux_mlsrange: 's0-s0:c0.c1023',
     selinux_user: 'staff_u',
     source: :local,
     title: 'localuser',
@@ -46,6 +49,7 @@ instance_examples = {
     ensure: :present,
     name: '%localgroup',
     selinux_login_name: '%localgroup',
+    selinux_mlsrange: 's0-s0:c0.c1023',
     selinux_user: 'unconfined_u',
     source: :local,
     title: '%localgroup'
@@ -54,6 +58,7 @@ instance_examples = {
     ensure: :present,
     name: '%localgroup2',
     selinux_login_name: '%localgroup2',
+    selinux_mlsrange: 's0-s0:c0.c1023',
     selinux_user: 'unconfined_u',
     source: :local,
     title: '%localgroup2'
@@ -92,7 +97,7 @@ describe semanage_provider do
         end
 
         it 'runs semanage login -a' do
-          expect(described_class).to receive(:semanage).with('login', '-a', '-s', 'staff_u', 'localuser')
+          expect(described_class).to receive(:semanage).with('login', '-a', '-s', 'staff_u', '-r', 's0-s0:c0.c1023', 'localuser')
           resource.provider.create
         end
       end
@@ -116,6 +121,7 @@ describe semanage_provider do
             'localuser2' => login.new(
               name: 'localuser2',
               selinux_login_name: 'localuser2',
+              selinux_mlsrange: 's0',
               selinux_user: 'user_u',
               title: 'localuser2'
             ),
@@ -134,6 +140,7 @@ describe semanage_provider do
 
           it { expect(p.name).to eq('localuser') }
           it { expect(p.selinux_login_name).to eq('localuser') }
+          it { expect(p.selinux_mlsrange).to eq('s0-s0:c0.c1023') }
           it { expect(p.selinux_user).to eq('staff_u') }
         end
 
