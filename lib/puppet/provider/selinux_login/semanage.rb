@@ -46,8 +46,8 @@ Puppet::Type.type(:selinux_login).provide(:semanage) do
   end
 
   # current file path is lib/puppet/provider/selinux_login/semanage.rb
-  # semanage_users.py is lib/puppet_x/voxpupuli/selinux/semanage_users.py
-  USERS_HELPER = File.expand_path('../../../../puppet_x/voxpupuli/selinux/semanage_users.py', __FILE__)
+  # semanage_logins.py is lib/puppet_x/voxpupuli/selinux/semanage_logins.py
+  LOGINS_HELPER = File.expand_path('../../../../puppet_x/voxpupuli/selinux/semanage_logins.py', __FILE__)
   commands semanage: 'semanage',
            python: python_command
 
@@ -91,7 +91,7 @@ Puppet::Type.type(:selinux_login).provide(:semanage) do
 
   def self.instances
     # no way to do this with one call as far as I know
-    policy = parse_helper_lines(python(USERS_HELPER).split("\n"))
+    policy = parse_helper_lines(python(LOGINS_HELPER).split("\n"))
     policy.values.map do |item|
       new(item)
     end
