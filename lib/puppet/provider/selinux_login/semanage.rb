@@ -122,6 +122,9 @@ Puppet::Type.type(:selinux_login).provide(:semanage) do
   end
 
   def self.prefetch(resources)
+    # Get default MLS ranges
+    users = parse_user_helper_lines(python(USERS_HELPER).split("\n"))
+
     # is there a better way to do this? Map selinux_user/selinux_login_name to the provider regardless of the title
     # and make sure all system resources have ensure => :present so that we don't try to remove them
     instances.each do |provider|
@@ -129,6 +132,11 @@ Puppet::Type.type(:selinux_login).provide(:semanage) do
       if resource
         unless resource[:selinux_login_name].to_s == provider.selinux_login_name || resource.purging?
           raise Puppet::ResourceError, "Selinux_login['#{resource[:name]}']: title does not match its login ('#{provider.name}' != '#{provider.selinux_login_name}'), and a conflicting resource exists"
+        end
+
+        if !resource.purging? && resource[:selinux_mlsrange].nil?
+          # If the MLS range is not set, default to that of the user
+          resource[:selinux_mlsrange] = users[resource[:selinux_user]]
         end
 
         resource.provider = provider

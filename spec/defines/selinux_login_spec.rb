@@ -24,7 +24,7 @@ describe 'selinux::login' do
         it { is_expected.to contain_selinux__login('myapp').that_comes_before('Anchor[selinux::end]') }
       end
 
-      context 'valid user' do
+      context 'with mls specified' do
         let(:params) do
           {
             selinux_login_name: 'localuser',
@@ -34,6 +34,17 @@ describe 'selinux::login' do
         end
 
         it { is_expected.to contain_selinux_login('localuser').with(selinux_login_name: 'localuser', selinux_user: 'staff_u', selinux_mlsrange: 's0-s0:c0.c1023') }
+      end
+
+      context 'without mls specified' do
+        let(:params) do
+          {
+            selinux_login_name: 'localuser',
+            selinux_user: 'staff_u',
+          }
+        end
+
+        it { is_expected.to contain_selinux_login('localuser').with(selinux_login_name: 'localuser', selinux_user: 'staff_u') }
       end
     end
   end

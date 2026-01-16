@@ -26,8 +26,7 @@ Puppet::Type.newtype(:selinux_login) do
   end
 
   newproperty(:selinux_mlsrange) do
-    desc 'The MLS range to set.'
-    isrequired
+    desc 'The MLS range to set. If undef, the MLS range of the SELinux user will be used.'
 
     def sync
       event = super

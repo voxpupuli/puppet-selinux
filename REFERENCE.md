@@ -542,9 +542,11 @@ The selinux user to map to
 
 ##### <a name="-selinux--login--selinux_mlsrange"></a>`selinux_mlsrange`
 
-Data type: `String[1]`
+Data type: `Optional[String[1]]`
 
-The MLS range to set
+The MLS range to set. If undef, the MLS range of the SELinux user will be used.
+
+Default value: `undef`
 
 ### <a name="selinux--module"></a>`selinux::module`
 
@@ -918,7 +920,7 @@ The name of the linux user or group to map.
 
 ##### `selinux_mlsrange`
 
-The MLS range to set.
+The MLS range to set. If undef, the MLS range of the SELinux user will be used.
 
 ##### `selinux_user`
 
