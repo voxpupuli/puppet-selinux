@@ -48,6 +48,7 @@ Puppet::Type.type(:selinux_login).provide(:semanage) do
   # current file path is lib/puppet/provider/selinux_login/semanage.rb
   # semanage_logins.py is lib/puppet_x/voxpupuli/selinux/semanage_logins.py
   LOGINS_HELPER = File.expand_path('../../../../puppet_x/voxpupuli/selinux/semanage_logins.py', __FILE__)
+  USERS_HELPER = File.expand_path('../../../../puppet_x/voxpupuli/selinux/semanage_users.py', __FILE__)
   commands semanage: 'semanage',
            python: python_command
 
@@ -87,6 +88,29 @@ Puppet::Type.type(:selinux_login).provide(:semanage) do
       }
     end
     ret
+  end
+
+  def self.parse_user_helper_lines(lines)
+    users = {}
+    lines.each do |line|
+      split = line.split(%r{\s+})
+      # helper format is:
+      # something_u mlsrange
+      #
+      # For example:
+      #
+      # guest_u s0
+      # root s0-s0:c0.c1023
+      # staff_u s0-s0:c0.c1023
+      # sysadm_u s0-s0:c0.c1023
+      # system_u s0-s0:c0.c1023
+      # unconfined_u s0-s0:c0.c1023
+      # user_u s0
+      # xguest_u s0
+      user, mlsrange = split
+      users[user] = mlsrange.to_s
+    end
+    users
   end
 
   def self.instances
