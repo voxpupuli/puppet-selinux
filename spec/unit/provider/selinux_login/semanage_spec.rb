@@ -14,6 +14,17 @@ LOGIN_HELPER_OUTPUT = <<~EOS
   local %localgroup2 unconfined_u s0-s0:c0.c1023
 EOS
 
+USER_HELPER_OUTPUT = <<~EOS
+  guest_u s0
+  root s0-s0:c0.c1023
+  staff_u s0-s0:c0.c1023
+  sysadm_u s0-s0:c0.c1023
+  system_u s0-s0:c0.c1023
+  unconfined_u s0-s0:c0.c1023
+  user_u s0
+  xguest_u s0
+EOS
+
 INSTANCE_EXAMPLES = {
   0 => {
     ensure: :present,
@@ -74,7 +85,8 @@ describe LOGIN_TYPE.provider(:semanage) do
       context 'with some local login definitions' do
         before do
           # Call to python helper script
-          allow(described_class).to receive(:python).and_return(LOGIN_HELPER_OUTPUT)
+          allow(described_class).to receive(:python).with(LOGINS_HELPER).and_return(LOGIN_HELPER_OUTPUT)
+          allow(described_class).to receive(:python).with(USERS_HELPER).and_return(USER_HELPER_OUTPUT)
         end
 
         it 'returns 5 resources' do
