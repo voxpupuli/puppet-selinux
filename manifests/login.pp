@@ -13,10 +13,12 @@
 # @param ensure Set to present to add or absent to remove a selinux login.
 # @param selinux_login_name A Linux user or group
 # @param selinux_user The selinux user to map to
+# @param selinux_mlsrange The MLS range to set. If undef, the MLS range of the SELinux user will be used.
 #
 define selinux::login (
   String[1]                    $selinux_login_name,
   String[1]                    $selinux_user,
+  Optional[String[1]]          $selinux_mlsrange = undef,
   Enum['present', 'absent'] $ensure = 'present',
 ) {
   include selinux
@@ -39,6 +41,7 @@ define selinux::login (
       ensure             => $ensure,
       selinux_login_name => $selinux_login_name,
       selinux_user       => $selinux_user,
+      selinux_mlsrange   => $selinux_mlsrange,
     }
   }
 }
