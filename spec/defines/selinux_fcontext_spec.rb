@@ -15,7 +15,7 @@ describe 'selinux::fcontext' do
         let(:params) do
           {
             pathspec: '/tmp/file1',
-            seltype: 'user_home_dir_t'
+            seltype: 'user_home_dir_t',
           }
         end
 
@@ -28,7 +28,7 @@ describe 'selinux::fcontext' do
           {
             ensure: 'absent',
             pathspec: '/tmp/file1',
-            seltype: 'user_home_dir_t'
+            seltype: 'user_home_dir_t',
           }
         end
 
@@ -42,7 +42,7 @@ describe 'selinux::fcontext' do
           {
             pathspec: '/tmp/file1',
             filetype: 'X',
-            seltype: 'user_home_dir_t'
+            seltype: 'user_home_dir_t',
           }
         end
 
@@ -54,7 +54,7 @@ describe 'selinux::fcontext' do
           {
             pathspec: '/tmp/file1',
             filetype: 'afdcbslp',
-            seltype: 'user_home_dir_t'
+            seltype: 'user_home_dir_t',
           }
         end
 
@@ -66,7 +66,7 @@ describe 'selinux::fcontext' do
           {
             pathspec: '/tmp/file1',
             filetype: 'a',
-            seltype: 'user_home_dir_t'
+            seltype: 'user_home_dir_t',
           }
         end
 
@@ -77,7 +77,7 @@ describe 'selinux::fcontext' do
         let(:params) do
           {
             pathspec: '/tmp/file1',
-            seltype: 'user_home_dir_t'
+            seltype: 'user_home_dir_t',
           }
         end
 

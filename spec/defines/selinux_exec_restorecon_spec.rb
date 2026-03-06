@@ -46,7 +46,7 @@ describe 'selinux::exec_restorecon' do
             is_expected.to contain_exec('selinux::exec_restorecon /opt/mycustompath').with(
               onlyif: 'some_command',
               unless: 'some_other_command',
-              refreshonly: false
+              refreshonly: false,
             )
           end
         end

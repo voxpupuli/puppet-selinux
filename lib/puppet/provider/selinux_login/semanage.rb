@@ -17,7 +17,7 @@ Puppet::Type.type(:selinux_login).provide(:semanage) do
       '/usr/libexec/platform-python',
       'python',
       'python3',
-      'python2'
+      'python2',
     ]
 
     valid_paths = []
@@ -82,7 +82,7 @@ Puppet::Type.type(:selinux_login).provide(:semanage) do
         name: key,
         source: source,
         selinux_login_name: selinux_login_name,
-        selinux_user: selinux_user
+        selinux_user: selinux_user,
       }
     end
     ret

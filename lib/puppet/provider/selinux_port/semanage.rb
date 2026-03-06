@@ -17,7 +17,7 @@ Puppet::Type.type(:selinux_port).provide(:semanage) do
       '/usr/libexec/platform-python',
       'python',
       'python3',
-      'python2'
+      'python2',
     ]
 
     valid_paths = []
@@ -83,7 +83,7 @@ Puppet::Type.type(:selinux_port).provide(:semanage) do
         low_port: low,
         high_port: high,
         protocol: protocol.to_sym,
-        source: source.to_sym
+        source: source.to_sym,
       }
     end
     ret

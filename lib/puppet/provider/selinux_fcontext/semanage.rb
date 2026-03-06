@@ -19,7 +19,7 @@ Puppet::Type.type(:selinux_fcontext).provide(:semanage) do
     '-l'        => 'l',
     '-p'        => 'p',
     '--'        => 'f',
-    '-s'        => 's'
+    '-s'        => 's',
   }
 
   def self.file_type_map(val)

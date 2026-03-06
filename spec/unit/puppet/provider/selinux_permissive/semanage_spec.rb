@@ -53,7 +53,7 @@ describe semanage_provider do
             name: 'tlp_t',
             seltype: 'tlp_t',
             ensure: :present,
-            local: false
+            local: false,
           )
         end
       end

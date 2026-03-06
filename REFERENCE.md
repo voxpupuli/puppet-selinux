@@ -103,6 +103,8 @@ sets the name for the refpolicy development package, required for the
 refpolicy module builder
 Default value: OS dependent (see data/)
 
+Default value: `'selinux-policy-devel'`
+
 ##### <a name="-selinux--mode"></a>`mode`
 
 Data type: `Optional[Enum['enforcing', 'permissive', 'disabled']]`

@@ -23,14 +23,14 @@ describe 'selinux::boolean' do
           context value do
             let(:params) do
               {
-                ensure: value
+                ensure: value,
               }
             end
 
             it do
               is_expected.to contain_selboolean('mybool').with(
                 'value'      => 'on',
-                'persistent' => true
+                'persistent' => true,
               )
             end
           end
@@ -40,14 +40,14 @@ describe 'selinux::boolean' do
           context value do
             let(:params) do
               {
-                ensure: value
+                ensure: value,
               }
             end
 
             it do
               is_expected.to contain_selboolean('mybool').with(
                 'value'      => 'off',
-                'persistent' => true
+                'persistent' => true,
               )
             end
           end
@@ -63,7 +63,7 @@ describe 'selinux::boolean' do
           context value do
             let(:params) do
               {
-                ensure: value
+                ensure: value,
               }
             end
 
@@ -77,7 +77,7 @@ describe 'selinux::boolean' do
           context value do
             let(:params) do
               {
-                ensure: value
+                ensure: value,
               }
             end
 

@@ -19,7 +19,7 @@ describe 'selinux::permissive' do
         context 'ensure selinux_permissive oddjob_mkhomedir_t is present' do
           let(:params) do
             {
-              seltype: 'oddjob_mkhomedir_t'
+              seltype: 'oddjob_mkhomedir_t',
             }
           end
 
@@ -32,7 +32,7 @@ describe 'selinux::permissive' do
           let(:params) do
             {
               seltype: 'oddjob_mkhomedir_t',
-              ensure: 'absent'
+              ensure: 'absent',
             }
           end
 
@@ -60,7 +60,7 @@ describe 'selinux::permissive' do
         context 'make sure it compiles' do
           let(:params) do
             {
-              seltype: 'oddjob_mkhomedir_t'
+              seltype: 'oddjob_mkhomedir_t',
             }
           end
 

@@ -12,7 +12,7 @@ describe 'selinux' do
                            'enforced' => true,
                            'config_mode' => 'enforcing',
                            'config_policy' => 'targeted',
-                           'current_mode' => 'enforcing'
+                           'current_mode' => 'enforcing',
                          } })
         end
 
