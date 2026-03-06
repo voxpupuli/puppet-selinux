@@ -16,7 +16,7 @@ describe 'selinux::port' do
           {
             seltype: 'http_port_t',
             port: 8080,
-            protocol: 'tcp'
+            protocol: 'tcp',
           }
         end
 
@@ -30,7 +30,7 @@ describe 'selinux::port' do
             {
               seltype: 'http_port_t',
               port: 8080,
-              protocol: protocol
+              protocol: protocol,
             }
           end
 
@@ -42,7 +42,7 @@ describe 'selinux::port' do
             {
               seltype: 'http_port_t',
               port_range: [8080, 8089],
-              protocol: protocol
+              protocol: protocol,
             }
           end
 
@@ -55,7 +55,7 @@ describe 'selinux::port' do
           {
             seltype: 'http_port_t',
             port: 8080,
-            protocol: 'bad'
+            protocol: 'bad',
           }
         end
 
@@ -68,7 +68,7 @@ describe 'selinux::port' do
             seltype: 'http_port_t',
             port: 8080,
             port_range: [8080, 8081],
-            protocol: 'tcp'
+            protocol: 'tcp',
           }
         end
 
@@ -79,7 +79,7 @@ describe 'selinux::port' do
         let(:params) do
           {
             seltype: 'http_port_t',
-            port: 8080
+            port: 8080,
           }
         end
 

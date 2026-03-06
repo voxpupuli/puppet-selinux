@@ -58,7 +58,7 @@ describe semanage_provider do
             seltype: 'bin_t',
             selrole: 'object_r',
             seluser: 'system_u',
-            selrange: 's0'
+            selrange: 's0',
           )
         end
 
@@ -71,7 +71,7 @@ describe semanage_provider do
             seltype: '<<none>>',
             selrole: nil,
             seluser: nil,
-            selrange: nil
+            selrange: nil,
           )
         end
       end
@@ -116,21 +116,21 @@ describe semanage_provider do
           return {
             # This one should be loaded from the system policy
             '/var/log_a' => fcontext.new(
-              name: '/var/log_a'
+              name: '/var/log_a',
             ),
             '/var/lib/mydir_s' => fcontext.new(
               name: '/var/lib/mydir_s',
               pathspec: '/var/lib/mydir',
               file_type: 's',
-              seltype: 'some_type_t'
+              seltype: 'some_type_t',
             ),
             '/foobar_a' => fcontext.new(
               name: '/foobar_a',
               file_type: 'a',
               pathspec: '/foobar',
               seltype: 'mytype_t',
-              seluser: 'myuser_u'
-            )
+              seluser: 'myuser_u',
+            ),
           }
         end
 

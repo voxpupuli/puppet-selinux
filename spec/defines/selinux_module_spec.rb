@@ -25,7 +25,7 @@ describe 'selinux::module' do
         context 'ordering' do
           let(:params) do
             {
-              source_te: 'puppet:///modules/mymodule/selinux/mymodule.te'
+              source_te: 'puppet:///modules/mymodule/selinux/mymodule.te',
             }
           end
 
@@ -37,7 +37,7 @@ describe 'selinux::module' do
           let(:params) do
             {
               source_te: 'puppet:///modules/mymodule/selinux/mymodule.te',
-              builder: 'refpolicy'
+              builder: 'refpolicy',
             }
           end
 
@@ -56,7 +56,7 @@ describe 'selinux::module' do
             {
               source_te: 'puppet:///modules/mymodule/selinux/mymodule.te',
               source_fc: 'puppet:///modules/mymodule/selinux/mymodule.fc',
-              builder: 'refpolicy'
+              builder: 'refpolicy',
             }
           end
 
@@ -76,7 +76,7 @@ describe 'selinux::module' do
               source_te: 'puppet:///modules/mymodule/selinux/mymodule.te',
               source_if: 'puppet:///modules/mymodule/selinux/mymodule.if',
               source_fc: 'puppet:///modules/mymodule/selinux/mymodule.fc',
-              builder: 'refpolicy'
+              builder: 'refpolicy',
             }
           end
 
@@ -96,7 +96,7 @@ describe 'selinux::module' do
               content_te: 'policy_module(puppet_test, 1.0.0)',
               content_if: 'interface(puppet_test)',
               content_fc: '/bin/sh system_u:object_r:bin_t',
-              builder: 'refpolicy'
+              builder: 'refpolicy',
             }
           end
 
@@ -114,7 +114,7 @@ describe 'selinux::module' do
           let(:params) do
             {
               source_te: 'puppet:///modules/mymodule/selinux/mymodule.te',
-              builder: 'simple'
+              builder: 'simple',
             }
           end
 
@@ -133,7 +133,7 @@ describe 'selinux::module' do
           let(:params) do
             {
               content_te: 'policy_module(puppet_test, 1.0.0)',
-              builder: 'simple'
+              builder: 'simple',
             }
           end
 
@@ -151,7 +151,7 @@ describe 'selinux::module' do
           let(:params) do
             {
               source_if: 'puppet:///modules/mymodule/selinux/mymodule.te',
-              builder: 'simple'
+              builder: 'simple',
             }
           end
 
@@ -163,7 +163,7 @@ describe 'selinux::module' do
         context 'present case with pre-compiled policy package' do
           let(:params) do
             {
-              source_pp: 'puppet:///modules/mymodule/selinux/mymodule.pp'
+              source_pp: 'puppet:///modules/mymodule/selinux/mymodule.pp',
             }
           end
 
@@ -179,7 +179,7 @@ describe 'selinux::module' do
             {
               source_pp: 'puppet:///modules/mymodule/selinux/mymodule.pp',
               source_te: 'puppet:///modules/mymodule/selinux/mymodule.te',
-              builder: 'simple'
+              builder: 'simple',
             }
           end
 
@@ -191,7 +191,7 @@ describe 'selinux::module' do
         context 'absent case' do
           let(:params) do
             {
-              ensure: 'absent'
+              ensure: 'absent',
             }
           end
 
@@ -207,7 +207,7 @@ describe 'selinux::module' do
         context 'make sure it compiles' do
           let(:params) do
             {
-              source_te: 'puppet:///modules/mymodule/selinux/mymodule.te'
+              source_te: 'puppet:///modules/mymodule/selinux/mymodule.te',
             }
           end
 

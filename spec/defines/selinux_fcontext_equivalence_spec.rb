@@ -19,7 +19,7 @@ describe 'selinux::fcontext::equivalence' do
         context 'ordering on ensure => present' do
           let(:params) do
             {
-              target: '/opt/some/other/path'
+              target: '/opt/some/other/path',
             }
           end
 
@@ -32,7 +32,7 @@ describe 'selinux::fcontext::equivalence' do
           let(:params) do
             {
               ensure: 'absent',
-              target: '/opt/some/other/path'
+              target: '/opt/some/other/path',
             }
           end
 
@@ -50,7 +50,7 @@ describe 'selinux::fcontext::equivalence' do
         context 'make sure it compiles' do
           let(:params) do
             {
-              target: '/opt/some/other/path'
+              target: '/opt/some/other/path',
             }
           end
 

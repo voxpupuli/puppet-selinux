@@ -40,7 +40,7 @@ describe semanage_provider do
           expect(described_class.instances[0].instance_variable_get('@property_hash')).to eq(
             ensure: :present,
             name: '/foobar',
-            target: '/var/lib/whatever'
+            target: '/var/lib/whatever',
           )
         end
       end
@@ -84,12 +84,12 @@ describe semanage_provider do
         let(:resources) do
           return { '/opt/myapp' => fc_equiv.new(
             name: '/opt/myapp',
-            target: '/usr/share/wordpress'
+            target: '/usr/share/wordpress',
           ),
                    '/foobar' => fc_equiv.new(
                      name: '/foobar',
-                     target: '/somewhere_else'
-                   ) }
+                     target: '/somewhere_else',
+                   ), }
         end
 
         before do

@@ -12,7 +12,7 @@ describe 'selinux' do
             operatingsystem: 'RedHat',
             operatingsystemmajrelease: majrelease,
             selinux_current_mode: 'enforcing',
-            os: { release: { major: majrelease }, name: 'RedHat', family: 'RedHat' }
+            os: { release: { major: majrelease }, name: 'RedHat', family: 'RedHat' },
           }
         end
 
@@ -29,7 +29,7 @@ describe 'selinux' do
           operatingsystem: 'RedHat',
           operatingsystemmajrelease: '8',
           selinux_current_mode: 'enforcing',
-          os: { release: { major: '8' }, name: 'RedHat', family: 'RedHat' }
+          os: { release: { major: '8' }, name: 'RedHat', family: 'RedHat' },
         }
       end
 
@@ -45,7 +45,7 @@ describe 'selinux' do
             operatingsystem: 'Fedora',
             operatingsystemmajrelease: majrelease,
             selinux_current_mode: 'enforcing',
-            os: { release: { major: majrelease }, name: 'Fedora', family: 'RedHat' }
+            os: { release: { major: majrelease }, name: 'Fedora', family: 'RedHat' },
           }
         end
 
@@ -61,7 +61,7 @@ describe 'selinux' do
           operatingsystem: 'Amazon',
           operatingsystemmajrelease: '2017',
           selinux_current_mode: 'enforcing',
-          os: { release: { major: '2017' }, name: 'Amazon', family: 'RedHat' }
+          os: { release: { major: '2017' }, name: 'Amazon', family: 'RedHat' },
         }
       end
 
@@ -75,12 +75,12 @@ describe 'selinux' do
           osfamily: 'RedHat',
           operatingsystem: 'RedHat',
           operatingsystemmajrelease: '7',
-          os: { release: { major: 7 }, name: 'RedHat', family: 'RedHat' }
+          os: { release: { major: 7 }, name: 'RedHat', family: 'RedHat' },
         }
       end
       let(:params) do
         {
-          manage_package: false
+          manage_package: false,
         }
       end
 
@@ -94,12 +94,12 @@ describe 'selinux' do
           osfamily: 'RedHat',
           operatingsystem: 'RedHat',
           operatingsystemmajrelease: '7',
-          os: { release: { major: 7 }, name: 'RedHat', family: 'RedHat' }
+          os: { release: { major: 7 }, name: 'RedHat', family: 'RedHat' },
         }
       end
       let(:params) do
         {
-          package_name: 'some_package'
+          package_name: 'some_package',
         }
       end
 
@@ -113,12 +113,12 @@ describe 'selinux' do
           osfamily: 'RedHat',
           operatingsystem: 'RedHat',
           operatingsystemmajrelease: '7',
-          os: { release: { major: 7 }, name: 'RedHat', family: 'RedHat' }
+          os: { release: { major: 7 }, name: 'RedHat', family: 'RedHat' },
         }
       end
       let(:params) do
         {
-          manage_setroubleshoot_packages: true
+          manage_setroubleshoot_packages: true,
         }
       end
 
@@ -133,12 +133,12 @@ describe 'selinux' do
           osfamily: 'RedHat',
           operatingsystem: 'RedHat',
           operatingsystemmajrelease: '7',
-          os: { release: { major: 7 }, name: 'RedHat', family: 'RedHat' }
+          os: { release: { major: 7 }, name: 'RedHat', family: 'RedHat' },
         }
       end
       let(:params) do
         {
-          manage_selinux_sandbox_packages: true
+          manage_selinux_sandbox_packages: true,
         }
       end
 

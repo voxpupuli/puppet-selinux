@@ -42,7 +42,7 @@ instance_examples = {
     seltype: 'ipp_port_t',
     high_port: '8614',
     low_port: '8610',
-    source: :policy
+    source: :policy,
   },
   1 => {
     ensure: :present,
@@ -51,7 +51,7 @@ instance_examples = {
     seltype: 'ipp_port_t',
     high_port: '8614',
     low_port: '8610',
-    source: :policy
+    source: :policy,
   },
   20 => {
     ensure: :present,
@@ -60,7 +60,7 @@ instance_examples = {
     seltype: 'zope_port_t',
     high_port: '12345',
     low_port: '12345',
-    source: :local
+    source: :local,
   },
   21 => {
     ensure: :present,
@@ -69,7 +69,7 @@ instance_examples = {
     seltype: 'zookeeper_client_port_t',
     high_port: '15132',
     low_port: '15123',
-    source: :local
+    source: :local,
   },
   22 => {
     ensure: :present,
@@ -78,8 +78,8 @@ instance_examples = {
     seltype: 'zookeeper_client_port_t',
     high_port: '15132',
     low_port: '15123',
-    source: :local
-  }
+    source: :local,
+  },
 }
 
 # remove the source key as it's supposed to error out
@@ -158,9 +158,9 @@ describe semanage_provider do
               protocol: :tcp,
               seltype: 'ipp_port_t',
               high_port: '54321',
-              low_port: '54321'
+              low_port: '54321',
             ),
-            'tcp_15123-15132' => port.new(resource_example)
+            'tcp_15123-15132' => port.new(resource_example),
           }
         end
 
