@@ -46,7 +46,8 @@ Puppet::Type.type(:selinux_login).provide(:semanage) do
   end
 
   # current file path is lib/puppet/provider/selinux_login/semanage.rb
-  # semanage_users.py is lib/puppet_x/voxpupuli/selinux/semanage_users.py
+  # semanage_logins.py is lib/puppet_x/voxpupuli/selinux/semanage_logins.py
+  LOGINS_HELPER = File.expand_path('../../../../puppet_x/voxpupuli/selinux/semanage_logins.py', __FILE__)
   USERS_HELPER = File.expand_path('../../../../puppet_x/voxpupuli/selinux/semanage_users.py', __FILE__)
   commands semanage: 'semanage',
            python: python_command
@@ -65,7 +66,7 @@ Puppet::Type.type(:selinux_login).provide(:semanage) do
       # policy %cn_cegbu_aconex_fr-dev-platform-priv unconfined_u
       # local %cn_cegbu_aconex_fr-dev-ops-priv unconfined_u
       # local %cn_cegbu_aconex_fr-dev-platform-priv unconfined_u
-      source_str, selinux_login_name, selinux_user = split
+      source_str, selinux_login_name, selinux_user, selinux_mlsrange = split
 
       key = selinux_login_name
       source =
@@ -83,20 +84,47 @@ Puppet::Type.type(:selinux_login).provide(:semanage) do
         source: source,
         selinux_login_name: selinux_login_name,
         selinux_user: selinux_user,
+        selinux_mlsrange: selinux_mlsrange,
       }
     end
     ret
   end
 
+  def self.parse_user_helper_lines(lines)
+    users = {}
+    lines.each do |line|
+      split = line.split(%r{\s+})
+      # helper format is:
+      # something_u mlsrange
+      #
+      # For example:
+      #
+      # guest_u s0
+      # root s0-s0:c0.c1023
+      # staff_u s0-s0:c0.c1023
+      # sysadm_u s0-s0:c0.c1023
+      # system_u s0-s0:c0.c1023
+      # unconfined_u s0-s0:c0.c1023
+      # user_u s0
+      # xguest_u s0
+      user, mlsrange = split
+      users[user] = mlsrange.to_s
+    end
+    users
+  end
+
   def self.instances
     # no way to do this with one call as far as I know
-    policy = parse_helper_lines(python(USERS_HELPER).split("\n"))
+    policy = parse_helper_lines(python(LOGINS_HELPER).split("\n"))
     policy.values.map do |item|
       new(item)
     end
   end
 
   def self.prefetch(resources)
+    # Get default MLS ranges
+    users = parse_user_helper_lines(python(USERS_HELPER).split("\n"))
+
     # is there a better way to do this? Map selinux_user/selinux_login_name to the provider regardless of the title
     # and make sure all system resources have ensure => :present so that we don't try to remove them
     instances.each do |provider|
@@ -106,11 +134,16 @@ Puppet::Type.type(:selinux_login).provide(:semanage) do
           raise Puppet::ResourceError, "Selinux_login['#{resource[:name]}']: title does not match its login ('#{provider.name}' != '#{provider.selinux_login_name}'), and a conflicting resource exists"
         end
 
+        if !resource.purging? && resource[:selinux_mlsrange].nil?
+          # If the MLS range is not set, default to that of the user
+          resource[:selinux_mlsrange] = users[resource[:selinux_user]]
+        end
+
         resource.provider = provider
         resource[:ensure] = :present if provider.source == :policy
       else
         resources.each_value do |res|
-          next unless res[:selinux_user] == provider.selinux_user && res[:selinux_login_name] == provider.selinux_login_name
+          next unless res[:selinux_user] == provider.selinux_user && res[:selinux_login_name] == provider.selinux_login_name && res[:selinux_mlsrange] == provider.selinux_mlsrange
 
           warning("Selinux_login['#{res[:name]}']: title does not match its login ('#{provider.name}' != '#{provider.selinux_login_name}')")
           resource.provider = provider
@@ -121,12 +154,12 @@ Puppet::Type.type(:selinux_login).provide(:semanage) do
   end
 
   def create
-    args = ['login', '-a', '-s', @resource[:selinux_user], @resource[:selinux_login_name]]
+    args = ['login', '-a', '-s', @resource[:selinux_user], '-r', @resource[:selinux_mlsrange], @resource[:selinux_login_name]]
     semanage(*args)
   end
 
   def sync
-    args = ['login', '-m', '-s', @resource[:selinux_user], @resource[:selinux_login_name]]
+    args = ['login', '-m', '-s', @resource[:selinux_user], '-r', @resource[:selinux_mlsrange], @resource[:selinux_login_name]]
     semanage(*args)
   end
 

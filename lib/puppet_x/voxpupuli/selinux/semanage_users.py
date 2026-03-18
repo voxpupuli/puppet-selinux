@@ -1,5 +1,5 @@
-# This script uses libsemanage directly to access the logins list
-# This is *much* faster than semanage login -l
+# This script uses libsemanage directly to access the users list
+# This is *much* faster than semanage user -l
 
 # will work with python 2.6+
 from __future__ import print_function
@@ -21,27 +21,19 @@ if semanage.semanage_is_managed(handle) < 0:
 if semanage.semanage_connect(handle) < 0:
     exit(1)
 
-def print_seuser(kind, seuser):
-    seuser_login = semanage.semanage_seuser_get_name(seuser)
-    selinux_user = semanage.semanage_seuser_get_sename(seuser)
-    print("{} {} {}".format(kind, seuser_login, selinux_user))
+def print_user(user):
+    user_name = semanage.semanage_user_get_name(user)
+    user_mlsrange = semanage.semanage_user_get_mlsrange(user)
+    print("{} {}".format(user_name, user_mlsrange))
 
 
-# Always list local config afterwards so that the provider works correctly
-(status, seusers) = semanage.semanage_seuser_list(handle)
+# Get a mapping of users to MLS ranges
+(status, users) = semanage.semanage_user_list(handle)
 if status < 0:
     raise ValueError("Could not list user config")
 
-for seuser in seusers:
-    print_seuser('policy', seuser)
-
-(status, seusers) = semanage.semanage_seuser_list_local(handle)
-if status < 0:
-    raise ValueError("Could not list local user config")
-
-for seuser in seusers:
-    print_seuser('local', seuser)
-
+for user in users:
+    print_user(user)
 
 semanage.semanage_disconnect(handle)
 semanage.semanage_handle_destroy(handle)

@@ -520,6 +520,7 @@ The following parameters are available in the `selinux::login` defined type:
 * [`ensure`](#-selinux--login--ensure)
 * [`selinux_login_name`](#-selinux--login--selinux_login_name)
 * [`selinux_user`](#-selinux--login--selinux_user)
+* [`selinux_mlsrange`](#-selinux--login--selinux_mlsrange)
 
 ##### <a name="-selinux--login--ensure"></a>`ensure`
 
@@ -540,6 +541,14 @@ A Linux user or group
 Data type: `String[1]`
 
 The selinux user to map to
+
+##### <a name="-selinux--login--selinux_mlsrange"></a>`selinux_mlsrange`
+
+Data type: `Optional[String[1]]`
+
+The MLS range to set. If undef, the MLS range of the SELinux user will be used.
+
+Default value: `undef`
 
 ### <a name="selinux--module"></a>`selinux::module`
 
@@ -910,6 +919,10 @@ Default value: `present`
 ##### `selinux_login_name`
 
 The name of the linux user or group to map.
+
+##### `selinux_mlsrange`
+
+The MLS range to set. If undef, the MLS range of the SELinux user will be used.
 
 ##### `selinux_user`
 

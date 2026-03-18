@@ -25,6 +25,16 @@ Puppet::Type.newtype(:selinux_login) do
     end
   end
 
+  newproperty(:selinux_mlsrange) do
+    desc 'The MLS range to set. If undef, the MLS range of the SELinux user will be used.'
+
+    def sync
+      event = super
+      provider.sync
+      event
+    end
+  end
+
   newproperty(:source) do
     desc 'Source of the login configuration - either policy or local'
     newvalues(:policy, :local)
