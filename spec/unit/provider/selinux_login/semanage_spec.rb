@@ -80,6 +80,15 @@ RESOURCE_EXAMPLE.delete(:source)
 LOGIN_TYPE = Puppet::Type.type(:selinux_login)
 
 describe LOGIN_TYPE.provider(:semanage) do
+  # The provider is confined to `os.selinux.enabled: true`. On a host where
+  # SELinux is enabled, the provider is "suitable" and Puppet::Type#provider
+  # falls back to instantiating it for resources that prefetch did not
+  # explicitly attach. That makes the `provider).to be_nil` assertion below
+  # pass on Debian-based CI containers but fail on a SELinux host (e.g.
+  # Fedora). Force unsuitability so the test reflects what prefetch did,
+  # not what the host happens to look like.
+  before { allow(described_class).to receive(:suitable?).and_return(false) }
+
   on_supported_os.each_key do |os|
     context "on #{os}" do
       context 'with some local login definitions' do
