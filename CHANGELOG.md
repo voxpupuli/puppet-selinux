@@ -4,6 +4,38 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v6.0.0](https://github.com/voxpupuli/puppet-selinux/tree/v6.0.0) (2026-05-15)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v5.0.0...v6.0.0)
+
+**Breaking changes:**
+
+- Drop puppet, update openvox minimum version to 8.19 [\#414](https://github.com/voxpupuli/puppet-selinux/pull/414) ([TheMeier](https://github.com/TheMeier))
+
+**Implemented enhancements:**
+
+- Add support for Debian 13 \(trixie\) [\#425](https://github.com/voxpupuli/puppet-selinux/pull/425) ([lbetz](https://github.com/lbetz))
+- Add RHEL, RockyLinux, AlmaLinux, OracleLinux and CentOS 10 support [\#424](https://github.com/voxpupuli/puppet-selinux/pull/424) ([lbetz](https://github.com/lbetz))
+- Allow managing MLS ranges of SELinux logins [\#423](https://github.com/voxpupuli/puppet-selinux/pull/423) ([EmRowlands](https://github.com/EmRowlands))
+- metadata.json: Add OpenVox [\#409](https://github.com/voxpupuli/puppet-selinux/pull/409) ([jstraw](https://github.com/jstraw))
+- replace legacy facts [\#406](https://github.com/voxpupuli/puppet-selinux/pull/406) ([voreilly](https://github.com/voreilly))
+
+**Fixed bugs:**
+
+- selinux\_login: Make semanage spec independent of host SELinux state [\#431](https://github.com/voxpupuli/puppet-selinux/pull/431) ([silug](https://github.com/silug))
+- Fix `selinux_login` provider typo and title mismatch [\#382](https://github.com/voxpupuli/puppet-selinux/pull/382) ([danwain](https://github.com/danwain))
+
+**Closed issues:**
+
+- Documentation change suggestion covering when puppet changes from disabled to enforcing [\#411](https://github.com/voxpupuli/puppet-selinux/issues/411)
+
+**Merged pull requests:**
+
+- docs: fix README badges [\#421](https://github.com/voxpupuli/puppet-selinux/pull/421) ([d1nuc0m](https://github.com/d1nuc0m))
+- refactor: change from mocha to rspec-mocks [\#416](https://github.com/voxpupuli/puppet-selinux/pull/416) ([TheMeier](https://github.com/TheMeier))
+- clarify behavior when enabling/disabling SELinux [\#412](https://github.com/voxpupuli/puppet-selinux/pull/412) ([edrude](https://github.com/edrude))
+- README: remove legacy facts [\#405](https://github.com/voxpupuli/puppet-selinux/pull/405) ([kenyon](https://github.com/kenyon))
+
 ## [v5.0.0](https://github.com/voxpupuli/puppet-selinux/tree/v5.0.0) (2024-09-12)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v4.1.0...v5.0.0)
@@ -663,7 +695,6 @@ These should not affect the functionality of the module.
 
 **Merged pull requests:**
 
-- Added Support for defining file types in fcontext defined type [\#21](https://github.com/voxpupuli/puppet-selinux/pull/21) ([ghost](https://github.com/ghost))
 - fix dependency name [\#20](https://github.com/voxpupuli/puppet-selinux/pull/20) ([vchepkov](https://github.com/vchepkov))
 - Add missing quotes to exec statement [\#19](https://github.com/voxpupuli/puppet-selinux/pull/19) ([lattwood](https://github.com/lattwood))
 - puppet 3.7 complaines about 'Error: Failed to apply catalog: Parameter c... [\#18](https://github.com/voxpupuli/puppet-selinux/pull/18) ([cristifalcas](https://github.com/cristifalcas))
