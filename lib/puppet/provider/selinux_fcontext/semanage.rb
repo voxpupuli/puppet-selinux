@@ -27,10 +27,9 @@ Puppet::Type.type(:selinux_fcontext).provide(:semanage) do
   end
 
   def self.parse_fcontext_lines(lines)
-    ret = []
-    lines.each do |line|
+    lines.filter_map do |line|
       next if line.strip.empty?
-      next if line =~ %r{^#}
+      next if line.start_with?('#')
 
       split = line.split(%r{\s+})
       if split.length == 2
@@ -45,16 +44,16 @@ Puppet::Type.type(:selinux_fcontext).provide(:semanage) do
         user = range = role = nil
       end
       ft = file_type_map(file_type)
-      ret.push(new(ensure: :present,
-                   name: "#{path_spec}_#{ft}",
-                   pathspec: path_spec,
-                   seltype: type,
-                   seluser: user,
-                   selrole: role,
-                   selrange: range,
-                   file_type: ft))
+
+      new(ensure: :present,
+          name: "#{path_spec}_#{ft}",
+          pathspec: path_spec,
+          seltype: type,
+          seluser: user,
+          selrole: role,
+          selrange: range,
+          file_type: ft)
     end
-    ret
   end
 
   def self.parse_fcontext_file(path)
