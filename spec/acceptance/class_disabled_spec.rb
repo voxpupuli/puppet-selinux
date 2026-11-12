@@ -45,7 +45,7 @@ describe 'selinux class - mode switching' do
   end
 
   context 'when switching from enforcing to disabled' do
-    let(:pp) do
+    let(:manifest) do
       <<-EOS
         class { 'selinux': mode => 'disabled' }
       EOS
@@ -53,6 +53,10 @@ describe 'selinux class - mode switching' do
 
     context 'before reboot' do
       before(:all) do
+        # Tag vagrant user to an administrative group
+        shell('semanage login -a -s staff_u vagrant')
+        # Vagrant is logging in and using privileges commands, we need to allow that
+        shell('setsebool -P ssh_sysadm_login 1')
         shell('sed -i "s/SELINUX=.*/SELINUX=enforcing/" /etc/selinux/config')
         shell('setenforce Enforcing && test "$(getenforce)" = "Enforcing"')
       end
@@ -75,7 +79,7 @@ describe 'selinux class - mode switching' do
       end
 
       it 'applies without changes' do
-        apply_manifest(pp, catch_changes: true)
+        apply_manifest(manifest, catch_changes: true)
       end
 
       describe command('getenforce') do
@@ -120,7 +124,7 @@ describe 'selinux class - mode switching' do
       end
 
       it 'applies without changes' do
-        apply_manifest(pp, catch_changes: true)
+        apply_manifest(manifest, catch_changes: true)
       end
 
       describe command('getenforce') do
