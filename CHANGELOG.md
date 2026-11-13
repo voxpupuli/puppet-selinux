@@ -4,7 +4,16 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
-## [v6.0.0](https://github.com/voxpupuli/puppet-selinux/tree/v6.0.0) (2026-05-15)
+## [v6.1.0](https://github.com/voxpupuli/puppet-selinux/tree/v6.1.0) (2026-11-13)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v6.0.0...v6.1.0)
+
+**Implemented enhancements:**
+
+- puppetlabs/stdlib: Allow 10.x [\#436](https://github.com/voxpupuli/puppet-selinux/pull/436) ([bastelfreak](https://github.com/bastelfreak))
+- Update requirements to allow OpenVox 9 [\#435](https://github.com/voxpupuli/puppet-selinux/pull/435) ([sebastianrakel](https://github.com/sebastianrakel))
+
+## [v6.0.0](https://github.com/voxpupuli/puppet-selinux/tree/v6.0.0) (2026-05-20)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-selinux/compare/v5.0.0...v6.0.0)
 
